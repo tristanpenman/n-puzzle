@@ -1,0 +1,15 @@
+#tree_view {
+ 
+}
+
+#tree_view .main {
+ position: absolute;
+ top: 0;
+ left: 0;
+}
+
+#tree_view .thumbnail {
+ position: absolute;
+ border: 1px solid #666;
+ display: none;
+}

@@ -1,0 +1,88 @@
+/******************************************************************************
+ *
+ * Application styles
+ *
+ ******************************************************************************/
+ 
+* {
+ margin: 0;
+ font-family: Arial; 
+}
+
+html {
+ font-size: 13px;
+}
+
+html, body {
+ height: 100%;
+}
+
+body {
+ overflow: hidden;
+}
+
+input, select {
+ vertical-align: bottom;
+}
+
+input[type="button"] {
+ padding: 3px 0.75em;
+ font-size: 13px;
+}
+
+form {
+ display: block;
+}
+
+select {
+ padding: 1px;
+ width: auto;
+}
+
+label {
+ display: block;
+ font-size: 0.9em;
+ margin-bottom: 0.4em;
+}
+
+h1 {
+ margin: 1.2em 0 1em 0.2em;
+ font-size: 1.4em;
+ padding-bottom: 0.2em;
+ border-bottom: 1px solid #aaa;
+ width: 8.9em;
+}
+
+.qtip-content p,
+.qtip-content ul {
+ margin-top: 0.5em;
+ margin-bottom: 0.5em;
+}
+
+.qtip-content li {
+ margin-top: 0.5em;
+ padding-left: 0;
+}
+
+.qtip-content ul {
+ padding-left: 1.5em;
+}
+
+.invisible {
+ display: none;
+}
+
+/******************************************************************************
+ *
+ * Hacks to make buttons look right in Firefox
+ *
+ ******************************************************************************/
+
+input[type="button"]::-moz-focus-inner {
+ padding: 1px 1px 0px 1px;
+ border: 0;
+}
+
+#control_panel .stepper input[type="button"]::-moz-focus-inner {
+ padding-top: 0px;
+}

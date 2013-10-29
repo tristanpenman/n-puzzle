@@ -1,0 +1,94 @@
+/******************************************************************************
+ *
+ * Control panel styles
+ *
+ ******************************************************************************/
+
+#control_panel {
+ position: absolute;
+ top: 0;
+ left: 0;
+ display: inline-block;
+ height: 100%;
+ padding: 0em 0.9em 0em 1em;
+ border-right: 1px solid #aaa;
+ overflow-y: auto;
+ overflow-x: hidden;
+ background-color: #F2F2F2;
+ background-image: url("../../images/shadow.png");
+ background-position: right top;
+ background-repeat: repeat-y;
+}
+
+#control_panel .initial .puzzle_state_view,
+#control_panel .goal .puzzle_state_view {
+ cursor: pointer;
+}
+
+#control_panel .initial.disabled .puzzle_state_view,
+#control_panel .goal.disabled .puzzle_state_view {
+ cursor: default;
+ border-color: #bbb;
+ background: #bbb;
+}
+
+#control_panel .initial.disabled .puzzle_state_view .cell_value,
+#control_panel .goal.disabled .puzzle_state_view .cell_value {
+ color: #777;
+}
+
+#control_panel .group.disabled label {
+ color: #666;
+}
+
+#control_panel form {
+ margin-right: 0.8em;
+}
+
+#control_panel form .field {
+ /* Prevent elements within a field from wrapping */
+ white-space:nowrap;
+ display: block;
+}
+
+#control_panel form .group {
+ padding: 0.3em;
+ margin-bottom: 0.7em;
+}
+
+#control_panel .help {
+ border: 0px;
+ display: inline-block;
+ position: relative;
+ left: 2px;
+ top: -0.2em;
+ vertical-align: bottom;
+ width: 17px;
+ height: 16px;
+ padding-right: 3px;
+ margin: auto 0;
+}
+
+#control_panel .algorithm select,
+#control_panel .heuristic select {
+ min-width: 12em;
+}
+
+#control_panel .stepper input[type="button"].start,
+#control_panel .stepper input[type="button"].next,
+#control_panel .stepper input[type="button"].reset {
+ width: 4.4em;
+}
+
+#control_panel .stepper input[type="button"] {
+ /* Add vertical padding between rows of buttons in the stepper control */
+ margin-bottom: 0.4em;
+}
+
+#control_panel .stepper input[type="button"].invisible {
+ display: none;	
+}
+
+#control_panel .tooltip_text {
+ display: none;
+}

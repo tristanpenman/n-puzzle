@@ -1,0 +1,148 @@
+/******************************************************************************
+ *
+ * PuzzleStateEditor modal dialog
+ *
+ ******************************************************************************/
+ 
+#puzzle_state_editor_overlay {
+ background-color:#000;
+ height: 100%;
+ cursor:wait;
+}
+
+#puzzle_state_editor_container {
+ background-color:#333;
+ border-radius: 0.3em;
+ padding:1.2em;
+ margin-top: 1em;
+ margin-bottom: 6em;
+ width: 213px;
+}
+
+#puzzle_state_editor_container a {
+ color:#ddd;
+}
+
+#puzzle_state_editor_container a.close {
+ background:url(../../images/close.png) no-repeat scroll 0 0 transparent;
+ width:25px;
+ height:29px;
+ display:inline;
+ z-index:3200;
+ position:absolute;
+ top:-13px;
+ right:-14px;
+ cursor:pointer;
+}
+
+#puzzle_state_editor {
+ display: none;
+ overflow: hidden;
+}
+
+#puzzle_state_editor input[type="button"].save {
+ margin: 1.3em 0.9em 0.5em 0;
+ vertical-align: baseline;
+}
+
+#puzzle_state_editor input[type="text"].edit_value {
+ background-color: Transparent;
+ position: fixed;
+ display: none;
+ border-style: none;
+ border-color: Transparent;
+ font-size: 1.5em;
+ width: 0.8em;
+}
+
+#puzzle_state_editor input[type="text"].edit_value:focus {
+ outline: none;
+}
+
+#puzzle_state_editor a {
+ position: relative;
+ top: 1px;
+ text-align: right;
+ font-size: 0.9em;
+ right: 0px;
+}
+
+#puzzle_state_editor span {
+ display: none;
+}
+
+#puzzle_state_editor .grid {
+ background: #666;
+ border: 2px solid #666;
+ display: inline-block;
+ border-radius: 0.3em;
+ width: 208px;
+ overflow: hidden;
+ margin: 0 auto;
+ text-align: center;
+}
+
+#puzzle_state_editor .row {
+ display: block;
+ font-size: 0;
+}
+
+#puzzle_state_editor .cell {
+ display: inline-block;
+ width: 68px;
+ height: 68px;
+ background: white;
+ text-align: center;
+ cursor: pointer;
+ overflow: hidden;
+ font-size: 13px;
+}
+
+#puzzle_state_editor .cell:hover {
+ background: #fcf3d0;
+}
+
+#puzzle_state_editor .cell_0_0,
+#puzzle_state_editor .cell_0_1,
+#puzzle_state_editor .cell_0_2,
+#puzzle_state_editor .cell_1_0,
+#puzzle_state_editor .cell_1_1,
+#puzzle_state_editor .cell_1_2 {
+ margin-right: 2px;
+}
+
+#puzzle_state_editor .row_0,
+#puzzle_state_editor .row_1 {
+ margin-bottom: 2px;
+}
+
+#puzzle_state_editor .cell_value {
+ position: relative;
+ font-size: 1.5em;
+ padding-left: 1px;
+ padding-right: 1px;
+ height: 22px;
+ width: 0.8em;
+ margin: 0 auto;
+ overflow: visible;
+}
+
+/*#puzzle_state_editor .active .cell_value {
+ display: none;
+})*/
+
+#puzzle_state_editor .cell_0_0 {
+ border-top-left-radius: 0.2em;
+}
+
+#puzzle_state_editor .cell_2_0 {
+ border-top-right-radius: 0.2em;
+}
+
+#puzzle_state_editor .cell_0_2 {
+ border-bottom-left-radius: 0.2em;
+}
+
+#puzzle_state_editor .cell_2_2 {
+ border-bottom-right-radius: 0.2em;
+}

@@ -1,0 +1,17 @@
+
+#stats_view {
+ position: absolute;
+ left: 10px;
+ top: 10px;
+ border-radius: 3px;
+ border: 1px solid #aaa;
+ background: #fafafa;
+ padding: 0.5em;
+ font-size: 0.9em;
+ margin: 0.9em;
+}
+
+#stats_view span{
+ display: block;
+ padding: 0.3em;
+}
