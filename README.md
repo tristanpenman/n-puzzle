@@ -6,12 +6,12 @@ Overview
 
 N-Puzzle is a web app for learning about graph-based search algorithms.
 
-This app uses the 8-puzzle to visualise the use of various graph-based search 
-algorithms. The 8-puzzle is an instance of the n-puzzle problem, where eight 
-tiles are placed on a 3x3 grid. The remaining un-tiled position is an empty
-space. Tiles adjacent to the empty space may be moved into that space. The
-puzzle is solved by finding a sequence of moves that will transform the initial
-state into a given goal state.
+This app uses the 8-puzzle to visualise the behaviour of various graph-based
+search algorithms. The 8-puzzle is an instance of the n-puzzle problem, where 
+eight tiles are placed on a 3x3 grid. The remaining un-tiled position is an
+empty space. Tiles adjacent to the empty space may be moved into that space.
+The puzzle is solved by finding a sequence of moves that will transform the
+initial state into the given goal state.
 
 An example initial state and goal state are given below:
 
