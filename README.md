@@ -15,16 +15,24 @@ state into a given goal state.
 
 An example initial state and goal state are given below:
 
-                 2 3 -                   2 5 3
- Initial state:  4 5 1       Goal state: 4 7 -
-                 6 7 8                   6 8 1
+Initial state:
+
+      2 3 -
+      4 5 1
+      6 7 8
+
+Goal state:
+
+      2 5 3
+      4 7 -
+      6 8 1
 
 N-Puzzle provides five algorithms that can be used to solve the problem:
- - Breadth-first Search (BFS)
- - Depth-first Search (DFS)
- - Iterative Deepening DFS (ID-DFS)
- - Greedy Search
- - A* Search
+- Breadth-first Search (BFS)
+- Depth-first Search (DFS)
+- Iterative Deepening DFS (ID-DFS)
+- Greedy Search
+- A* Search
 
 Since Greedy Search and A* Search are informed search algorithms, three
 heuristic functions are also provided:
