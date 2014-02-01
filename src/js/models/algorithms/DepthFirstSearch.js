@@ -5,55 +5,33 @@ DepthFirstSearch = Backbone.Model.extend({
         // Callback functions
         this.isGoalState = options.isGoalState;
         this.onDiscover = options.onDiscover;
-        this.storeExploredStates = options.storeExploredStates
-        if (this.storeExploredStates) {
-            // Discovered nodes
-            this.discovered = {};
-            this.discovered[options.initialState.toString()] = true;
 
-            // Number of explored nodes
-            this.closedCount = 0;
-        }
+        // Discovered nodes
+        this.discovered = {};
+        this.discovered[options.initialState.toString()] = true;
 
-        // Prepare initial state for discovery
-        var augmentedInitialState = {
+        // Number of nodes that have been explored
+        this.closedCount = 0;
+
+        // Add initial state to frontier
+        this.frontier = [options.initialState];
+
+        // Discover initial state
+        options.onDiscover([{
             originalState: options.initialState,
             depth: 0,
             kind: 'normal'
-        };
-
-        // Check whether or not initial state is a goal
-        this.goalFound = this.isGoalState(options.initialState);
-        if (this.goalFound) {
-            this.frontier = [];
-            augmentedInitialState.kind = 'goal';
-        } else {
-            this.frontier = [options.initialState];
-        }
-
-        // Discover initial state
-        options.onDiscover([augmentedInitialState], null);
+        }], null);
     },
 
     getStatistics: function() {
-        var stats = [{
+        return [{
             name: 'Open list',
             value: this.frontier.length
+        },{
+            name: 'Closed list',
+            value: this.closedCount
         }];
-
-        if (this.storeExploredStates) {
-            stats.push({
-                name: 'Closed list',
-                value: this.closedCount
-            });
-        } else {
-            stats.push({
-                name: 'Closed list',
-                value: 'N/A'
-            });
-        }
-
-        return stats;
     },
 
     iterate: function() {
@@ -63,6 +41,17 @@ DepthFirstSearch = Backbone.Model.extend({
         }
 
         var state = this.frontier.pop();
+
+        if (this.isGoalState(state)) {
+            // Let the application know that the goal has been discovered
+            this.goalFound = true;
+            this.onDiscover([{
+                originalState: state,
+                kind: 'goal'
+            }], state.getParent());
+            return true;
+        }
+
         var successors = state.generateSuccessors();
         this.closedCount++;
         var numSuccessors = successors.length;
@@ -78,21 +67,10 @@ DepthFirstSearch = Backbone.Model.extend({
                 kind: 'normal'
             };
 
-            var addToFrontier = false;
-
-            if (this.isGoalState(successor) && !this.goalFound) {
-                this.goalFound = true;
-                augmentedState.kind = 'goal';
-            } else if (this.storeExploredStates && this.discovered.hasOwnProperty(successorStr)) {
+            if (this.discovered.hasOwnProperty(successorStr)) {
                 augmentedState.kind = 'repeat';
-            } else if (this.storeExploredStates) {
-                this.discovered[successorStr] = true;
-                addToFrontier = true;
             } else {
-                addToFrontier = true;
-            }
-
-            if (addToFrontier) {
+                this.discovered[successorStr] = true;
                 this.frontier.push(successor);
             }
 

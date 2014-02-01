@@ -46,7 +46,6 @@ test ("test ApplicationState construction", function() {
 
     var r = createApplicationStateWithMockObjects();
 
-    equal( r.applicationState.getTree(), r.searchTree, "Modle should use the search tree that was passed in during construction");
     equal( r.applicationState.getConfiguration(), r.configuration, "Model should use the configuration that was passed in during construction");
     equal( r.applicationState.isRunning(), false, "Application should not be running after construction");
     equal( r.applicationState.get('algorithm'), null, "Application should not have an active algorithm");
@@ -68,7 +67,6 @@ test ("test ApplicationState start()", function() {
 
     // Test application state
     equal( r.applicationState.start(), r.applicationState, "start() method should allow for chaining");
-    equal( r.applicationState.getTree(), r.searchTree, "Application model should continue to use the search tree that was passed in during construction");
     equal( r.applicationState.isRunning(), true, "Application should be running after calling start()");
     equal( r.applicationState.get('algorithm') != null, true, "Application should have an active algorithm after calling start()");
 
@@ -91,7 +89,6 @@ test ("test ApplicationState next()", function() {
 
     // Test application state
     equal( r.applicationState.start().next(), r.applicationState, "next() method should allow for chaining");
-    equal( r.applicationState.getTree(), r.searchTree, "Application model should continue to use the search tree that was passed in during construction");
     equal( r.applicationState.isRunning(), true, "Application should continue running after calling next()");
     equal( r.applicationState.get('algorithm') != null, true, "Application should continue to have an active algorithm after calling next()");
 
@@ -115,7 +112,6 @@ test ("test ApplicationState reset()", function() {
     equal( r.applicationState.reset(), r.applicationState, "reset() method should allow for chaining");
     equal( r.applicationState.get('algorithm'), null, "Application should not have an active algorithm after calling reset()");
     equal( r.applicationState.getConfiguration(), r.configuration, "Application configuration should not be affected by calling reset()");
-    equal( r.applicationState.getTree(), r.searchTree, "Application model should continue to use the search tree that was passed in during construction");
     equal( r.applicationState.getTree().getRootNode(), null, "Search tree should not have a root node after calling reset()");
     equal( r.applicationState.isRunning(), false, "Application should not be running after calling reset()");
 });

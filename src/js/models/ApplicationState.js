@@ -1,7 +1,7 @@
 /**
  * This model represents the overall application state, and implements the
  * most of the runtime logic for the application. The current configuration
- * and active search tree are maintained as child models (or sub-models).
+ * and active search tree are maintained as sub-models.
  *
  * Notably, the start() method encapsulates the logic relating to 'Actions',
  * which are objects that modify the search tree or application state in
@@ -13,30 +13,21 @@ ApplicationState = Backbone.Model.extend({
 
     initialize: function() {
 
+        if (!this.has('configuration')) {
+            throw "A default configuration has not been provided to the ApplicationState model.";
+        }
+
         this.treeUndoActions = [];
         this.treeRedoActions = [];
 
-        // Set defaults
+        // Set default application state to indicate that there is no algorithm
+        // currently being used
         this.set({
             'algorithm': null,
             'state': 'stopped'
         });
 
-        if (this.has('configuration')) {
-            this.get('configuration').on('change',
-                this.onChangeConfiguration,
-                this);
-        } else {
-            throw "A default configuration has not been provided to the ApplicationState model.";
-        }
-
-        if (this.has('searchTree')) {
-            this.get('searchTree').on('change',
-                this.onChangeTree,
-                this);
-        } else {
-            throw "A search tree has not been provided to the ApplicationState model.";
-        }
+        this.set('searchTree', new SearchTree());
 
         this.set('statistics', []);
     },
@@ -84,14 +75,6 @@ ApplicationState = Backbone.Model.extend({
 
     isStopped: function() {
         return this.get('state') == 'stopped';
-    },
-
-    onChangeConfiguration: function() {
-        this.trigger('change:configuration');
-    },
-
-    onChangeTree: function() {
-        this.trigger('change:tree');
     },
 
     undo: function() {
@@ -207,15 +190,14 @@ ApplicationState = Backbone.Model.extend({
 
         // Locate the algorithm constructor function
         var config = this.getConfiguration();
-        var availableConfigs = config.getAvailableConfigurations();
-        var algorithms = availableConfigs.getAvailableAlgorithms();
+        var algorithms = Configuration.getAvailableAlgorithms();
         var selectedAlgorithm = config.getAlgorithm();
         var AlgorithmConstructor = window[algorithms[selectedAlgorithm].className];
 
         // Find the name of the heuristic function
         var heuristicName = null;
         if (algorithms[selectedAlgorithm].usesHeuristic) {
-            var heuristics = availableConfigs.getAvailableHeuristics();
+            var heuristics = Configuration.getAvailableHeuristics();
             heuristicName = heuristics[config.getHeuristic()].fnName;
         }
 

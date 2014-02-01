@@ -54,7 +54,7 @@ TreeView = Backbone.View.extend({
 
         // Respond to changes within the tree by recalculating the layout of
         // the tree, then rendering the result.
-        this.model.on('change:tree', this.layoutAndRenderTree, this);
+        this.model.getTree().on('change', this.layoutAndRenderTree, this);
 
         // Respond to the tree being reset by resetting the current position
         // of the tree

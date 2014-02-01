@@ -27,18 +27,11 @@ InformedSearch = Backbone.Model.extend({
             kind: 'normal'
         };
 
-        // Check whether or not initial state is a goal
-        /*this.goalFound = this.isGoalState(options.initialState);
-        if (this.goalFound) {
-            augmentedInitialState.kind = 'goal';
-            this.closedCount++;
-        } else {*/
-            options.initialState.setHeuristicValue(this.heuristicFunction(options.initialState));
-            this.frontier.enqueue({
-                f: options.initialState.getHeuristicValue(),
-                state: options.initialState
-            });
-        //}
+        options.initialState.setHeuristicValue(this.heuristicFunction(options.initialState));
+        this.frontier.enqueue({
+            f: options.initialState.getHeuristicValue(),
+            state: options.initialState
+        });
 
         // Discover initial state
         options.onDiscover([augmentedInitialState], null);

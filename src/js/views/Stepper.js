@@ -14,7 +14,7 @@ Stepper = Backbone.View.extend({
 
     initialize: function() {
         this.model.on('change', this.render, this);
-        this.model.on('change:configuration', this.render, this);
+        this.model.getConfiguration().on('change', this.render, this);
         this.render();
     },
 

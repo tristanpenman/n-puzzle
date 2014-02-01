@@ -3,16 +3,11 @@ Configuration = Backbone.Model.extend({
 
     initialize: function() {
 
-        if (!this.has('availableConfigurations')) {
-            throw "An available configurations object has not been provided to the Configuration model.";
-        }
-
-        var availableConfigurations = this.get('availableConfigurations');
-
+        // Set default configuration
         this.set({
-            'algorithm': availableConfigurations.getDefaultAlgorithm(),
-            'heuristic': availableConfigurations.getDefaultHeuristic(),
-            'mode': availableConfigurations.getDefaultControlMode()
+            'algorithm': Configuration.getDefaultAlgorithm(),
+            'heuristic': Configuration.getDefaultHeuristic(),
+            'mode': Configuration.getDefaultControlMode()
         });
 
         if (!this.has('goal')) {
@@ -37,7 +32,7 @@ Configuration = Backbone.Model.extend({
     },
 
     getAvailableConfigurations: function() {
-        return this.get('availableConfigurations');
+        return Configuration;
     },
 
     getGoalState: function() {
@@ -62,11 +57,10 @@ Configuration = Backbone.Model.extend({
 
     setAlgorithm: function(algorithm) {
         this.set('algorithm', algorithm);
-        var availableConfigs = this.getAvailableConfigurations();
-        if (availableConfigs.getAvailableAlgorithms()[algorithm].usesHeuristic) {
+        if (Configuration.getAvailableAlgorithms()[algorithm].usesHeuristic) {
             if (this.get('heuristic') == null) {
                 // Set default heuristic
-                this.set('heuristic', availableConfigs.getDefaultHeuristic());
+                this.set('heuristic', Configuration.getDefaultHeuristic());
             }
         } else {
             this.set('heuristic', null);
@@ -75,9 +69,8 @@ Configuration = Backbone.Model.extend({
     },
 
     setHeuristic: function(heuristic) {
-        var availableConfigs = this.getAvailableConfigurations();
         var algorithm = this.get('algorithm');
-        if (availableConfigs.getAvailableAlgorithms()[algorithm].usesHeuristic) {
+        if (Configuration.getAvailableAlgorithms()[algorithm].usesHeuristic) {
             this.set('heuristic', heuristic);
         } else {
             this.set('heuristic', null);
@@ -118,12 +111,7 @@ Configuration.getAvailableAlgorithms = function() {
             name: 'A* search',
             usesHeuristic: true,
             className: 'AStarSearch'
-        }/*,
-        'branch': {
-            name: 'Branch-and-bound search',
-            usesHeuristic: true,
-            className: 'BranchAndBoundSearch'
-        }*/
+        }
     };
 };
 
@@ -132,9 +120,6 @@ Configuration.getAvailableControlModes = function() {
         'single': {
             name: 'Single-step'
         },
-        /*'prediction': {
-            name: 'User prediction'
-        },*/
         'burst': {
             name: 'Burst mode'
         }

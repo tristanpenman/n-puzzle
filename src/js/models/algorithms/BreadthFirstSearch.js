@@ -13,37 +13,25 @@ BreadthFirstSearch = Backbone.Model.extend({
         // Number of nodes that have been explored
         this.closedCount = 0;
 
-        // Prepare initial state for discovery
-        var augmentedInitialState = {
+        // Add initial state to frontier
+        this.frontier = [options.initialState];
+
+        // Discover initial state
+        options.onDiscover([{
             originalState: options.initialState,
             depth: 0,
             kind: 'normal'
-        };
-
-        // Check whether or not initial state is a goal
-        this.goalFound = this.isGoalState(options.initialState);
-        if (this.goalFound) {
-            this.frontier = [];
-            augmentedInitialState.kind = 'goal';
-        } else {
-            this.frontier = [options.initialState];
-        }
-
-        // Discover initial state
-        options.onDiscover([augmentedInitialState], null);
+        }], null);
     },
 
     getStatistics: function() {
-        return [
-            {
-                name: 'Open list',
-                value: this.frontier.length
-            },
-            {
-                name: 'Closed list',
-                value: this.closedCount
-            }
-        ];
+        return [{
+            name: 'Open list',
+            value: this.frontier.length
+        },{
+            name: 'Closed list',
+            value: this.closedCount
+        }];
     },
 
     iterate: function() {
@@ -53,6 +41,17 @@ BreadthFirstSearch = Backbone.Model.extend({
         }
 
         var state = this.frontier.shift();
+
+        if (this.isGoalState(state)) {
+            // Let the application know that the goal has been discovered
+            this.goalFound = true;
+            this.onDiscover([{
+                originalState: state,
+                kind: 'goal'
+            }], state.getParent());
+            return true;
+        }
+
         var successors = state.generateSuccessors();
         this.closedCount++;
         var numSuccessors = successors.length;
@@ -67,10 +66,7 @@ BreadthFirstSearch = Backbone.Model.extend({
                 originalState: successor
             }
 
-            if (this.isGoalState(successor) && !this.goalFound) {
-                this.goalFound = true;
-                augmentedState.kind = 'goal';
-            } else if (this.discovered.hasOwnProperty(successorStr)) {
+            if (this.discovered.hasOwnProperty(successorStr)) {
                 augmentedState.kind = 'repeat';
             } else {
                 this.discovered[successorStr] = true;

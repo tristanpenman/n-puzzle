@@ -82,16 +82,15 @@ ControlPanel = Backbone.View.extend({
         });
 
         // Populate the available settings
-        var configurations = this.model.getConfiguration().getAvailableConfigurations();
-        this.populateAlgorithmsList(configurations.getAvailableAlgorithms());
-        this.populateHeuristicsList(configurations.getAvailableHeuristics());
-        this.populateControlModesList(configurations.getAvailableControlModes());
+        this.populateAlgorithmsList(Configuration.getAvailableAlgorithms());
+        this.populateHeuristicsList(Configuration.getAvailableHeuristics());
+        this.populateControlModesList(Configuration.getAvailableControlModes());
 
         // Respond to changes in the application state
         this.model.on('change', this.render, this);
 
         // Respond to changes in the application configuration
-        this.model.on('change:configuration', this.render, this);
+        this.model.getConfiguration().on('change', this.render, this);
 
         // Render the initial application configuration
         this.render();

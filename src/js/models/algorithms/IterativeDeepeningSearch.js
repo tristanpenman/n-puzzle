@@ -10,27 +10,23 @@ IterativeDeepeningSearch = Backbone.Model.extend({
         this.discovered = {};
         this.discovered[options.initialState.toString()] = 0;
 
-        // Number of explored nodes
+        // Number of nodes that have been explored
         this.closedCount = 0;
 
-        // Prepare initial state for discovery, and for future iterations
+        // Initial maximum depth is zero
+        this.set('maxDepth', 0);
+
+        // Define an initial 'augmented' state. The frontier will be reset
+        // and repopulated with this state every time we begin a new iteration
+        // of IDDFS.
         this.augmentedInitialState = {
             originalState: options.initialState,
             depth: 0,
             kind: 'normal'
         };
 
-        // Check whether or not initial state is a goal
-        this.goalFound = this.isGoalState(options.initialState);
-        if (this.goalFound) {
-            this.augmentedInitialState.kind = 'goal';
-            this.frontier = [];
-        } else {
-            this.frontier = [this.augmentedInitialState];
-        }
-
-        // Initial maximum depth is zero
-        this.set('maxDepth', 0);
+        // Add initial state to frontier
+        this.frontier = [this.augmentedInitialState];
 
         // Discover initial state
         options.onDiscover([this.augmentedInitialState], null);
@@ -41,20 +37,16 @@ IterativeDeepeningSearch = Backbone.Model.extend({
     },
 
     getStatistics: function() {
-        return [
-            {
-                name: 'Maximum depth',
-                value: this.getMaxDepth()
-            },
-            {
-                name: 'Open list',
-                value: this.frontier.length
-            },
-            {
-                name: 'Closed list',
-                value: this.closedCount
-            }
-        ];
+        return [{
+            name: 'Maximum depth',
+            value: this.getMaxDepth()
+        },{
+            name: 'Open list',
+            value: this.frontier.length
+        },{
+            name: 'Closed list',
+            value: this.closedCount
+        }];
     },
 
     iterate: function() {
@@ -71,6 +63,18 @@ IterativeDeepeningSearch = Backbone.Model.extend({
         while (this.frontier.length > 0 && numStates == 0) {
 
             var augmentedState = this.frontier.pop();
+
+            if (this.isGoalState(augmentedState.originalState)) {
+                // Let the application know that the goal has been discovered
+                this.goalFound = true;
+                this.onDiscover([{
+                    originalState: augmentedState.originalState,
+                    kind: 'goal',
+                    depth: augmentedState.depth
+                }], augmentedState.originalState.getParent());
+                return true;
+            }
+
             if (augmentedState.depth < maxDepth) {
 
                 var parentState = augmentedState.originalState
@@ -93,10 +97,7 @@ IterativeDeepeningSearch = Backbone.Model.extend({
 
                     var isRepeat = this.discovered.hasOwnProperty(successorStr);
 
-                    if (this.isGoalState(successor) && !this.goalFound) {
-                        this.goalFound = true;
-                        childAugmentedState.kind = 'goal';
-                    } else if (isRepeat) {
+                    if (isRepeat) {
                         childAugmentedState.kind = 'repeat';
                     } else {
                         childAugmentedState.kind = 'normal';
