@@ -5,7 +5,7 @@ PuzzleStateRenderer = function(context) {
     var xPaddingRight = 5;
     var xSpacing = 6;
     var yPaddingTop = 4;
-    var yPaddingBottom = 3;
+    var yPaddingBottom = 4;
     var ySpacing = 2;
     var characterWidth = 7;
     var characterHeight = 10;
@@ -30,7 +30,7 @@ PuzzleStateRenderer = function(context) {
 
     // Pre-calculate expected width and height of a node
     var width = xPaddingLeft + characterWidth * 3 + xSpacing * 2 + xPaddingRight;
-    var height = yPaddingTop * 2 + (characterHeight + ySpacing) * 3 + characterHeight + yPaddingBottom * 2;
+    var height = yPaddingTop * 2 + 3 * characterHeight + 2 * ySpacing + characterHeight + yPaddingBottom * 2;
 
     this.getExpectedHeight = function() {
         return height;
@@ -106,7 +106,7 @@ PuzzleStateRenderer = function(context) {
 
 
         var middleX = Math.round(x + this.getExpectedWidth() / 2) + 0.5;
-        var middleY = y + yPaddingTop + 3 * (ySpacing + characterHeight) + yPaddingBottom + 0.5;
+        var middleY = y + yPaddingTop + 3 * characterHeight + 2 * ySpacing + yPaddingBottom + 0.5;
 
         context.beginPath();
 
