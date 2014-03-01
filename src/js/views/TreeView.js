@@ -31,8 +31,10 @@ TreeView = Backbone.View.extend({
 
         // Layout constants
         this.scrollbarWidth = this.getScrollbarWidth();
-        this.treeLayoutMarginX = 120;
-        this.treeLayoutMarginY = 10;
+        this.treeLayoutMarginLeft = 120;
+        this.treeLayoutMarginRight = 120;
+        this.treeLayoutMarginTop = 10;
+        this.treeLayoutMarginBottom = 20;
 
         // Enable debug mode
         this.debug = (this.options.debug == true);
@@ -181,16 +183,16 @@ TreeView = Backbone.View.extend({
 
         var xOffset = Math.max(
             Math.round((width - boundingWidth) / 2 - boundingBox.left),
-            this.treeLayoutMarginX - boundingBox.left
+            this.treeLayoutMarginLeft - boundingBox.left
         ) - this.$viewport.scrollLeft();
 
-        var yOffset = this.treeLayoutMarginY - boundingBox.top - this.$viewport.scrollTop();
+        var yOffset = this.treeLayoutMarginTop - boundingBox.top - this.$viewport.scrollTop();
 
         virtualDoc = {
-            x: this.treeLayoutMarginX,
-            y: this.treeLayoutMarginY,
-            width: Math.max(width - this.treeLayoutMarginX * 2, boundingWidth),
-            height: Math.max(height - this.treeLayoutMarginY * 2, boundingHeight)
+            x: this.treeLayoutMarginLeft,
+            y: this.treeLayoutMarginTop,
+            width: Math.max(width - this.treeLayoutMarginLeft + this.treeLayoutMarginRight, boundingWidth),
+            height: Math.max(height - this.treeLayoutMarginTop + this.treeLayoutMarginBottom, boundingHeight)
         };
 
         if (this.debug) {
@@ -203,8 +205,8 @@ TreeView = Backbone.View.extend({
         }
 
         this.$el.find('#fakescrolldiv')
-            .css('width', (virtualDoc.width + this.treeLayoutMarginX * 2) + "px")
-            .css('height', (virtualDoc.height + this.treeLayoutMarginY * 2) + "px");
+            .css('width', (virtualDoc.width + this.treeLayoutMarginLeft + this.treeLayoutMarginRight) + "px")
+            .css('height', (virtualDoc.height + this.treeLayoutMarginTop + this.treeLayoutMarginBottom) + "px");
 
 
         // Position and draw the tree
