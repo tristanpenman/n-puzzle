@@ -36,11 +36,13 @@ ApplicationView = Backbone.View.extend({
             // as the state editor overlay.
             if (this.model.getTree().getRootNode() == null) {
                 $statsView.toggleClass('invisible', true);
+                $treeView.toggleClass('invisible', true);
                 this.treeView.setSize(0, 0);
             } else {
                 var newWidth = $body.innerWidth() - $controlPanel.outerWidth();
                 var newHeight = $body.innerHeight();
                 $statsView.toggleClass('invisible', false);
+                $treeView.toggleClass('invisible', false);
                 this.treeView.setSize(newWidth, newHeight);
             }
 
