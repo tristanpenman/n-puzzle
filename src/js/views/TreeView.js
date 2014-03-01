@@ -137,9 +137,6 @@ TreeView = Backbone.View.extend({
                 return;
             }
 
-            //childCoords.x = Math.round(childCoords.x);
-            //childCoords.y = Math.round(childCoords.y);
-
             // Draw a line connecting the parent node to its children
             context.beginPath();
             context.moveTo(
