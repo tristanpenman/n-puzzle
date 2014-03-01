@@ -117,8 +117,8 @@ TreeView = Backbone.View.extend({
         }
 
         // Render this state
-        var x = coords.x + xOffset;
-        var y = coords.y + yOffset;
+        var x = Math.round(coords.x + xOffset);
+        var y = Math.round(coords.y + yOffset);
         var expectedWidth = this.renderer.getExpectedWidth();
         var expectedHeight = this.renderer.getExpectedHeight();
         if (x + expectedWidth >= 0 && x < width &&
@@ -137,16 +137,16 @@ TreeView = Backbone.View.extend({
                 return;
             }
 
-            childCoords.x = Math.round(childCoords.x);
-            childCoords.y = Math.round(childCoords.y);
+            //childCoords.x = Math.round(childCoords.x);
+            //childCoords.y = Math.round(childCoords.y);
 
             // Draw a line connecting the parent node to its children
             context.beginPath();
             context.moveTo(
-                coords.x + xOffset + expectedWidth / 2 + 0.5,
+                Math.round(coords.x + xOffset + expectedWidth / 2) + 0.5,
                 coords.y + yOffset + expectedHeight + 1);
             context.lineTo(
-                childCoords.x + xOffset + expectedWidth / 2 + 0.5,
+                Math.round(childCoords.x + xOffset + expectedWidth / 2) + 0.5,
                 childCoords.y + yOffset);
             context.strokeStyle = '#000';
             context.stroke();
@@ -182,7 +182,7 @@ TreeView = Backbone.View.extend({
         var boundingHeight = boundingBox.bottom - boundingBox.top;
 
         var xOffset = Math.max(
-            Math.round((width - boundingWidth) / 2 - boundingBox.left),
+            (width - boundingWidth) / 2 - boundingBox.left,
             this.treeLayoutMarginLeft - boundingBox.left
         ) - this.$viewport.scrollLeft();
 
@@ -217,8 +217,10 @@ TreeView = Backbone.View.extend({
 
                 // Get coordinates for root node
                 var coords = this.layoutAlgorithm.getCoordinatesForNode(rootNode);
-                coords.x = Math.round(coords.x);
-                coords.y = Math.round(coords.y);
+                coords.x = 0;
+                coords.y = 0;
+                //coords.x = Math.round(coords.x);
+                //coords.y = Math.round(coords.y);
 
                 this.renderSubtree(context, rootNode, coords, xOffset, yOffset, width, height);
             }
