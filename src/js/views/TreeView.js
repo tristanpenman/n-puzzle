@@ -1,8 +1,39 @@
 
 TreeView = Backbone.View.extend({
 
+    /**
+     * Function to determine the width of scroll bars.
+     */
+    getScrollbarWidth: function() {
+        var outer = document.createElement("div");
+        outer.style.visibility = "hidden";
+        outer.style.width = "100px";
+        document.body.appendChild(outer);
+
+        var widthNoScroll = outer.offsetWidth;
+        // force scrollbars
+        outer.style.overflow = "scroll";
+
+        // add innerdiv
+        var inner = document.createElement("div");
+        inner.style.width = "100%";
+        outer.appendChild(inner);
+
+        var widthWithScroll = inner.offsetWidth;
+
+        // remove divs
+        outer.parentNode.removeChild(outer);
+
+        return widthNoScroll - widthWithScroll;
+    },
+
     initialize: function() {
 
+        // Layout constants
+        this.scrollbarWidth = this.getScrollbarWidth();
+        this.treeLayoutMargin = 10;
+
+        // Enable debug mode
         this.debug = (this.options.debug == true);
 
         // Get drawing context
@@ -12,34 +43,19 @@ TreeView = Backbone.View.extend({
             return;
         }
 
-        this.reset();
-
         $main.mousedown(_.bind(function(event){
-            this.dragOrigin = {
-                'x': event.pageX,
-                'y': event.pageY
-            };
+            // TODO: implement node selection
             event.preventDefault();
         }, this));
 
         $(document).mousemove(_.bind(function(event){
-            if (this.dragOrigin != null) {
-                this.dragOffset.x = event.pageX - this.dragOrigin.x;
-                this.dragOffset.y = event.pageY - this.dragOrigin.y;
-                this.render();
-            }
+            // TODO: implement node selection
             event.preventDefault();
         }, this));
 
         $(document).mouseup(_.bind(function(event){
-            if (this.dragOrigin != null) {
-                this.dragOrigin = null;
-                this.finalOffset.x += this.dragOffset.x;
-                this.finalOffset.y += this.dragOffset.y;
-                this.dragOffset.x = 0;
-                this.dragOffset.y = 0;
-                event.preventDefault();
-            }
+            // TODO: implement node selection
+            event.preventDefault();
         }, this));
 
         this.renderer = new PuzzleStateRenderer(context);
@@ -49,16 +65,27 @@ TreeView = Backbone.View.extend({
 
         // Initialise the layout algorithm
         this.layoutAlgorithm = new TreeLayout({
-            nodeWidth: this.renderer.getExpectedWidth()
+            nodeWidth: this.renderer.getExpectedWidth(),
+            nodeHeight: this.renderer.getExpectedHeight()
         });
 
         // Respond to changes within the tree by recalculating the layout of
         // the tree, then rendering the result.
         this.model.getTree().on('change', this.layoutAndRenderTree, this);
 
-        // Respond to the tree being reset by resetting the current position
-        // of the tree
-        this.model.on('reset:tree', this.reset, this);
+        // When the user scrolls using the virtual viewport, the offset of the
+        // the search tree should be updated using the scrollbar positions.
+        this.$viewport = this.$el.find('#viewport');
+        this.$viewport.scroll(_.bind(this.render, this));
+
+        // Respond to the tree being reset by resetting the virtual viewport
+        this.model.on('reset:tree', function() {
+            this.$viewport
+                .css('width', '0px')
+                .css('height', '0px');
+            },
+            this
+        );
     },
 
     layoutAndRenderTree: function() {
@@ -128,7 +155,9 @@ TreeView = Backbone.View.extend({
     render: function() {
 
         var $main = this.$el.find('.main');
-        if ($main.attr('width') == 0 || $main.attr('height') == 0) {
+        var width = $main.attr('width');
+        var height = $main.attr('height');
+        if (width == 0 || height == 0) {
             return;
         }
 
@@ -138,8 +167,6 @@ TreeView = Backbone.View.extend({
         }
 
         // Clear canvas
-        var width = $main.attr('width');
-        var height = $main.attr('height');
         context.clearRect(0, 0, width, height);
 
         // Center the tree in the viewport
@@ -148,8 +175,35 @@ TreeView = Backbone.View.extend({
             return;
         }
         var boundingWidth = boundingBox.right - boundingBox.left;
-        var xOffset = Math.round((width - boundingWidth) / 2 - boundingBox.left + this.dragOffset.x + this.finalOffset.x);
-        var yOffset = Math.round(this.dragOffset.y + this.finalOffset.y);
+        var boundingHeight = boundingBox.bottom - boundingBox.top;
+
+        var xOffset = Math.max(
+            Math.round((width - boundingWidth) / 2 - boundingBox.left),
+            this.treeLayoutMargin - boundingBox.left
+        ) - this.$viewport.scrollLeft();
+
+        var yOffset = this.treeLayoutMargin - boundingBox.top - this.$viewport.scrollTop();
+
+        virtualDoc = {
+            x: this.treeLayoutMargin,
+            y: this.treeLayoutMargin,
+            width: Math.max(width - this.treeLayoutMargin * 2, boundingWidth),
+            height: Math.max(height - this.treeLayoutMargin * 2, boundingHeight)
+        };
+
+        if (this.debug) {
+            context.strokeStyle = '#CCC';
+            context.strokeRect(
+                    Math.round(virtualDoc.x) + 0.5 - this.$viewport.scrollLeft(),
+                    Math.round(virtualDoc.y) + 0.5 - this.$viewport.scrollTop(),
+                    virtualDoc.width,
+                    virtualDoc.height);
+        }
+
+        this.$el.find('#fakescrolldiv')
+            .css('width', (virtualDoc.width + this.treeLayoutMargin * 2) + "px")
+            .css('height', (virtualDoc.height + this.treeLayoutMargin * 2) + "px");
+
 
         // Position and draw the tree
         var tree = this.model.getTree();
@@ -170,52 +224,30 @@ TreeView = Backbone.View.extend({
         if (this.debug) {
             context.strokeStyle = '#CCC';
             context.strokeRect(
-                    Math.round(boundingBox.left + xOffset) + 0.5,
-                    Math.round(boundingBox.top + yOffset) + 0.5,
-                    boundingBox.right - boundingBox.left,
-                    boundingBox.bottom - boundingBox.top);
+                Math.round(boundingBox.left + xOffset) + 0.5,
+                Math.round(boundingBox.top + yOffset) + 0.5,
+                boundingBox.right - boundingBox.left,
+                boundingBox.bottom - boundingBox.top);
         }
-    },
-
-    reset: function() {
-
-        this.dragOrigin = null;
-
-        this.dragOffset = {
-            x: 0,
-            y: 0
-        };
-
-        this.finalOffset = {
-            x: 0,
-            y: 10
-        };
     },
 
     setSize: function(newWidth, newHeight) {
 
         // Resize container
         this.$el
-            .css('width', newWidth)      // Canvas width
+            .css('width', newWidth)       // Canvas width
             .css('height', newHeight);    // Canvas height
 
         // Resize main canvas
         this.$el.find('.main')
-            .attr('width', this.$el.innerWidth())
-            .attr('height', this.$el.innerHeight());
+            .attr('width', this.$el.innerWidth() - this.scrollbarWidth)
+            .attr('height', this.$el.innerHeight() - this.scrollbarWidth);
 
-        // Position or hide the thumbnail canvas
-        var $thumbnail = this.$el.find('.thumbnail');
-        if (this.renderThumbnail) {
-            var top = this.$el.innerHeight() - $thumbnail.attr('height') - 20;
-            var left = this.$el.innerWidth() - $thumbnail.attr('width') - 20;
-            $thumbnail
-                .css('top', top  + 'px')
-                .css('left', left + 'px')
-                .css('display', 'block');
-        } else {
-            $thumbnail.css('display', 'none');
-        }
+        this.$el.find('#viewport')
+            .css('overflow', 'scroll')
+            .css('position', 'absolute')
+            .css('width', newWidth)
+            .css('height', newHeight);
 
         this.render();
     }
