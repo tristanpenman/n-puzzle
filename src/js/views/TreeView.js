@@ -191,8 +191,8 @@ TreeView = Backbone.View.extend({
         virtualDoc = {
             x: this.treeLayoutMarginLeft,
             y: this.treeLayoutMarginTop,
-            width: Math.max(width - this.treeLayoutMarginLeft + this.treeLayoutMarginRight, boundingWidth),
-            height: Math.max(height - this.treeLayoutMarginTop + this.treeLayoutMarginBottom, boundingHeight)
+            width: Math.max(width - (this.treeLayoutMarginLeft + this.treeLayoutMarginRight), boundingWidth),
+            height: Math.max(height - (this.treeLayoutMarginTop + this.treeLayoutMarginBottom), boundingHeight)
         };
 
         if (this.debug) {

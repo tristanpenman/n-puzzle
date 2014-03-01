@@ -1,10 +1,10 @@
 PuzzleStateRenderer = function(context) {
 
     // Character metrics for normal-sized font
-    var xPaddingLeft = 5;
-    var xPaddingRight = 6;
+    var xPaddingLeft = 6;
+    var xPaddingRight = 5;
     var xSpacing = 6;
-    var yPaddingTop = 3;
+    var yPaddingTop = 4;
     var yPaddingBottom = 3;
     var ySpacing = 2;
     var characterWidth = 7;
@@ -15,6 +15,7 @@ PuzzleStateRenderer = function(context) {
     font.src = "images/font.png";
 
     // Character metrics for tiny font
+    var tinyPaddingTop = 5;
     var tinyCharacterWidth = 5;
     var tinyCharacterHeight = 7;
     var tinyCharacterSpacing = 1;
@@ -73,8 +74,8 @@ PuzzleStateRenderer = function(context) {
 
         for(i = 0; i < characters.length; i++) {
 
-            var destX = xOffset + (tinyCharacterWidth + tinyCharacterSpacing) * i;
-            var destY = yOffset + yPaddingTop + 1;
+            var destX = Math.round(xOffset + (tinyCharacterWidth + tinyCharacterSpacing) * i);
+            var destY = Math.round(yOffset + tinyPaddingTop);
 
             context.drawImage(tinyFont,
                 characters[i] * tinyCharacterWidth, 0, tinyCharacterWidth, 7,
@@ -94,8 +95,8 @@ PuzzleStateRenderer = function(context) {
                 var tileCharacter;
                 var srcX = characterWidth * tile;
 
-                var destX = x + tx * (xSpacing + characterWidth) + xPaddingLeft + 0.5;
-                var destY = y + ty * (ySpacing + characterHeight) + yPaddingTop + 0.5;
+                var destX = x + tx * (xSpacing + characterWidth) + xPaddingLeft;
+                var destY = y + ty * (ySpacing + characterHeight) + yPaddingTop;
 
                 context.drawImage(font,
                     srcX, 0, characterWidth, characterHeight,
