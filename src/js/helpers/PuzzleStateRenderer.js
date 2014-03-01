@@ -79,6 +79,7 @@ PuzzleStateRenderer = function(context) {
         context.lineTo(x + this.getExpectedWidth() / 2 + 0.5, yPos + 12);
         context.stroke();
 
+        context.fillStyle = '#000';
         context.fillText(state.getDepth(), x + xPaddingLeft + 2, yPos + 5);
         context.fillText(text, x + xPaddingLeft + 2.0 * (xSpacing + characterWidth) - 2, yPos + 5);
     };
