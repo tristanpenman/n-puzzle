@@ -213,6 +213,7 @@ PuzzleState.calculateEuclideanDistance = function(a, b) {
     for (var y = 0; y < 3; y++) {
         for (var x = 0; x < 3; x++) {
             // Find the matching tile in puzzle state 'b'
+            var found = false;
             for (var dy = 0; dy < 3; dy++) {
                 for (var dx = 0; dx < 3; dx++) {
                     if (a.getTile(x, y) == b.getTile(dx, dy)) {
@@ -220,7 +221,12 @@ PuzzleState.calculateEuclideanDistance = function(a, b) {
                         var h = Math.abs(dx - x);
                         var v = Math.abs(dy - y);
                         distance += Math.sqrt(v*v + h*h);
+                        found = true;
+                        break;
                     }
+                }
+                if (found) {
+                    break;
                 }
             }
         }
@@ -233,12 +239,20 @@ PuzzleState.calculateManhattanDistance = function(a, b) {
     // For each tile in puzzle state 'a'
     for (var y = 0; y < 3; y++) {
         for (var x = 0; x < 3; x++) {
-            // Find the matching tile in puzzle state 'b'
-            for (var dy = 0; dy < 3; dy++) {
-                for (var dx = 0; dx < 3; dx++) {
-                    if (a.getTile(x, y) == b.getTile(dx, dy)) {
-                        distance += Math.abs(dx - x);
-                        distance += Math.abs(dy - y);
+            if (a.getTile(x, y) != 0) {
+                // Find the matching tile in puzzle state 'b'
+                var found = false;
+                for (var dy = 0; dy < 3; dy++) {
+                    for (var dx = 0; dx < 3; dx++) {
+                        if (a.getTile(x, y) == b.getTile(dx, dy)) {
+                            distance += Math.abs(dx - x);
+                            distance += Math.abs(dy - y);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) {
+                        break;
                     }
                 }
             }
@@ -252,8 +266,11 @@ PuzzleState.calculateTilesOutOfPlace = function(a, b) {
     // For each tile in puzzle state 'a'
     for (var y = 0; y < 3; y++) {
         for (var x = 0; x < 3; x++) {
-            if (a.getTile(x, y) != b.getTile(x, y)) {
-                tilesOutOfPlace++;
+            var tile = a.getTile(x, y);
+            if (tile != 0) {
+                if (tile != b.getTile(x, y)) {
+                    tilesOutOfPlace++;
+                }
             }
         }
     }

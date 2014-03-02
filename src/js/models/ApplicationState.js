@@ -602,6 +602,7 @@ ApplicationState = Backbone.Model.extend({
             // revert the application state to whatever it was prior to the
             // goal being found.
             for (var i = 0; i < augmentedStates.length; i++) {
+
                 if (augmentedStates[i].kind == 'goal') {
 
                     goalFound = true;
@@ -621,7 +622,11 @@ ApplicationState = Backbone.Model.extend({
                     this.expansionOrder++;
                     localActions.push(setExpansionOrderAction.execute());
 
-                    break;
+                } else if (augmentedStates[i].kind == 'repeat') {
+                    // While checking for goal states, we can also check for
+                    // repeat states, so that we can reset the heuristic value
+                    // to null for those states.
+                    augmentedStates[i].originalState.setHeuristicValue(null);
                 }
             }
 
