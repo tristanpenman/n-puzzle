@@ -197,6 +197,85 @@
         </div>
     </div>
 
+    <div id="tutorial">
+        <div id="content">
+            <h1>Welcome to N-Puzzle</h1>
+            <p>This web application allows you to view a graphical representation of a range of different graph search algorithms, whilst solving your choice of 8-puzzle problems.</p>
+            <h2>Getting Started</h2>
+            <p>On the left-hand side of this application, you will see the <em>Control Panel</em>. Using the <em>Control Panel</em>, you can configure the following aspects of the application:</p>
+            <ul>
+                <li>Initial State and Goal State</li>
+                <li>Which Search Algorithm to use</li>
+                <li>Which Heuristic Function to use, if using an Informed Search Algorithm</li>
+                <li>And whether to use single-step or burst mode</li>
+            </ul>
+            <p>Each of these options will be described in more detail below.</p>
+            <h3>Initial and Goal States</h3>
+            <p>To set the Initial or Goal states, you can click either the 'Edit state' button or the graphical representation of the state.</p>
+            <p>You should see a popup like the following:</p>
+            <img src="images/choose-state.png" width="130" height="161">
+            <p>To change a tile, simply click on the tile that you would like to replace, then enter the new value on your keyboard. This will swap the tile with the one that previously held that value.</p>
+            <h3>Search Algorithm</h3>
+            <p>N-Puzzle supports five different Graph-based Search Algorithms. The first three are <em>Uninformed</em> Search Algorithms:</p>
+            <ul>
+                <li>Breadth-first Search</li>
+                <li>Depth-first Search</li>
+                <li>Iterative Deepening Search</li>
+            </ul>
+            <p>The other two are <em>Informed</em> Search Algorithms:</p>
+            <ul>
+                <li>A* Search</li>
+                <li>Greedy Search</li>
+            </ul>
+            <p>If you choose an Informed Search Algorithm, then you will also need to select a Heuristic Function.</p>
+            <h3>Heuristic Function</h3>
+            <p>N-Puzzle supports three different Heuristic Functions:</p>
+            <ul>
+                <li>Euclidean Distance</li>
+                <li>Manhattan Distance (City-Block distance)</li>
+                <li>Tiles Out-of-place</li>
+            </ul>
+            <h3>Single-Step or Burst Mode</h3>
+            <h2>The Search Tree</h2>
+            <h3>State Representation</h3>
+            <img src="images/state-representation.png">
+            <h3>Node Colours</h3>
+            <p>To help make the Search Tree more 'readable', the border of each node is colour-coded based on its current state.</p>
+            <p>The following diagram shows the A* algorithm (with the Euclidean distance heuristic) applied to a problem that can be solved in just two moves:</p>
+            <img src="images/astar-steps.png">
+            <p>The colours can be interpreted as follows:</p>
+            <table>
+                <tr>
+                    <th>Colour</th>
+                    <th>Meaning</th>
+                </tr>
+                <tr>
+                    <td>Blue</td>
+                    <td>State is in the frontier, and has not been seen previously.</td>
+                </tr>
+                <tr>
+                    <td>Red</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Grey</td>
+                    <td>If a state has been explored, it will be grey. For example, in step 2) of the diagram above, the initial state has been coloured grey to indicate that it has been explored. In step 3), the initial state is rediscovered but will not be expanded again.</td>
+                </tr>
+                <tr>
+                    <td>Green</td>
+                    <td>Once the goal state has been found, it will be highlighted in green.</td>
+                </tr>
+                <tr>
+                    <td>Gold</td>
+                    <td>Once the goal state has been found, any states on the path from the initial state to the goal state will be highlighted.</td>
+                </tr>
+            </table>
+            <p>Step 1) corresponds to </p>
+            <h3>Open and Closed Lists</h3>
+            <img src="images/stats.png">
+        </div>
+    </div>
+
     <!-- Markup for StatsView -->
     <div id="stats_view">
     </div>
