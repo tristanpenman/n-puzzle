@@ -3,6 +3,7 @@ PuzzleState = Backbone.Model.extend({
     initialize: function(attributes, options) {
         this.tiles = [1,2,3,4,5,6,7,8,0];
         this.depth = 0;
+        this.expansionOrder = 0;
         this.heuristicValue = null;
         if (options != null) {
             this.parent = options.parent;
@@ -63,6 +64,10 @@ PuzzleState = Backbone.Model.extend({
         return this.depth;
     },
 
+    getExpansionOrder: function() {
+        return this.expansionOrder;
+    },
+
     getHeuristicValue: function() {
         return this.heuristicValue;
     },
@@ -103,6 +108,10 @@ PuzzleState = Backbone.Model.extend({
             return other.toString() === this.toString();
         }
         return false;
+    },
+
+    setExpansionOrder: function(value) {
+        this.expansionOrder = value;
     },
 
     setHeuristicValue: function(value) {

@@ -23,6 +23,8 @@ PuzzleStateRenderer = function(context) {
     // Special character offsets
     var tinyFontCharGreaterThanOrEqual = 10;
     var tinyFontK = 11;
+    var tinyFontHash = 12;
+    var tinyFontDash = 13;
 
     // Load tiny font (for depth and path cost)
     var tinyFont = new Image();
@@ -30,41 +32,47 @@ PuzzleStateRenderer = function(context) {
 
     // Pre-calculate expected width and height of a node
     var width = xPaddingLeft + characterWidth * 3 + xSpacing * 2 + xPaddingRight;
-    var height = yPaddingTop * 2 + 3 * characterHeight + 2 * ySpacing + characterHeight + yPaddingBottom * 2;
+    var height = yPaddingTop + 5 * characterHeight + 2 * ySpacing + yPaddingBottom * 2 + 2 * tinyPaddingTop + tinyCharacterSpacing * 2;
 
     this.getExpectedHeight = function() {
         return height;
     },
 
-
     this.getExpectedWidth = function() {
         return width;
     },
 
-    this.renderNumberUsingTinyFont = function(xOffset, yOffset, value) {
+    this.convertNumberToTinyFontChars = function(value) {
 
         var log10 = function(val) {
             return Math.log(val) / Math.LN10;
         }
 
-        // Width of text area
-        var boxWidth = this.getExpectedWidth() / 2;
-
         // Indices of characters to be rendered
-        var characters = new Array();
+        var characters = [];
 
+        // Extract digits
+        var numDigits = value > 0 ? Math.floor(log10(value)) + 1 : 1;
+        for (var i = 0; i < numDigits; i++) {
+            var digit = value % 10;
+            characters.unshift(digit);
+            value = (value - digit) / 10;
+        }
+
+        return characters;
+    },
+
+    this.convertNumberToTinyFontCharsLimit1k = function(value) {
         if (value < 1000) {
-            // Extract digits
-            var numDigits = value > 0 ? Math.floor(log10(value)) + 1 : 1;
-            for (var i = 0; i < numDigits; i++) {
-                var digit = value % 10;
-                characters.unshift(digit);
-                value = (value - digit) / 10;
-            }
+            // Convert to character indices
+            return this.convertNumberToTinyFontChars(value);
         } else {
             // Print characters to represent >= 1000
-            characters = new Array(tinyFontCharGreaterThanOrEqual, 1, tinyFontK);
+            return [tinyFontCharGreaterThanOrEqual, 1, tinyFontK];
         }
+    },
+
+    this.renderNumberUsingTinyFont = function(xOffset, yOffset, boxWidth, characters) {
 
         // Calculate width of text
         var textWidth = (tinyCharacterWidth + tinyCharacterSpacing) * characters.length;
@@ -108,24 +116,46 @@ PuzzleStateRenderer = function(context) {
         var middleX = Math.round(x + this.getExpectedWidth() / 2) + 0.5;
         var middleY = y + yPaddingTop + 3 * characterHeight + 2 * ySpacing + yPaddingBottom + 0.5;
 
-        context.beginPath();
-
         // Draw horizontal line
+        context.beginPath();
         context.moveTo(x + 0.5, middleY);
         context.lineTo(Math.round(x + this.getExpectedWidth() + 0.5), middleY);
-
-        // Divide bottom section in half with a vertical line
-        context.moveTo(middleX, middleY);
-        context.lineTo(middleX, middleY + yPaddingTop + characterHeight + yPaddingBottom);
-
         context.stroke();
 
-        this.renderNumberUsingTinyFont(x + 1, middleY, state.getDepth());
+        // Divide bottom section in half with a vertical line
+        context.beginPath();
+        context.moveTo(middleX, middleY);
+        context.lineTo(middleX, middleY + yPaddingTop + characterHeight + yPaddingBottom);
+        context.stroke();
+
+        var characters;
+        var depth = state.getDepth();
+        var characters = this.convertNumberToTinyFontCharsLimit1k(depth);
+        this.renderNumberUsingTinyFont(x + 1, middleY, this.getExpectedWidth() / 2, characters);
 
         var hv = state.getHeuristicValue();
-        if (hv != null) {
+        if (hv == null) {
+            characters = [tinyFontDash];
+        } else {
             hv = parseInt(hv, 10);
-            this.renderNumberUsingTinyFont(middleX, middleY, hv);
+            characters = this.convertNumberToTinyFontCharsLimit1k(hv);
         }
+        this.renderNumberUsingTinyFont(middleX, middleY, this.getExpectedWidth() / 2, characters);
+
+        middleY += yPaddingTop + characterHeight + yPaddingBottom;
+
+        context.beginPath();
+        context.moveTo(x + 0.5, middleY);
+        context.lineTo(Math.round(x + this.getExpectedWidth() + 0.5), middleY);
+        context.stroke();
+
+        var eo = state.getExpansionOrder();
+        if (eo == 0) {
+            characters = [tinyFontDash];
+        } else {
+            characters = this.convertNumberToTinyFontChars(eo);
+            characters.unshift(tinyFontHash);
+        }
+        this.renderNumberUsingTinyFont(x + 1, middleY, this.getExpectedWidth(), characters);
     };
 };

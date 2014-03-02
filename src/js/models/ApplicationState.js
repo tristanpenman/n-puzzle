@@ -30,6 +30,8 @@ ApplicationState = Backbone.Model.extend({
         this.set('searchTree', new SearchTree());
 
         this.set('statistics', []);
+
+        this.expansionOrder = 1;
     },
 
     /**
@@ -144,6 +146,7 @@ ApplicationState = Backbone.Model.extend({
         if (this.isRunning() || this.isPaused() || this.isComplete()) {
             this.treeUndoActions = [];
             this.treeRedoActions = [];
+            this.expansionOrder = 1;
             this.get('searchTree').setRootNode(null);
             this.set({
                 'algorithm': null,
@@ -212,6 +215,18 @@ ApplicationState = Backbone.Model.extend({
         // Alias initial and goal states
         var initialState = config.getInitialState();
         var goalState = config.getGoalState();
+
+        /**
+         * Constructor function that will initialise an Action that will set
+         * the 'expansion order' value for a state.
+         */
+        var SetExpansionOrderAction = function(state, value) {
+            this.execute = function() {
+                oldValue = state.getExpansionOrder();
+                state.setExpansionOrder(value);
+                return new SetExpansionOrderAction(state, oldValue);
+            }
+        };
 
         /**
          * Constructor function that will initialise an Action that will add
@@ -482,6 +497,13 @@ ApplicationState = Backbone.Model.extend({
             // below...
             var newAugmentedStates = [];
 
+            if (parentState != null) {
+                // Update the expansion order value for the parent state
+                var setExpansionOrderAction = new SetExpansionOrderAction(parentState, this.expansionOrder);
+                this.expansionOrder++;
+                localActions.push(setExpansionOrderAction.execute());
+            }
+
             // Process each state. If the state has been added to the tree
             // previously, then execute an UpdateStateAttributeAction.
             // Otherwise, add the state to the list of states that should
@@ -569,7 +591,7 @@ ApplicationState = Backbone.Model.extend({
                 }
             }
 
-            // Check for goal states. If there a goal state has been
+            // Check for goal states. If there is a goal state that has been
             // discovered, then the Application state should be updated to
             // 'complete'. Reversing this action (i.e. clicking 'Back') will
             // revert the application state to whatever it was prior to the
