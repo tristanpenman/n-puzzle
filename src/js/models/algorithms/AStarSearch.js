@@ -1,8 +1,8 @@
 AStarSearch = InformedSearch.extend({
 
     initialize: function(attributes, options) {
-        this.heuristicFunction = function(state) {
-            return state.getDepth() + options.heuristicFunction(state);
+        this.fScoreFunction = function(state) {
+            return state.getDepth() + state.getHeuristicValue();
         };
         this.constructor.__super__.initialize.apply(this, arguments);
     }

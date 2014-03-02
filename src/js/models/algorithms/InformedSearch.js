@@ -7,6 +7,7 @@ InformedSearch = Backbone.Model.extend({
         // Callback functions
         this.isGoalState = options.isGoalState;
         this.onDiscover = options.onDiscover;
+        this.heuristicFunction = options.heuristicFunction;
 
         // Function that compares the estimated cost 'f' of a path
         var compareEntries = _.bind(function(a, b) {
@@ -27,9 +28,11 @@ InformedSearch = Backbone.Model.extend({
             kind: 'normal'
         };
 
-        options.initialState.setHeuristicValue(this.heuristicFunction(options.initialState));
+        options.initialState.setHeuristicValue(
+            options.heuristicFunction(options.initialState));
+
         this.frontier.enqueue({
-            f: options.initialState.getHeuristicValue(),
+            f: this.fScoreFunction(options.initialState),
             state: options.initialState
         });
 
@@ -85,7 +88,7 @@ InformedSearch = Backbone.Model.extend({
             }
 
             this.frontier.enqueue({
-                f: successor.getHeuristicValue(),
+                f: this.fScoreFunction(successor),
                 state: successor
             });
 
