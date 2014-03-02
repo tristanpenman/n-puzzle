@@ -85,6 +85,7 @@ ApplicationState = Backbone.Model.extend({
             var redoAction = action.execute();
             this.treeRedoActions.push(redoAction);
             this.trigger('change');
+            this.get('searchTree').trigger('change');
         }
     },
 
@@ -104,7 +105,6 @@ ApplicationState = Backbone.Model.extend({
                 var action = this.treeRedoActions.pop();
                 var undoAction = action.execute();
                 this.treeUndoActions.push(undoAction);
-                this.trigger('change');
 
             } else  if (algorithm.iterate()) {
 
@@ -119,6 +119,9 @@ ApplicationState = Backbone.Model.extend({
                     this.doBurst();
                 }
             }
+
+            this.trigger('change');
+            this.get('searchTree').trigger('change');
         }
 
         return this;
@@ -297,9 +300,6 @@ ApplicationState = Backbone.Model.extend({
                     }
                 }
 
-                // Setting the root node of the tree like this will cause the
-                // tree to be redrawn.
-                tree.setRootNode(tree.getRootNode());
 
                 // Return an action to undo the changes
                 return new RemoveStatesFromTreeAction(newStates, parentState, tree);
@@ -353,10 +353,6 @@ ApplicationState = Backbone.Model.extend({
                     parentNode.removeChild(node);
                     delete statesMappedToNodes[stateId];
                 }
-
-                // Setting the root node of the tree like this will cause the
-                // tree to be redrawn.
-                tree.setRootNode(tree.getRootNode());
 
                 return new AddStatesToTreeAction(
                     augmentedStates, parentState, tree
@@ -466,8 +462,9 @@ ApplicationState = Backbone.Model.extend({
         var CompositeAction = function(actions) {
             this.execute = function() {
                 var undoActions = [];
-                for (var i = 0; i < actions.length; i++) {
-                    var undoAction = actions[i].execute();
+                while(actions.length) {
+                    var action = actions.pop();
+                    var undoAction = action.execute();
                     if (undoAction != null) {
                         undoActions.push(undoAction);
                     }
@@ -497,9 +494,10 @@ ApplicationState = Backbone.Model.extend({
             // below...
             var newAugmentedStates = [];
 
-            if (parentState != null) {
+            if (parentState != null && parentState.getExpansionOrder() == 0) {
                 // Update the expansion order value for the parent state
-                var setExpansionOrderAction = new SetExpansionOrderAction(parentState, this.expansionOrder);
+                var setExpansionOrderAction = new SetExpansionOrderAction(
+                    parentState, this.expansionOrder);
                 this.expansionOrder++;
                 localActions.push(setExpansionOrderAction.execute());
             }
@@ -598,8 +596,15 @@ ApplicationState = Backbone.Model.extend({
             // goal being found.
             for (var i = 0; i < augmentedStates.length; i++) {
                 if (augmentedStates[i].kind == 'goal') {
+
                     var action = new UpdateApplicationStateAction(this, 'complete');
                     localActions.push(action.execute());
+
+                    // Update the expansion order value for the goal state
+                    var setExpansionOrderAction = new SetExpansionOrderAction(
+                        augmentedStates[i].originalState, this.expansionOrder);
+                    this.expansionOrder++;
+                    localActions.push(setExpansionOrderAction.execute());
                 }
             }
 
@@ -620,8 +625,6 @@ ApplicationState = Backbone.Model.extend({
             }
 
             this.trigger('change');
-
-            searchTree.setRootNode(searchTree.getRootNode());
 
         }, this);
 
@@ -645,6 +648,10 @@ ApplicationState = Backbone.Model.extend({
             }
             return 0;
         }, this);
+
+        // Reset the expansion order of the initial state, otherwise the value
+        // from a previous run may be used
+        initialState.setExpansionOrder(0);
 
         // Instantiate algorithm
         var algorithm = new AlgorithmConstructor({}, {

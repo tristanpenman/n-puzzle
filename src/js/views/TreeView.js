@@ -92,11 +92,21 @@ TreeView = Backbone.View.extend({
     },
 
     layoutAndRenderTree: function() {
+
         // Position and draw the tree
         var tree = this.model.getTree();
         if (tree != null) {
+
+            // Calculate new layout for tree
             this.layoutAlgorithm.positionTree(tree.getRootNode());
-            this.render();
+
+            // Render new tree layout if the canvas is visible
+            var $main = this.$el.find('.main');
+            var width = $main.attr('width');
+            var height = $main.attr('height');
+            if (width > 0 && height > 0) {
+                this.render();
+            }
         }
     },
 
