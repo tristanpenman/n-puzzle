@@ -6,11 +6,8 @@ IterativeDeepeningSearch = Backbone.Model.extend({
         this.isGoalState = options.isGoalState;
         this.onDiscover = options.onDiscover;
 
-        // Discovered nodes in the current iteration
-        this.discovered = {};
-        this.discovered[options.initialState.toString()] = 0;
-
-        // Number of nodes that have been explored
+        // Nodes that have been explored
+        this.closedList = {};
         this.closedCount = 0;
 
         // Initial maximum depth is zero
@@ -79,8 +76,13 @@ IterativeDeepeningSearch = Backbone.Model.extend({
 
                 var parentState = augmentedState.originalState
                 var successors = parentState.generateSuccessors();
-                this.closedCount++;
                 var childDepth = augmentedState.depth + 1;
+
+                var stateStr = parentState.toString()
+                if (!this.closedList.hasOwnProperty(stateStr)) {
+                    this.closedList[stateStr] = true;
+                    this.closedCount++;
+                }
 
                 // An array of successor objects with additional attributes
                 var augmentedSuccessors = [];
@@ -95,13 +97,12 @@ IterativeDeepeningSearch = Backbone.Model.extend({
                         depth: childDepth
                     };
 
-                    var isRepeat = this.discovered.hasOwnProperty(successorStr);
+                    var isRepeat = this.closedList.hasOwnProperty(successorStr);
 
                     if (isRepeat) {
                         childAugmentedState.kind = 'repeat';
                     } else {
                         childAugmentedState.kind = 'normal';
-                        this.discovered[successorStr] = true;
                         this.frontier.push(childAugmentedState);
                     }
 
@@ -123,8 +124,7 @@ IterativeDeepeningSearch = Backbone.Model.extend({
 
             // Reset the frontier
             this.frontier = [this.augmentedInitialState];
-            this.discovered = {};
-            this.discovered[this.augmentedInitialState.originalState] = true;
+            this.closedList = {};
             this.closedCount = 0;
             this.onDiscover([this.augmentedInitialState], null);
         }
@@ -133,7 +133,14 @@ IterativeDeepeningSearch = Backbone.Model.extend({
     },
 
     peek: function() {
-        return this.frontier[this.frontier.length - 1];
+
+        for (var x = this.frontier.length - 1; x >= 0; x--) {
+            if (this.frontier[x].originalState.getDepth() < this.getMaxDepth()) {
+                return this.frontier[x].originalState;
+            }
+        }
+
+        return null;
     },
 
     wasGoalFound: function() {

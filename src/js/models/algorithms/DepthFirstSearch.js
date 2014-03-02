@@ -6,11 +6,8 @@ DepthFirstSearch = Backbone.Model.extend({
         this.isGoalState = options.isGoalState;
         this.onDiscover = options.onDiscover;
 
-        // Discovered nodes
-        this.discovered = {};
-        this.discovered[options.initialState.toString()] = true;
-
-        // Number of nodes that have been explored
+        // Nodes that have been explored
+        this.closedList = {};
         this.closedCount = 0;
 
         // Add initial state to frontier
@@ -52,8 +49,13 @@ DepthFirstSearch = Backbone.Model.extend({
             return true;
         }
 
+        var stateStr = state.toString()
+        if (!this.closedList.hasOwnProperty(stateStr)) {
+            this.closedList[stateStr] = true;
+            this.closedCount++;
+        }
+
         var successors = state.generateSuccessors();
-        this.closedCount++;
         var numSuccessors = successors.length;
         var augmentedSuccessors = [];
 
@@ -67,10 +69,9 @@ DepthFirstSearch = Backbone.Model.extend({
                 kind: 'normal'
             };
 
-            if (this.discovered.hasOwnProperty(successorStr)) {
+            if (this.closedList.hasOwnProperty(successorStr)) {
                 augmentedState.kind = 'repeat';
             } else {
-                this.discovered[successorStr] = true;
                 this.frontier.push(successor);
             }
 

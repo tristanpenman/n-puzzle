@@ -225,7 +225,7 @@ ApplicationState = Backbone.Model.extend({
          */
         var SetExpansionOrderAction = function(state, value) {
             this.execute = function() {
-                oldValue = state.getExpansionOrder();
+                var oldValue = state.getExpansionOrder();
                 state.setExpansionOrder(value);
                 return new SetExpansionOrderAction(state, oldValue);
             }
@@ -643,8 +643,10 @@ ApplicationState = Backbone.Model.extend({
                 nextState = alg.peek();
             }
 
-            var action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
-            localActions.push(action.execute());
+            if (nextState != null) {
+                var action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
+                localActions.push(action.execute());
+            }
 
             if (localActions.length > 1) {
                 // Create a composite action to perform all of the actions

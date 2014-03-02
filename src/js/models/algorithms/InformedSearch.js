@@ -2,19 +2,14 @@ InformedSearch = Backbone.Model.extend({
 
     initialize: function(attributes, options) {
 
-        this.closedCount = 0;
-
         // Callback functions
         this.isGoalState = options.isGoalState;
         this.onDiscover = options.onDiscover;
         this.heuristicFunction = options.heuristicFunction;
 
-        // Discovered nodes
-        this.discovered = {};
-        this.discovered[options.initialState.toString()] = true;
-
-        // Order assigned to states to break ties when f() value is the same
-        this.numStatesDiscovered = 1;
+        // Nodes that have been explored
+        this.closedList = {};
+        this.closedCount = 0;
 
         // Function that compares the estimated cost 'f' of a path
         var compareEntries = _.bind(function(a, b) {
@@ -34,7 +29,14 @@ InformedSearch = Backbone.Model.extend({
             return 0;
         }, this);
 
+        options.initialState.setHeuristicValue(
+            options.heuristicFunction(options.initialState));
+
         this.frontier = new buckets.PriorityQueue(compareEntries);
+        this.frontier.enqueue({
+            f: this.fScoreFunction(options.initialState),
+            state: options.initialState
+        });
 
         // Prepare initial state for discovery
         var augmentedInitialState = {
@@ -42,14 +44,6 @@ InformedSearch = Backbone.Model.extend({
             depth: 0,
             kind: 'normal'
         };
-
-        options.initialState.setHeuristicValue(
-            options.heuristicFunction(options.initialState));
-
-        this.frontier.enqueue({
-            f: this.fScoreFunction(options.initialState),
-            state: options.initialState
-        });
 
         // Discover initial state
         options.onDiscover([augmentedInitialState], null);
@@ -74,8 +68,6 @@ InformedSearch = Backbone.Model.extend({
             return true;
         }
 
-        this.closedCount++;
-
         var state = this.frontier.dequeue().state;
         if (this.isGoalState(state)) {
             // Let the application know that the goal has been discovered
@@ -85,6 +77,12 @@ InformedSearch = Backbone.Model.extend({
                 kind: 'goal'
             }], state.getParent());
             return true;
+        }
+
+        var stateStr = state.toString()
+        if (!this.closedList.hasOwnProperty(stateStr)) {
+            this.closedList[stateStr] = true;
+            this.closedCount++;
         }
 
         var successors = state.generateSuccessors();
@@ -101,13 +99,12 @@ InformedSearch = Backbone.Model.extend({
                 originalState: successor
             }
 
-            if (this.discovered.hasOwnProperty(successorStr)) {
+            if (this.closedList.hasOwnProperty(successorStr)) {
                 augmentedState.kind = 'repeat';
             } else {
-                this.discovered[successorStr] = true;
                 this.frontier.enqueue({
                     f: this.fScoreFunction(successor),
-                    order: this.numStatesDiscovered++,
+                    order: i,
                     state: successor
                 });
                 augmentedState.kind = 'normal';
