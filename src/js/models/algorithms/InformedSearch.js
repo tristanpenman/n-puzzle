@@ -9,6 +9,11 @@ InformedSearch = Backbone.Model.extend({
         this.onDiscover = options.onDiscover;
         this.heuristicFunction = options.heuristicFunction;
 
+        // Discovered nodes
+        this.discovered = {};
+        this.discovered[options.initialState.toString()] = true;
+
+        // Order assigned to states to break ties when f() value is the same
         this.numStatesDiscovered = 1;
 
         // Function that compares the estimated cost 'f' of a path
@@ -16,6 +21,10 @@ InformedSearch = Backbone.Model.extend({
             if (a.f > b.f) {
                 return -1;
             } else if (a.f < b.f) {
+                return 1;
+            } else if (a.state.getDepth() > b.state.getDepth()) {
+                return -1
+            } else if (a.state.getDepth() < b.state.getDepth()) {
                 return 1;
             } else if (a.order < b.order) {
                 return -1;
@@ -89,15 +98,20 @@ InformedSearch = Backbone.Model.extend({
             var successorStr = successor.toString();
 
             var augmentedState = {
-                originalState: successor,
-                kind: 'normal'
+                originalState: successor
             }
 
-            this.frontier.enqueue({
-                f: this.fScoreFunction(successor),
-                order: this.numStatesDiscovered++,
-                state: successor
-            });
+            if (this.discovered.hasOwnProperty(successorStr)) {
+                augmentedState.kind = 'repeat';
+            } else {
+                this.discovered[successorStr] = true;
+                this.frontier.enqueue({
+                    f: this.fScoreFunction(successor),
+                    order: this.numStatesDiscovered++,
+                    state: successor
+                });
+                augmentedState.kind = 'normal';
+            }
 
             augmentedSuccessors.push(augmentedState);
         }
@@ -106,6 +120,10 @@ InformedSearch = Backbone.Model.extend({
         this.onDiscover(augmentedSuccessors, state);
 
         return false;
+    },
+
+    peek: function() {
+        return this.frontier.peek().state;
     },
 
     wasGoalFound: function() {

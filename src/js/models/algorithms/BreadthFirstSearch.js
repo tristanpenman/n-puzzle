@@ -83,6 +83,10 @@ BreadthFirstSearch = Backbone.Model.extend({
         return this.goalFound;
     },
 
+    peek: function() {
+        return this.frontier[0];
+    },
+
     wasGoalFound: function() {
         return this.goalFound;
     }

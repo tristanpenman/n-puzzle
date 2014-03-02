@@ -132,6 +132,10 @@ IterativeDeepeningSearch = Backbone.Model.extend({
         return this.goalFound;
     },
 
+    peek: function() {
+        return this.frontier[this.frontier.length - 1];
+    },
+
     wasGoalFound: function() {
         return this.goalFound;
     }

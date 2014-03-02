@@ -116,11 +116,21 @@ TreeView = Backbone.View.extend({
         var stateColor = '#000';
 
         switch (node.getAttributes().kind) {
+        case 'normal':
+            stateColor = '#00F';     // Blue
+            break;
+        case 'goal_path':
+            stateColor = '#fdbe00';  // Gold
+            break;
+        case 'next':
+            stateColor = '#F00';     // Red
+            break;
+        case 'explored':
         case 'repeat':
-            stateColor = '#F00';
+            stateColor = '#999';     // Grey
             break;
         case 'goal':
-            stateColor = '#0F0';
+            stateColor = '#0F0';     // Green
             break;
         default:
             break;

@@ -494,12 +494,18 @@ ApplicationState = Backbone.Model.extend({
             // below...
             var newAugmentedStates = [];
 
-            if (parentState != null && parentState.getExpansionOrder() == 0) {
-                // Update the expansion order value for the parent state
-                var setExpansionOrderAction = new SetExpansionOrderAction(
-                    parentState, this.expansionOrder);
-                this.expansionOrder++;
-                localActions.push(setExpansionOrderAction.execute());
+            if (parentState != null) {
+
+                if (parentState.getExpansionOrder() == 0) {
+                    // Update the expansion order value for the parent state
+                    var setExpansionOrderAction = new SetExpansionOrderAction(
+                        parentState, this.expansionOrder);
+                    this.expansionOrder++;
+                    localActions.push(setExpansionOrderAction.execute());
+                }
+
+                var action = new UpdateStateAttributeAction(parentState, 'kind', 'explored');
+                localActions.push(action.execute());
             }
 
             // Process each state. If the state has been added to the tree
@@ -532,7 +538,6 @@ ApplicationState = Backbone.Model.extend({
                 // add it to the tree
                 newAugmentedStates.push(augmentedState);
             }
-
 
             // Special case for IDS:
             // If the parentState is null, but there is at least one action in
@@ -589,6 +594,8 @@ ApplicationState = Backbone.Model.extend({
                 }
             }
 
+            var goalFound = false;
+
             // Check for goal states. If there is a goal state that has been
             // discovered, then the Application state should be updated to
             // 'complete'. Reversing this action (i.e. clicking 'Back') will
@@ -596,6 +603,14 @@ ApplicationState = Backbone.Model.extend({
             // goal being found.
             for (var i = 0; i < augmentedStates.length; i++) {
                 if (augmentedStates[i].kind == 'goal') {
+
+                    goalFound = true;
+                    var ancestor = augmentedStates[i].originalState.getParent();
+                    while (ancestor) {
+                        var action = new UpdateStateAttributeAction(ancestor, 'kind', 'goal_path');
+                        localActions.push(action.execute());
+                        ancestor = ancestor.getParent();
+                    }
 
                     var action = new UpdateApplicationStateAction(this, 'complete');
                     localActions.push(action.execute());
@@ -605,6 +620,8 @@ ApplicationState = Backbone.Model.extend({
                         augmentedStates[i].originalState, this.expansionOrder);
                     this.expansionOrder++;
                     localActions.push(setExpansionOrderAction.execute());
+
+                    break;
                 }
             }
 
@@ -616,6 +633,14 @@ ApplicationState = Backbone.Model.extend({
                 localActions.push(updateStatsAction.execute());
             }
 
+            var nextState = initialState;
+            if (alg != null) {
+                nextState = alg.peek();
+            }
+
+            var action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
+            localActions.push(action.execute());
+
             if (localActions.length > 1) {
                 // Create a composite action to perform all of the actions
                 // required for this iteration.
@@ -624,7 +649,11 @@ ApplicationState = Backbone.Model.extend({
                 this.treeUndoActions.push(localActions.pop());
             }
 
-            this.trigger('change');
+            if (alg == null) {
+                this.treeUndoActions = [];
+            } else {
+                this.trigger('change');
+            }
 
         }, this);
 
