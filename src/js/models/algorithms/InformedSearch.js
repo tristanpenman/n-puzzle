@@ -9,11 +9,17 @@ InformedSearch = Backbone.Model.extend({
         this.onDiscover = options.onDiscover;
         this.heuristicFunction = options.heuristicFunction;
 
+        this.numStatesDiscovered = 1;
+
         // Function that compares the estimated cost 'f' of a path
         var compareEntries = _.bind(function(a, b) {
             if (a.f > b.f) {
                 return -1;
             } else if (a.f < b.f) {
+                return 1;
+            } else if (a.order < b.order) {
+                return -1;
+            } else if (a.order > b.order) {
                 return 1;
             }
             return 0;
@@ -89,6 +95,7 @@ InformedSearch = Backbone.Model.extend({
 
             this.frontier.enqueue({
                 f: this.fScoreFunction(successor),
+                order: this.numStatesDiscovered++,
                 state: successor
             });
 
