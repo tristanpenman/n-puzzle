@@ -65,12 +65,14 @@ InformedSearch = Backbone.Model.extend({
 
     inOpenList: function(state) {
         var stateStr = state.toString();
+        var result = false;
         this.openList.forEach(_.bind(function(object) {
             if (object.state.toString() == stateStr) {
-                return true;
+                result = true;
+                return false;
             }
         }, this));
-        return false;
+        return result;
     },
 
     iterate: function() {
@@ -99,9 +101,9 @@ InformedSearch = Backbone.Model.extend({
         // other nodes in the tree
         var explored = [];
 
+        this.closedSetSize++;
         if (!this.closedSet.hasOwnProperty(stateStr)) {
             this.closedSet[stateStr] = true;
-            this.closedSetSize++;
 
             // Find all nodes in the frontier with the same state string, and
             // mark them as explored. We also need to mark these nodes as explored
@@ -144,12 +146,6 @@ InformedSearch = Backbone.Model.extend({
                 this.closedSetSize++;
                 this.closedSet[successorStr] = true;
                 augmentedState.kind = 'repeat';
-                this.openList.enqueue({
-                    f: Math.floor(this.fScoreFunction(successor)),
-                    explored: false,
-                    order: this.nonce++,
-                    state: successor
-                });
             } else if (this.closedSet.hasOwnProperty(successorStr)) {
                 augmentedState.kind = 'repeat';
             } else {
