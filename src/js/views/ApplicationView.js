@@ -63,8 +63,6 @@ ApplicationView = Backbone.View.extend({
                 .css('top', '0')
                 .css('left', xOffset);
 
-            console.log($window.innerWidth() - xOffset);
-
             $tutorial
                 .css('position', 'absolute')
                 .css('top', '0')
