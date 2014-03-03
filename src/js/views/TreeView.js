@@ -239,8 +239,6 @@ TreeView = Backbone.View.extend({
                 var coords = this.layoutAlgorithm.getCoordinatesForNode(rootNode);
                 coords.x = 0;
                 coords.y = 0;
-                //coords.x = Math.round(coords.x);
-                //coords.y = Math.round(coords.y);
 
                 this.renderSubtree(context, rootNode, coords, xOffset, yOffset, width, height);
             }
