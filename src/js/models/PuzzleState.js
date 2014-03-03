@@ -220,7 +220,7 @@ PuzzleState.calculateEuclideanDistance = function(a, b) {
                         // Then add the distance between the tiles' positions
                         var h = Math.abs(dx - x);
                         var v = Math.abs(dy - y);
-                        distance += Math.sqrt(v*v + h*h);
+                        distance += Math.floor(Math.sqrt(v*v + h*h));
                         found = true;
                         break;
                     }
