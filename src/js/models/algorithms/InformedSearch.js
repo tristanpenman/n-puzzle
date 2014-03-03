@@ -6,10 +6,13 @@ InformedSearch = Backbone.Model.extend({
         this.isGoalState = options.isGoalState;
         this.onDiscover = options.onDiscover;
         this.heuristicFunction = options.heuristicFunction;
+        this.onChangeKind = options.onChangeKind;
 
         // Nodes that have been explored
         this.closedSet = {};
         this.closedSetSize = 0;
+
+        this.nonce = 0;
 
         // Function that compares the estimated cost 'f' of a path
         var compareEntries = _.bind(function(a, b) {
@@ -64,11 +67,23 @@ InformedSearch = Backbone.Model.extend({
         ];
     },
 
+    inOpenList: function(state) {
+        var stateStr = state.toString();
+        this.openList.forEach(_.bind(function(object) {
+            if (object.state.toString() == stateStr) {
+                return true;
+            }
+        }, this));
+        return false;
+    },
+
     iterate: function() {
 
         if (this.goalFound) {
             return true;
         }
+
+        var expectedNode = this.peek();
 
         // Get the highest priority node that has not been explored
         var node;
@@ -76,10 +91,18 @@ InformedSearch = Backbone.Model.extend({
             node = this.openList.dequeue();
         } while (node.explored == true);
 
+        if (node.state.toString() != expectedNode.toString()) {
+            alert(node.state.toString() + " " + expectedNode.toString());
+        }
+
         // Extract state associated with the node
         var state = node.state;
+        var stateStr = state.toString();
 
-        var stateStr = state.toString()
+        // Keep track of any nodes whose states have been explored via
+        // other nodes in the tree
+        var explored = [];
+
         if (!this.closedSet.hasOwnProperty(stateStr)) {
             this.closedSet[stateStr] = true;
             this.closedSetSize++;
@@ -88,15 +111,13 @@ InformedSearch = Backbone.Model.extend({
             // mark them as explored. We also need to mark these nodes as explored
             // in the frontier, so that the search algorithm does not explore
             // it again.
-            this.openList.forEach(function(object) {
+            this.openList.forEach(_.bind(function(object) {
                 if (object.state.toString() == stateStr) {
-                    this.onDiscover([{
-                        originalState: object.state,
-                        kind: 'explored'
-                    }], object.state.getParent());
+                    explored.push(object.state);
                     object.explored = true;
+                    this.closedSetSize++;
                 }
-            });
+            }, this));
         }
 
         if (this.isGoalState(state)) {
@@ -123,23 +144,33 @@ InformedSearch = Backbone.Model.extend({
                 originalState: successor
             }
 
-            if (this.closedSet.hasOwnProperty(successorStr)) {
+            if (this.inOpenList(successor)) {
+                this.closedSetSize++;
+                this.closedSet[successorStr] = true;
                 augmentedState.kind = 'repeat';
-            } else {
                 this.openList.enqueue({
                     f: Math.floor(this.fScoreFunction(successor)),
                     explored: false,
-                    order: i,
+                    order: this.nonce++,
                     state: successor
                 });
+            } else if (this.closedSet.hasOwnProperty(successorStr)) {
+                augmentedState.kind = 'repeat';
+            } else {
                 augmentedState.kind = 'normal';
+                this.openList.enqueue({
+                    f: Math.floor(this.fScoreFunction(successor)),
+                    explored: false,
+                    order: this.nonce++,
+                    state: successor
+                });
             }
 
             augmentedSuccessors.push(augmentedState);
         }
 
         // Let application know that states have been discovered
-        this.onDiscover(augmentedSuccessors, state);
+        this.onDiscover(augmentedSuccessors, state, explored);
 
         return false;
     },
@@ -148,14 +179,16 @@ InformedSearch = Backbone.Model.extend({
 
         var node = null;
 
-        if (!this.openList.isEmpty()) {
-            do {
+        do {
+            if (this.openList.isEmpty()) {
+                node = null;
+            } else {
                 node = this.openList.peek();
                 if (node.explored) {
                     this.openList.dequeue();
                 }
-            } while (node && node.explored == true);
-        }
+            }
+        } while (node && node.explored == true);
 
         if (node) {
             return node.state;

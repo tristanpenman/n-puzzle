@@ -491,7 +491,7 @@ ApplicationState = Backbone.Model.extend({
          * @param  parentState      the parentState of all states in the
          *                          augmentedStates array.
          */
-        var onDiscover = _.bind(function(augmentedStates, parentState) {
+        var onDiscover = _.bind(function(augmentedStates, parentState, exploredNodes) {
 
             // Get the current root node
             var searchTree = this.get('searchTree');
@@ -663,6 +663,13 @@ ApplicationState = Backbone.Model.extend({
                 var attributes = node.getAttributes();
                 if (attributes.kind != 'culled') {
                     var action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
+                    localActions.push(action.execute());
+                }
+            }
+
+            if (typeof exploredNodes != 'undefined') {
+                for (var i = 0; i < exploredNodes.length; i++) {
+                    var action = new UpdateStateAttributeAction(exploredNodes[i], 'kind', 'explored');
                     localActions.push(action.execute());
                 }
             }
