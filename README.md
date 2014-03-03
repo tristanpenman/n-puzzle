@@ -37,11 +37,6 @@ heuristic functions are also provided:
  - Manhattan distance heuristic
  - Tiles-out heuristic
 
-Tutorial
---------
-
-A tutorial can be found in the ` /doc/tutorial ` directory.
-
 License
 -------
 
