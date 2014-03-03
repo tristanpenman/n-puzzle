@@ -50,7 +50,9 @@ DepthFirstSearch = Backbone.Model.extend({
         }
 
         var stateStr = state.toString()
-        if (!this.closedList.hasOwnProperty(stateStr)) {
+        if (this.closedList.hasOwnProperty(stateStr)) {
+            return false;
+        } else {
             this.closedList[stateStr] = true;
             this.closedCount++;
         }

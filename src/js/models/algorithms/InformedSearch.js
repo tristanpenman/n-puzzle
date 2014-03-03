@@ -8,7 +8,7 @@ InformedSearch = Backbone.Model.extend({
         this.heuristicFunction = options.heuristicFunction;
 
         // Nodes that have been explored
-        this.closedList = {};
+        this.closedSet = {};
         this.closedCount = 0;
 
         // Function that compares the estimated cost 'f' of a path
@@ -21,9 +21,9 @@ InformedSearch = Backbone.Model.extend({
                 return -1
             } else if (a.state.getDepth() < b.state.getDepth()) {
                 return 1;
-            } else if (a.order < b.order) {
-                return -1;
             } else if (a.order > b.order) {
+                return -1;
+            } else if (a.order < b.order) {
                 return 1;
             }
             return 0;
@@ -35,6 +35,7 @@ InformedSearch = Backbone.Model.extend({
         this.frontier = new buckets.PriorityQueue(compareEntries);
         this.frontier.enqueue({
             f: this.fScoreFunction(options.initialState),
+            explored: false,
             state: options.initialState
         });
 
@@ -68,7 +69,36 @@ InformedSearch = Backbone.Model.extend({
             return true;
         }
 
-        var state = this.frontier.dequeue().state;
+        // Get the highest priority node that has not been explored
+        var node;
+        do {
+            node = this.frontier.dequeue();
+        } while (node.explored == true);
+
+        // Extract state associated with the node
+        var state = node.state;
+
+        var stateStr = state.toString()
+        if (!this.closedSet.hasOwnProperty(stateStr)) {
+            this.closedSet[stateStr] = true;
+            this.closedCount++;
+
+            // Find all nodes in the frontier with the same state string, and
+            // mark them as explored. We also need to mark these nodes as explored
+            // in the frontier, so that the search algorithm does not explore
+            // it again.
+            this.frontier.forEach(function(object) {
+                console.log("  " + object.state.toString());
+                if (object.state.toString() == stateStr) {
+                    this.onDiscover([{
+                        originalState: object.state,
+                        kind: 'explored'
+                    }], object.state.getParent());
+                    object.explored = true;
+                }
+            });
+        }
+
         if (this.isGoalState(state)) {
             // Let the application know that the goal has been discovered
             this.goalFound = true;
@@ -77,12 +107,6 @@ InformedSearch = Backbone.Model.extend({
                 kind: 'goal'
             }], state.getParent());
             return true;
-        }
-
-        var stateStr = state.toString()
-        if (!this.closedList.hasOwnProperty(stateStr)) {
-            this.closedList[stateStr] = true;
-            this.closedCount++;
         }
 
         var successors = state.generateSuccessors();
@@ -99,11 +123,12 @@ InformedSearch = Backbone.Model.extend({
                 originalState: successor
             }
 
-            if (this.closedList.hasOwnProperty(successorStr)) {
+            if (this.closedSet.hasOwnProperty(successorStr)) {
                 augmentedState.kind = 'repeat';
             } else {
                 this.frontier.enqueue({
-                    f: this.fScoreFunction(successor),
+                    f: Math.floor(this.fScoreFunction(successor)),
+                    explored: false,
                     order: i,
                     state: successor
                 });
@@ -120,7 +145,23 @@ InformedSearch = Backbone.Model.extend({
     },
 
     peek: function() {
-        return this.frontier.peek().state;
+
+        var node = null;
+
+        if (!this.frontier.isEmpty()) {
+            do {
+                node = this.frontier.peek();
+                if (node.explored) {
+                    this.frontier.dequeue();
+                }
+            } while (node && node.explored == true);
+        }
+
+        if (node) {
+            return node.state;
+        }
+
+        return null;
     },
 
     wasGoalFound: function() {

@@ -6,8 +6,11 @@ IterativeDeepeningSearch = Backbone.Model.extend({
         this.isGoalState = options.isGoalState;
         this.onDiscover = options.onDiscover;
 
-        // Nodes that have been explored
-        this.closedList = {};
+        // Nodes that have been discovered
+        this.discoveredList = {};
+        this.discoveredList[options.initialState.toString()] = true;
+
+        // Number of nodes that have been explored
         this.closedCount = 0;
 
         // Initial maximum depth is zero
@@ -78,11 +81,7 @@ IterativeDeepeningSearch = Backbone.Model.extend({
                 var successors = parentState.generateSuccessors();
                 var childDepth = augmentedState.depth + 1;
 
-                var stateStr = parentState.toString()
-                if (!this.closedList.hasOwnProperty(stateStr)) {
-                    this.closedList[stateStr] = true;
-                    this.closedCount++;
-                }
+                this.closedCount++;
 
                 // An array of successor objects with additional attributes
                 var augmentedSuccessors = [];
@@ -97,12 +96,13 @@ IterativeDeepeningSearch = Backbone.Model.extend({
                         depth: childDepth
                     };
 
-                    var isRepeat = this.closedList.hasOwnProperty(successorStr);
+                    var isRepeat = this.discoveredList.hasOwnProperty(successorStr);
 
                     if (isRepeat) {
                         childAugmentedState.kind = 'repeat';
                     } else {
                         childAugmentedState.kind = 'normal';
+                        this.discoveredList[successorStr] = true;
                         this.frontier.push(childAugmentedState);
                     }
 
@@ -124,7 +124,7 @@ IterativeDeepeningSearch = Backbone.Model.extend({
 
             // Reset the frontier
             this.frontier = [this.augmentedInitialState];
-            this.closedList = {};
+            this.discoveredList = {};
             this.closedCount = 0;
             this.onDiscover([this.augmentedInitialState], null);
         }

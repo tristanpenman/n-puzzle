@@ -6,8 +6,12 @@ BreadthFirstSearch = Backbone.Model.extend({
         this.isGoalState = options.isGoalState;
         this.onDiscover = options.onDiscover;
 
-        // Nodes that have been explored
-        this.closedList = {};
+        // Nodes that have been discovered
+        this.closedSet = {};
+        this.discoveredSet = {};
+        this.discoveredSet[options.initialState.toString()] = true;
+
+        // Number of nodes that have been explored
         this.closedCount = 0;
 
         // Add initial state to frontier
@@ -49,11 +53,8 @@ BreadthFirstSearch = Backbone.Model.extend({
             return true;
         }
 
-        var stateStr = state.toString()
-        if (!this.closedList.hasOwnProperty(stateStr)) {
-            this.closedList[stateStr] = true;
-            this.closedCount++;
-        }
+        this.closedSet[state.toString()] = true;
+        this.closedCount++;
 
         var successors = state.generateSuccessors();
         var numSuccessors = successors.length;
@@ -64,17 +65,28 @@ BreadthFirstSearch = Backbone.Model.extend({
             var successor = successors[i];
             var successorStr = successor.toString();
 
-            console.log(successorStr);
-
             var augmentedState = {
                 originalState: successor
             }
 
-            if (this.closedList.hasOwnProperty(successorStr)) {
-                augmentedState.kind = 'repeat';
-            } else {
-                this.frontier.push(successor);
-                augmentedState.kind = 'normal';
+            var checkDiscoveredList = true;
+            for (var j = 0; j < this.frontier.length; j++) {
+                if (this.frontier[j].toString() == successorStr) {
+                    this.closedSet[this.frontier[j].toString()] = true;
+                    this.closedCount++;
+                    checkDiscoveredList = false;
+                    augmentedState.kind = 'repeat';
+                }
+            }
+
+            if (checkDiscoveredList) {
+                if (this.discoveredSet.hasOwnProperty(successorStr)) {
+                    augmentedState.kind = 'repeat';
+                } else {
+                    this.discoveredSet[successorStr] = true;
+                    this.frontier.push(successor);
+                    augmentedState.kind = 'normal';
+                }
             }
 
             augmentedSuccessors.push(augmentedState);
