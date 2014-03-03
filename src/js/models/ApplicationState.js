@@ -474,6 +474,16 @@ ApplicationState = Backbone.Model.extend({
         };
 
         /**
+         * Algorithm callback method that resets the expansion order counter.
+         *
+         * This is used by Iterative Deepening DFS when the maximum depth is
+         * incremented.
+         */
+        var onResetExpansionOrder = _.bind(function() {
+            this.expansionOrder = 1;
+        }, this);
+
+        /**
          * Algorithm callback method that handles the discovery of an array of
          * successor states for a particular parent state.
          *
@@ -529,6 +539,11 @@ ApplicationState = Backbone.Model.extend({
 
                     // Add the action to the list of actions performed so far
                     localActions.push(updateNodeKindAction.execute());
+
+                    var updateExpansionOrderAction = new SetExpansionOrderAction(
+                        state, augmentedState.expansionOrder);
+
+                    localActions.push(updateExpansionOrderAction.execute());
 
                     // Check next state.
                     continue;
@@ -644,8 +659,12 @@ ApplicationState = Backbone.Model.extend({
             }
 
             if (nextState != null) {
-                var action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
-                localActions.push(action.execute());
+                var node = statesMappedToNodes[nextState.getLongIdentifier()];
+                var attributes = node.getAttributes();
+                if (attributes.kind != 'culled') {
+                    var action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
+                    localActions.push(action.execute());
+                }
             }
 
             if (localActions.length > 1) {
@@ -694,6 +713,7 @@ ApplicationState = Backbone.Model.extend({
             'initialState': initialState,
             'isGoalState': isGoalState,              // Callback
             'onDiscover': onDiscover,                // Callback
+            'onResetExpansionOrder': onResetExpansionOrder,
             'heuristicFunction': heuristicFunction,  // Callback
             'storeExploredStates': true,             // Only applies to DFS
         });

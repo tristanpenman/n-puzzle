@@ -9,7 +9,7 @@ InformedSearch = Backbone.Model.extend({
 
         // Nodes that have been explored
         this.closedSet = {};
-        this.closedCount = 0;
+        this.closedSetSize = 0;
 
         // Function that compares the estimated cost 'f' of a path
         var compareEntries = _.bind(function(a, b) {
@@ -32,8 +32,9 @@ InformedSearch = Backbone.Model.extend({
         options.initialState.setHeuristicValue(
             options.heuristicFunction(options.initialState));
 
-        this.frontier = new buckets.PriorityQueue(compareEntries);
-        this.frontier.enqueue({
+        // Nodes that are in the open list
+        this.openList = new buckets.PriorityQueue(compareEntries);
+        this.openList.enqueue({
             f: this.fScoreFunction(options.initialState),
             explored: false,
             state: options.initialState
@@ -54,11 +55,11 @@ InformedSearch = Backbone.Model.extend({
         return [
             {
                 name: 'Open list',
-                value: this.frontier.size()
+                value: this.openList.size()
             },
             {
                 name: 'Closed list',
-                value: this.closedCount
+                value: this.closedSetSize
             }
         ];
     },
@@ -72,7 +73,7 @@ InformedSearch = Backbone.Model.extend({
         // Get the highest priority node that has not been explored
         var node;
         do {
-            node = this.frontier.dequeue();
+            node = this.openList.dequeue();
         } while (node.explored == true);
 
         // Extract state associated with the node
@@ -81,14 +82,13 @@ InformedSearch = Backbone.Model.extend({
         var stateStr = state.toString()
         if (!this.closedSet.hasOwnProperty(stateStr)) {
             this.closedSet[stateStr] = true;
-            this.closedCount++;
+            this.closedSetSize++;
 
             // Find all nodes in the frontier with the same state string, and
             // mark them as explored. We also need to mark these nodes as explored
             // in the frontier, so that the search algorithm does not explore
             // it again.
-            this.frontier.forEach(function(object) {
-                console.log("  " + object.state.toString());
+            this.openList.forEach(function(object) {
                 if (object.state.toString() == stateStr) {
                     this.onDiscover([{
                         originalState: object.state,
@@ -126,7 +126,7 @@ InformedSearch = Backbone.Model.extend({
             if (this.closedSet.hasOwnProperty(successorStr)) {
                 augmentedState.kind = 'repeat';
             } else {
-                this.frontier.enqueue({
+                this.openList.enqueue({
                     f: Math.floor(this.fScoreFunction(successor)),
                     explored: false,
                     order: i,
@@ -148,11 +148,11 @@ InformedSearch = Backbone.Model.extend({
 
         var node = null;
 
-        if (!this.frontier.isEmpty()) {
+        if (!this.openList.isEmpty()) {
             do {
-                node = this.frontier.peek();
+                node = this.openList.peek();
                 if (node.explored) {
-                    this.frontier.dequeue();
+                    this.openList.dequeue();
                 }
             } while (node && node.explored == true);
         }

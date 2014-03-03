@@ -132,6 +132,9 @@ TreeView = Backbone.View.extend({
         case 'goal':
             stateColor = '#0F0';     // Green
             break;
+        case 'culled':
+            stateColor = '#F0F';
+            break;
         default:
             break;
         }

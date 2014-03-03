@@ -7,11 +7,11 @@ DepthFirstSearch = Backbone.Model.extend({
         this.onDiscover = options.onDiscover;
 
         // Nodes that have been explored
-        this.closedList = {};
-        this.closedCount = 0;
+        this.closedSet = {};
+        this.closedSetSize = 0;
 
         // Add initial state to frontier
-        this.frontier = [options.initialState];
+        this.openList = [options.initialState];
 
         // Discover initial state
         options.onDiscover([{
@@ -21,14 +21,27 @@ DepthFirstSearch = Backbone.Model.extend({
         }], null);
     },
 
+    addToClosedSet: function(state) {
+        this.closedSet[state.toString()] = true;
+        this.closedSetSize++;
+    },
+
+    addToOpenList: function(state) {
+        this.openList.push(state);
+    },
+
     getStatistics: function() {
         return [{
             name: 'Open list',
-            value: this.frontier.length
+            value: this.openList.length
         },{
             name: 'Closed list',
-            value: this.closedCount
+            value: this.closedSetSize
         }];
+    },
+
+    inClosedSet: function(state) {
+        return this.closedSet.hasOwnProperty(state.toString());
     },
 
     iterate: function() {
@@ -37,7 +50,7 @@ DepthFirstSearch = Backbone.Model.extend({
             return true;
         }
 
-        var state = this.frontier.pop();
+        var state = this.openList.pop();
 
         if (this.isGoalState(state)) {
             // Let the application know that the goal has been discovered
@@ -49,13 +62,7 @@ DepthFirstSearch = Backbone.Model.extend({
             return true;
         }
 
-        var stateStr = state.toString()
-        if (this.closedList.hasOwnProperty(stateStr)) {
-            return false;
-        } else {
-            this.closedList[stateStr] = true;
-            this.closedCount++;
-        }
+        this.addToClosedSet(state);
 
         var successors = state.generateSuccessors();
         var numSuccessors = successors.length;
@@ -63,18 +70,17 @@ DepthFirstSearch = Backbone.Model.extend({
 
         // Add states to the frontier
         for (var i = 0; i < numSuccessors; i++) {
-            var successor = successors[i];
-            var successorStr = successor.toString();
 
+            var successor = successors[i];
             var augmentedState = {
                 originalState: successor,
                 kind: 'normal'
             };
 
-            if (this.closedList.hasOwnProperty(successorStr)) {
+            if (this.inClosedSet(successor)) {
                 augmentedState.kind = 'repeat';
             } else {
-                this.frontier.push(successor);
+                this.addToOpenList(successor);
             }
 
             augmentedSuccessors.push(augmentedState);
@@ -87,7 +93,11 @@ DepthFirstSearch = Backbone.Model.extend({
     },
 
     peek: function() {
-        return this.frontier[this.frontier.length - 1];
+        if (this.openList.length > 0) {
+            return this.openList[this.openList.length - 1];
+        } else {
+            return null;
+        }
     },
 
     wasGoalFound: function() {

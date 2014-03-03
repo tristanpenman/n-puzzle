@@ -8,14 +8,10 @@ BreadthFirstSearch = Backbone.Model.extend({
 
         // Nodes that have been discovered
         this.closedSet = {};
-        this.discoveredSet = {};
-        this.discoveredSet[options.initialState.toString()] = true;
-
-        // Number of nodes that have been explored
-        this.closedCount = 0;
+        this.closedSetSize = 0;
 
         // Add initial state to frontier
-        this.frontier = [options.initialState];
+        this.openList = [options.initialState];
 
         // Discover initial state
         options.onDiscover([{
@@ -25,14 +21,43 @@ BreadthFirstSearch = Backbone.Model.extend({
         }], null);
     },
 
+    addToClosedSet: function(state) {
+        this.closedSet[state.toString()] = true;
+        this.closedSetSize++;
+    },
+
+    addToOpenList: function(state) {
+        this.openList.push(state);
+    },
+
+    getNextStateFromOpenList: function() {
+        return this.openList.shift();
+    },
+
     getStatistics: function() {
         return [{
             name: 'Open list',
-            value: this.frontier.length
+            value: this.openList.length
         },{
             name: 'Closed list',
-            value: this.closedCount
+            value: this.closedSetSize
         }];
+    },
+
+    inClosedSet: function(state) {
+        return this.closedSet.hasOwnProperty(state.toString());
+    },
+
+    inOpenList: function(state) {
+
+        var stateStr = state.toString();
+        for (var i = 0; i < this.openList.length; i++) {
+            if (this.openList[i].toString() == stateStr) {
+                return true;
+            }
+        }
+
+        return false;
     },
 
     iterate: function() {
@@ -41,7 +66,7 @@ BreadthFirstSearch = Backbone.Model.extend({
             return true;
         }
 
-        var state = this.frontier.shift();
+        var state = this.getNextStateFromOpenList();
 
         if (this.isGoalState(state)) {
             // Let the application know that the goal has been discovered
@@ -53,8 +78,7 @@ BreadthFirstSearch = Backbone.Model.extend({
             return true;
         }
 
-        this.closedSet[state.toString()] = true;
-        this.closedCount++;
+        this.addToClosedSet(state);
 
         var successors = state.generateSuccessors();
         var numSuccessors = successors.length;
@@ -62,31 +86,20 @@ BreadthFirstSearch = Backbone.Model.extend({
 
         // Add states to the frontier
         for (var i = 0; i < numSuccessors; i++) {
-            var successor = successors[i];
-            var successorStr = successor.toString();
 
+            var successor = successors[i];
             var augmentedState = {
                 originalState: successor
             }
 
-            var checkDiscoveredList = true;
-            for (var j = 0; j < this.frontier.length; j++) {
-                if (this.frontier[j].toString() == successorStr) {
-                    this.closedSet[this.frontier[j].toString()] = true;
-                    this.closedCount++;
-                    checkDiscoveredList = false;
-                    augmentedState.kind = 'repeat';
-                }
-            }
-
-            if (checkDiscoveredList) {
-                if (this.discoveredSet.hasOwnProperty(successorStr)) {
-                    augmentedState.kind = 'repeat';
-                } else {
-                    this.discoveredSet[successorStr] = true;
-                    this.frontier.push(successor);
-                    augmentedState.kind = 'normal';
-                }
+            if (this.inOpenList(successor)) {
+                this.addToClosedSet(successor);
+                augmentedState.kind = 'repeat';
+            } else if (this.inClosedSet(successor)) {
+                augmentedState.kind = 'repeat';
+            } else {
+                this.addToOpenList(successor);
+                augmentedState.kind = 'normal';
             }
 
             augmentedSuccessors.push(augmentedState);
@@ -99,7 +112,11 @@ BreadthFirstSearch = Backbone.Model.extend({
     },
 
     peek: function() {
-        return this.frontier[0];
+        if (this.openList.length > 0) {
+            return this.openList[0];
+        } else {
+            return null;
+        }
     },
 
     wasGoalFound: function() {
