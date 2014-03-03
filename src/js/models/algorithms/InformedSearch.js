@@ -20,10 +20,6 @@ InformedSearch = Backbone.Model.extend({
                 return -1;
             } else if (a.f < b.f) {
                 return 1;
-            } else if (a.state.getDepth() > b.state.getDepth()) {
-                return -1
-            } else if (a.state.getDepth() < b.state.getDepth()) {
-                return 1;
             } else if (a.order > b.order) {
                 return -1;
             } else if (a.order < b.order) {
