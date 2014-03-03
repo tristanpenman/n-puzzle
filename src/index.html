@@ -251,15 +251,15 @@
                 </tr>
                 <tr>
                     <td>Blue</td>
-                    <td>State is in the frontier, and has not been seen previously.</td>
+                    <td>If a node is in the open list then it will be highlighted in blue.</td>
                 </tr>
                 <tr>
                     <td>Red</td>
-                    <td></td>
+                    <td>After each iteration of a search algorithm, the node that will be expanded next will be highlighted in red. This applies even when the goal node has been found.</td>
                 </tr>
                 <tr>
                     <td>Grey</td>
-                    <td>If a state has been explored, it will be grey. For example, in step 2) of the diagram above, the initial state has been coloured grey to indicate that it has been explored. In step 3), the initial state is rediscovered but will not be expanded again.</td>
+                    <td>If a state has been explored, it will be greyed out. For example, in step 2) of the diagram above, the initial state has been coloured grey to indicate that it has been explored. In step 3), the initial state is rediscovered but will not be expanded again.</td>
                 </tr>
                 <tr>
                     <td>Green</td>
@@ -267,10 +267,13 @@
                 </tr>
                 <tr>
                     <td>Gold</td>
-                    <td>Once the goal state has been found, any states on the path from the initial state to the goal state will be highlighted.</td>
+                    <td>Once the goal state has been found, any nodes on the path from the initial state to the goal state will be highlighted in gold.</td>
+                </tr>
+                <tr>
+                    <td>Purple</td>
+                    <td>When using Iterative Deepening Search, unexplored nodes that exceed the maximum depth will not be added to the open list. These nodes will be colored purple.</td>
                 </tr>
             </table>
-            <p>Step 1) corresponds to </p>
             <h3>Open and Closed Lists</h3>
             <img src="images/stats.png">
         </div>
