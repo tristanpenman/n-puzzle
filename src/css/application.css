@@ -102,7 +102,7 @@ input[type="button"]::-moz-focus-inner {
 #tutorial p {
  line-height: 22px;
  font-size: 14px;
- margin-top: 10px;
+ margin-top: 7px;
 }
 
 #tutorial h1 {
@@ -112,18 +112,18 @@ input[type="button"]::-moz-focus-inner {
 }
 
 #tutorial h2 {
- margin-top: 1em;
- margin-bottom: 13px;
- font-size: 18px;
- font-style: italic;
+ margin-top: 22px;
+ margin-bottom: 17px;
+ font-size: 19px;
  padding-bottom: 5px;
  border-bottom: 1px solid #ddd;
+ font-weight: normal;
 }
 
 #tutorial h3 {
  font-size: 16px;
  font-weight: bold;
- margin-top: 14px;
+ margin-top: 20px;
  margin-bottom: 10px;
 }
 
@@ -137,15 +137,36 @@ input[type="button"]::-moz-focus-inner {
 }
 
 #tutorial img {
- margin-top: 2px;
- margin-left: 20px;
+ margin-top: 5px;
+}
+
+table {
+ border-collapse: collapse;
+ margin-top: 1em;
+ max-width: 780px;
+ margin-bottom: 2em;
 }
 
 table, table td, table th {
- border: 1px solid #ccc;
+ border: 1px solid #999;
  line-height: 20px;
 }
 
 table td, table th {
- padding: 4px;
+ padding: 6px 10px;
+ text-align: left;
+ line-height: 22px;
+ font-size: 14px;
+}
+
+table th {
+ background: #ededed; /* Old browsers (including IE6-9) */
+ background: -moz-linear-gradient(top, #f9f9f9 26%, #ebecee 73%); /* FF3.6+ */
+ background: -webkit-gradient(linear, left top, left bottom, color-stop(26%,#f9f9f9), color-stop(73%,#ebecee)); /* Chrome,Safari4+ */
+ background: -webkit-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* Chrome10+,Safari5.1+ */
+ background: -o-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* Opera 11.10+ */
+ background: -ms-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* IE10+ */
+ background: linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* W3C */
+ padding-top: 0.7em;
+ padding-bottom: 0.7em;
 }
