@@ -40,7 +40,7 @@ heuristic functions are also provided:
 License
 -------
 
-N-Puzzle is distributed under the Simplied BSD License. See the LICENSE file for more information.
+N-Puzzle is distributed under the Simplified BSD License. See the LICENSE file for more information.
 
 History
 -------
