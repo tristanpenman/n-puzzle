@@ -10,6 +10,7 @@ IterativeDeepeningSearch = Backbone.Model.extend({
         // Nodes that have been explored
         this.closedSet = {};
         this.closedSetSize = 0;
+        this.cost = undefined;
 
         // Initial maximum depth is zero
         this.set('maxDepth', 0);
@@ -57,6 +58,9 @@ IterativeDeepeningSearch = Backbone.Model.extend({
         },{
             name: 'Closed list',
             value: this.closedSetSize
+        },{
+            name: 'Cost',
+            value: this.cost
         }];
     },
 
@@ -110,6 +114,7 @@ IterativeDeepeningSearch = Backbone.Model.extend({
             if (this.isGoalState(augmentedState.originalState)) {
                 // Let the application know that the goal has been discovered
                 this.goalFound = true;
+                this.cost = augmentedState.originalState.depth+1;
                 this.onDiscover([{
                     originalState: augmentedState.originalState,
                     kind: 'goal',
