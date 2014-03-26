@@ -37,6 +37,12 @@ heuristic functions are also provided:
  - Manhattan distance heuristic
  - Tiles-out heuristic
 
+Demo
+----
+
+A demo is available at:
+http://tristanpenman.com/demos/n-puzzle
+
 License
 -------
 
