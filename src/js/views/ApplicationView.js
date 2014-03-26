@@ -76,5 +76,7 @@ ApplicationView = Backbone.View.extend({
         $window
             .load(resizeHandler)
             .resize(resizeHandler);
+
+        $tutorial.fadeIn();
     }
 });
