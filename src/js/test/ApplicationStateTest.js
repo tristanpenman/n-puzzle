@@ -22,6 +22,26 @@ function createApplicationStateWithMockObjects() {
         },
         getMode: function() {
             return 'single';
+        },
+        setAlgorithm: function(alg) {
+            this.getAlgorithm = function() {
+                return alg;
+            }
+        },
+        setGoalState: function(state) {
+            this.getGoalState = function() {
+                return state;
+            }
+        },
+        setHeuristic: function(heuristic) {
+            this.getHeuristic = function() {
+                return heuristic;
+            }
+        },
+        setInitialState: function(state) {
+            this.getInitialState = function() {
+                return state;
+            }
         }
     });
 
