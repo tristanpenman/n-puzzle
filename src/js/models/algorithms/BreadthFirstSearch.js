@@ -9,6 +9,7 @@ BreadthFirstSearch = Backbone.Model.extend({
         // Nodes that have been discovered
         this.closedSet = {};
         this.closedSetSize = 0;
+        this.cost = undefined;
 
         // Add initial state to frontier
         this.openList = [options.initialState];
@@ -41,6 +42,9 @@ BreadthFirstSearch = Backbone.Model.extend({
         },{
             name: 'Closed list',
             value: this.closedSetSize
+        },{
+            name: 'Cost',
+            value: this.cost
         }];
     },
 
@@ -71,6 +75,7 @@ BreadthFirstSearch = Backbone.Model.extend({
         if (this.isGoalState(state)) {
             // Let the application know that the goal has been discovered
             this.goalFound = true;
+            this.cost = state.depth+1;
             this.onDiscover([{
                 originalState: state,
                 kind: 'goal'
