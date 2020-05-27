@@ -27,8 +27,7 @@ TreeView = Backbone.View.extend({
         return widthNoScroll - widthWithScroll;
     },
 
-    initialize: function() {
-
+    initialize: function(options) {
         // Layout constants
         this.scrollbarWidth = this.getScrollbarWidth();
         this.treeLayoutMarginLeft = 120;
@@ -37,7 +36,7 @@ TreeView = Backbone.View.extend({
         this.treeLayoutMarginBottom = 20;
 
         // Enable debug mode
-        this.debug = (this.options.debug == true);
+        this.debug = (options.debug == true);
 
         // Get drawing context
         var $main = this.$el.find('.main');

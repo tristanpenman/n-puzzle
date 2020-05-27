@@ -1,33 +1,33 @@
 ApplicationView = Backbone.View.extend({
 
-    initialize: function() {
+    initialize: function(options) {
 
         // Initialise control panel
         this.controlPanel = new ControlPanel({
-            el: this.options.$controlPanel,
-            debug: this.options.debug,
+            el: options.$controlPanel,
+            debug: options.debug,
             model: this.model
         });
 
         // Initialise tree view
         this.treeView = new TreeView({
-            el: this.options.$treeView,
-            debug: this.options.debug,
+            el: options.$treeView,
+            debug: options.debug,
             model: this.model
         });
 
         this.statsView = new StatsView({
-            el: this.options.$statsView,
+            el: options.$statsView,
             model: this.model
         });
 
         // Cache selectors
         var $body = $('body');
         var $window = $(window);
-        var $controlPanel = this.options.$controlPanel;
-        var $statsView = this.options.$statsView;
-        var $treeView = this.options.$treeView;
-        var $main = this.options.$treeView.find('.main');
+        var $controlPanel = options.$controlPanel;
+        var $statsView = options.$statsView;
+        var $treeView = options.$treeView;
+        var $main = options.$treeView.find('.main');
         var $tutorial = $body.find('#tutorial');
 
         resizeHandler = _.bind(function() {
