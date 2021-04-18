@@ -5,8 +5,8 @@
  ******************************************************************************/
 
 * {
+ font-family: Arial, serif;
  margin: 0;
- font-family: Arial;
 }
 
 html {
@@ -79,12 +79,12 @@ h1 {
  ******************************************************************************/
 
 input[type="button"]::-moz-focus-inner {
- padding: 1px 1px 0px 1px;
+ padding: 1px 1px 0 1px;
  border: 0;
 }
 
 #control_panel .stepper input[type="button"]::-moz-focus-inner {
- padding-top: 0px;
+ padding-top: 0;
 }
 
 #tutorial {

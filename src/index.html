@@ -13,9 +13,6 @@
 
     <!-- application css and overrides -->
     <link rel="stylesheet" href="css/application.css">
-    <!--[if IE]>
-        <link rel="stylesheet" href="css/application-ie.css">
-    <![endif]-->
 
     <!-- legacy libraries -->
     <script src="lib/jquery/jquery-1.7.2.min.js"></script>
@@ -66,9 +63,6 @@
     <script src="js/views/StatsView.js"></script>
     <script src="js/views/Stepper.js"></script>
     <script src="js/views/TreeView.js"></script>
-
-    <!-- application -->
-    <script src="js/application.js"></script>
 
 </head>
 <body>
@@ -306,6 +300,31 @@
     <!-- Markup for StatsView -->
     <div id="stats_view" class="invisible">
     </div>
+
+    <script>
+        Vue.component('puzzle-state-view', httpVueLoader('js/components/puzzle-state-view.vue'));
+
+        var enableDebug = false;
+
+        // Set up the default configuration
+        var configuration = new Configuration();
+        configuration.getInitialState().setTiles([0,2,3,1,4,5,8,7,6]);
+        configuration.getGoalState().setTiles([1,2,3,8,0,4,7,6,5]);
+
+        // Initialise the application state with the default configuration
+        var applicationState = new ApplicationState({
+            'configuration': configuration
+        });
+
+        // Initialise the application view
+        new ApplicationView({
+            $controlPanel : $('#control_panel'),
+            $statsView: $('#stats_view'),
+            $treeView : $('#tree_view'),
+            debug: enableDebug,
+            model: applicationState
+        });
+    </script>
 
 </body>
 </html>
