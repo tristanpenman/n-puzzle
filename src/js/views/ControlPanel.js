@@ -98,8 +98,10 @@ ControlPanel = Backbone.View.extend({
 
     editGoalState: function() {
         if (this.model.isStopped()) {
+            const el = document.createElement('div');
+            document.body.append(el);
             new PuzzleStateEditor({
-                el: $('#puzzle_state_editor'),
+                el,
                 model: this.model.getConfiguration().getGoalState()
             });
         }
@@ -107,8 +109,10 @@ ControlPanel = Backbone.View.extend({
 
     editInitialState: function() {
         if (this.model.isStopped()) {
+            const el = document.createElement('div');
+            document.body.append(el);
             new PuzzleStateEditor({
-                el: $('#puzzle_state_editor'),
+                el,
                 model: this.model.getConfiguration().getInitialState()
             });
         }

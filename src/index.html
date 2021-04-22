@@ -6,8 +6,6 @@
 
     <!-- stylesheets for views -->
     <link rel="stylesheet" href="css/views/ControlPanel.css">
-    <link rel="stylesheet" href="css/views/PuzzleStateEditor.css">
-    <link rel="stylesheet" href="css/views/PuzzleStateView.css">
     <link rel="stylesheet" href="css/views/StatsView.css">
     <link rel="stylesheet" href="css/views/TreeView.css">
 
@@ -144,28 +142,6 @@
 
     </div>
 
-    <!-- Markup for the PuzzleStateEditor view -->
-    <div id="puzzle_state_editor">
-        <div class="grid">
-            <div class="row row_0"><span>
-                </span><div class="cell cell_0_0"><div class="cell_value">7</div></div><span>
-                </span><div class="cell cell_1_0"><div class="cell_value">7</div></div><span>
-                </span><div class="cell cell_2_0"><div class="cell_value">7</div></div>
-            </div><span>
-            </span><div class="row row_1"><span>
-                </span><div class="cell cell_0_1"><div class="cell_value">7</div></div><span>
-                </span><div class="cell cell_1_1"><div class="cell_value">7</div></div><span>
-                </span><div class="cell cell_2_1"><div class="cell_value">7</div></div>
-            </div><span>
-            </span><div class="row row_2"><span>
-                </span><div class="cell cell_0_2"><div class="cell_value">7</div></div><span>
-                </span><div class="cell cell_1_2"><div class="cell_value">7</div></div><span>
-                </span><div class="cell cell_2_2"><div class="cell_value">7</div></div>
-            </div>
-        </div><br/>
-        <input type="button" value="Save changes" class="save"></input><a href="#">Discard</a>
-    </div>
-
     <!-- Markup for the TreeView view -->
     <div id="tree_view" >
         <canvas class="main"></canvas>
@@ -274,7 +250,13 @@
     </div>
 
     <script>
-        Vue.component('puzzle-state-view', httpVueLoader('js/components/puzzle-state-view.vue'));
+        [
+          'puzzle-state-editor',
+          'puzzle-state-editor-cell',
+          'puzzle-state-view'
+        ].forEach((component) => {
+          Vue.component(component, httpVueLoader(`js/components/${component}.vue`));
+        });
 
         var enableDebug = false;
 

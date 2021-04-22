@@ -1,7 +1,7 @@
 PuzzleStateView = Backbone.View.extend({
   initialize: function () {
-    this.render();
     this.model.on('change', this.render, this);
+    this.render();
   },
 
   render: function () {

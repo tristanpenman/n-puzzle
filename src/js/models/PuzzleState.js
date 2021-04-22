@@ -177,6 +177,7 @@ PuzzleState = Backbone.Model.extend({
         }
 
         this.trigger('change');
+        return this;
     },
 
     swapTiles: function(a, b) {
