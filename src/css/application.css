@@ -21,6 +21,18 @@ body {
  overflow: hidden;
 }
 
+p {
+ margin-bottom: 10px;
+}
+
+li {
+ margin-bottom: 4px;
+}
+
+ul {
+ margin-bottom: 8px;
+}
+
 input, select {
  vertical-align: bottom;
 }
@@ -53,22 +65,18 @@ h1 {
  width: 8.9em;
 }
 
-.qtip-content p,
-.qtip-content ul {
- margin-top: 0.5em;
- margin-bottom: 0.5em;
-}
-
-.qtip-content li {
- margin-top: 0.5em;
- padding-left: 0;
-}
-
-.qtip-content ul {
- padding-left: 1.5em;
-}
-
 .invisible {
+ display: none;
+}
+
+.help_button {
+ border: 0;
+ cursor: pointer;
+ padding: 0;
+ user-select: none;
+}
+
+.help_text {
  display: none;
 }
 

@@ -11,7 +11,7 @@ PuzzleStateEditor = Backbone.View.extend({
         model: this.model
       },
       methods: {
-        discard() {
+        dismiss() {
           vm.$destroy();
           vm.$el.parentNode.removeChild(this.$el);
         },
@@ -24,7 +24,7 @@ PuzzleStateEditor = Backbone.View.extend({
       template: `
         <puzzle-state-editor
           v-bind:tiles="model.valueOf()"
-          @discard="discard"
+          @dismiss="dismiss"
           @save="save"
         />
       `

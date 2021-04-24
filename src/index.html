@@ -14,8 +14,6 @@
 
     <!-- legacy libraries -->
     <script src="lib/jquery/jquery-1.7.2.min.js"></script>
-    <script src="lib/jquery.simplemodal/jquery.simplemodal-1.4.2.min.js"></script>
-    <script src="lib/jquery.qtip/jquery.qtip-1.0.0-rc3.min.js"></script>
     <script src="lib/underscore-1.10.2/underscore-min.js"></script>
     <script src="lib/backbone-1.4.0/backbone-min.js"></script>
     <script src="lib/buckets/buckets-20120801.min.js"></script>
@@ -56,6 +54,7 @@
     <!-- views -->
     <script src="js/views/ApplicationView.js"></script>
     <script src="js/views/ControlPanel.js"></script>
+    <script src="js/views/HelpModal.js"></script>
     <script src="js/views/PuzzleStateEditor.js"></script>
     <script src="js/views/PuzzleStateView.js"></script>
     <script src="js/views/StatsView.js"></script>
@@ -87,36 +86,41 @@
             </div>
 
             <div class="group algorithm disabled_while_running">
-                <label>Search algorithm:</label>
+                <label for="algorithm">Search algorithm:</label>
                 <div class="field">
-                    <select></select>
-                    <a href="#"><img src="images/help_icon.gif" class="help"></a>
-                </div>
-                <div class="tooltip_text">
-                    <p>The graph-search algorithms in this list fall in to two categories:</p>
-                    <ul>
-                        <li>Uninformed algorithms - those that <em>do not</em> make use of a heuristic function</li>
-                        <li>Informed algorithms - those that <em>do</em> make some use of a heuristic function</li>
-                    </ul>
-                    <p>See your lecture notes and the assigned text book to learn more about each algorithm.</p>
+                    <select id="algorithm"></select>
+                    <button class="help_button" data-content-id="algorithm_help">
+                        <img src="images/help_icon.gif" alt="help">
+                    </button>
+                    <div id="algorithm_help" class="help_text">
+                        <p>The graph-search algorithms in N-Puzzle fall in to two categories:</p>
+                        <ul>
+                            <li>Uninformed algorithms - those that <em>do not</em> make use of a heuristic function</li>
+                            <li>Informed algorithms - those that <em>do</em> make some use of a heuristic function</li>
+                        </ul>
+                        <p>See your lecture notes and the assigned text book to learn more about each algorithm.</p>
+                    </div>
                 </div>
             </div>
 
             <div class="group heuristic disabled_while_running">
-                <label>Heuristic:</label>
+                <label for="heuristic">Heuristic:</label>
                 <div class="field">
-                    <select></select>
-                    <a href="#"><img src="images/help_icon.gif" class="help"></a>
+                    <select id="heuristic"></select>
+                    <button class="help_button" data-content-id="heuristic_help">
+                        <img src="images/help_icon.gif" alt="help">
+                    </button>
+                    <div id="heuristic_help" class="help_text">
+                        <p>When using an informed algorithm, such as A* Search, you must also choose a heuristic.</p>
+                        <p>You can choose one of three heuristics:</p>
+                        <ul>
+                            <li>Euclidean distance - sum of the straight-line distance for each tile out of place</li>
+                            <li>Manhattan distance - sum of horizontal and vertical distance for each tile out of place</li>
+                            <li>Tiles-out - the number of tiles that are out of place</li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="tooltip_text">
-                    <p>When using an informed algorithm, such as A* Search, you must also choose a heuristic.</p>
-                    <p>You can choose one of three heuristics:</p>
-                    <ul>
-                        <li>Euclidean distance - sum of the straight-line distance for each tile out of place</li>
-                        <li>Manhattan distance - sum of horizontal and vertical distance for each tile out of place</li>
-                        <li>Tiles-out - the number of tiles that are out of place</li>
-                    </ul>
-                </div>
+
             </div>
 
             <div class="group mode disabled_while_running">
@@ -251,6 +255,7 @@
 
     <script>
         [
+          'help-modal',
           'puzzle-state-editor',
           'puzzle-state-editor-cell',
           'puzzle-state-view'

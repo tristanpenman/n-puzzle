@@ -12,73 +12,43 @@ ControlPanel = Backbone.View.extend({
         'click .goal .puzzle_state_view': 'editGoalState'
     },
 
-    createTooltip: function($target, content) {
-        $target.qtip({
-            'content': content,
-            show: {
-                when:'click',
-                delay: 0,
-                effect: {
-                    length: 0
-                }
-            },
-            hide: 'unfocus',
-            position: {
-                corner: {
-                    target: 'rightMiddle',
-                    tooltip: 'leftMiddle'
-                }
-            },
-            style: {
-                border: {
-                     width: 1,
-                     radius: 1,
-                     color: '#666'
-                },
-                name: 'light',
-                tip: {
-                    corner: 'leftMiddle',
-                    size: {
-                        x: 6,
-                        y: 11
-                    }
-                }
-            }
-        });
-    },
-
     initialize: function() {
-
-        this.createTooltip(
-            this.$el.find('.algorithm img.help'),
-            this.$el.find('.algorithm .tooltip_text').html()
-        );
-
-        this.createTooltip(
-            this.$el.find('.heuristic img.help'),
-            this.$el.find('.heuristic .tooltip_text').html()
-        );
 
         // Bind the render method to be run in the context of a control
         // panel instance
         _.bindAll(this, 'render');
 
         // Attach a Stepper presenter to the stepper controls
-        this.stepper = new Stepper({
+        new Stepper({
             el: this.$el.find('.stepper'),
             model: this.model
         });
 
         // Create a subview for the initial state
-        this.initialStateView = new PuzzleStateView({
+        new PuzzleStateView({
             el: this.$el.find('.initial .puzzle_state_view'),
             model: this.model.getConfiguration().getInitialState()
         });
 
         // Create a subview for the goal state
-        this.goalStateView = new PuzzleStateView({
+        new PuzzleStateView({
             el: this.$el.find('.goal .puzzle_state_view'),
             model: this.model.getConfiguration().getGoalState()
+        });
+
+        // Wire up help buttons and modals
+        this.$el.find('.help_button').each(function () {
+            this.onclick = function () {
+                const contentId = this.dataset.contentId;
+                const html = document.getElementById(contentId).innerHTML;
+                const el = document.createElement('div');
+                document.body.append(el);
+                new HelpModal({
+                    el,
+                    html,
+                    origin: this
+                });
+            };
         });
 
         // Populate the available settings

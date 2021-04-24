@@ -33,7 +33,7 @@ module.exports = {
   methods: {
     discard() {
       this.unsaved = new PuzzleState().setTiles(this.tiles);
-      this.$emit('discard');
+      this.$emit('dismiss');
     },
     edit(position) {
       this.editing = position;
