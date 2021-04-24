@@ -35,7 +35,12 @@
     <div class="group heuristic">
       <label>Heuristic:</label>
       <div class="field">
-        <select @change="changeHeuristic" v-bind:value="configuration.getHeuristic()" v-if="usesHeuristic()" :disabled="state !== 'stopped'">
+        <select
+          @change="changeHeuristic"
+          :disabled="state !== 'stopped'"
+          :value="configuration.getHeuristic()"
+          v-if="usesHeuristic()"
+        >
           <option v-for="heuristic in availableHeuristics()" v-bind:value="heuristic.key">
             {{ heuristic.name }}
           </option>
@@ -64,17 +69,17 @@
     <div class="group stepper">
       <label>Controls:</label>
       <div class="row" v-if="getMode() === 'burst'">
-        <input type="button" value="Start" class="start" :disabled="state !== 'stopped'" @click="$emit('start')" />
-        <input type="button" value="Resume" class="resume" :disabled="state !== 'paused' && state !== 'stopped'" @click="$emit('resume')" />
-        <input type="button" value="Pause" class="pause" :disabled="state !== 'running' && state !== 'stopped'" @click="$emit('pause')" />
+        <button :disabled="state !== 'stopped'" @click="$emit('start')">Start</button>
+        <button :disabled="state === 'stopped' || state !== 'paused'" @click="$emit('resume')">Resume</button>
+        <button :disabled="state === 'stopped' || state !== 'running'" @click="$emit('pause')">Pause</button>
       </div>
       <div class="row" v-else>
-        <input type="button" value="Start" class="start" :disabled="state !== 'stopped'" @click="$emit('start')" />
-        <input type="button" value="Next" class="next" :disabled="state !== 'running'" @click="$emit('next')" />
-        <input type="button" value="Back" class="back" :disabled="state !== 'running'" @click="$emit('back')" />
+        <button :disabled="state !== 'stopped'" @click="$emit('start')">Start</button>
+        <button :disabled="state !== 'running'" @click="$emit('next')">Next</button>
+        <button :disabled="state !== 'running'" @click="$emit('back')">Back</button>
       </div>
       <div class="row">
-        <input type="button" value="Reset" class="reset" :disabled="state === 'stopped'" @click="$emit('reset')" />
+        <button :disabled="state === 'stopped'" @click="$emit('reset')">Reset</button>
       </div>
     </div>
 
@@ -207,13 +212,7 @@ module.exports = {
   margin-bottom: 0.7em;
 }
 
-.ControlPanel > .stepper > input[type="button"].start,
-.ControlPanel > .stepper > input[type="button"].next,
-.ControlPanel > .stepper > input[type="button"].reset {
-  width: 4.4em;
-}
-
-.ControlPanel > .stepper input[type="button"] {
+.ControlPanel > .stepper > .row {
   margin-bottom: 0.4em;
 }
 

@@ -41,9 +41,14 @@ input, select {
  vertical-align: bottom;
 }
 
-input[type="button"] {
+button {
  padding: 3px 0.75em;
  font-size: 13px;
+}
+
+button::-moz-focus-inner {
+ padding: 1px 1px 0 1px;
+ border: 0;
 }
 
 form {
@@ -71,11 +76,6 @@ h1 {
 
 .invisible {
  display: none;
-}
-
-input[type="button"]::-moz-focus-inner {
- padding: 1px 1px 0 1px;
- border: 0;
 }
 
 #stats_view {
