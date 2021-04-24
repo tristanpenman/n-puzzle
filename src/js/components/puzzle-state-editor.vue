@@ -8,15 +8,15 @@
               v-bind:editing="editing && editing[0] === x && editing[1] === y"
               v-bind:position="[x, y]"
               v-bind:value="unsaved.getTile(x, y)"
-              v-on:edit="edit"
-              v-on:set="set"
-            />
+              @edit="edit"
+              @set="set"
+            ></puzzle-state-editor-cell>
           </div>
         </div>
       </div>
       <div class="actions">
-        <input type="button" value="Save Changes" v-on:click="save" />
-        <a href="#" v-on:click="discard">Discard</a>
+        <button class="save" @click="save">Save Changes</button>
+        <button class="discard" @click="discard">Discard</button>
       </div>
     </div>
   </div>

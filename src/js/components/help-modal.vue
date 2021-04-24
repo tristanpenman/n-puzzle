@@ -1,7 +1,7 @@
 <template>
   <div class="HelpModal" @click="close">
     <div class="popup">
-      <div v-html="html"></div>
+      <slot></slot>
       <div class="actions">
         <button @click="close">Close</button>
       </div>
@@ -15,10 +15,7 @@ module.exports = {
     close() {
       this.$emit('dismiss');
     }
-  },
-  props: [
-    'html'
-  ]
+  }
 };
 </script>
 

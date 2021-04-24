@@ -62,9 +62,6 @@ TreeView = Backbone.View.extend({
 
         this.renderer = new PuzzleStateRenderer(context);
 
-        // Don't display the tree thumbnail
-        this.renderThumbnail = false;
-
         // Initialise the layout algorithm
         this.layoutAlgorithm = new TreeLayout({
             nodeWidth: this.renderer.getExpectedWidth(),

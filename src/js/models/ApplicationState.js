@@ -84,7 +84,7 @@ ApplicationState = Backbone.Model.extend({
             var action = this.treeUndoActions.pop();
             var redoAction = action.execute();
             this.treeRedoActions.push(redoAction);
-            this.trigger('change');
+            this.trigger('change', this);
             this.get('searchTree').trigger('change');
         }
     },
@@ -120,7 +120,7 @@ ApplicationState = Backbone.Model.extend({
                 }
             }
 
-            this.trigger('change');
+            this.trigger('change', this);
             this.get('searchTree').trigger('change');
         }
 
@@ -685,7 +685,7 @@ ApplicationState = Backbone.Model.extend({
             if (alg == null) {
                 this.treeUndoActions = [];
             } else {
-                this.trigger('change');
+                this.trigger('change', this);
             }
 
         }, this);

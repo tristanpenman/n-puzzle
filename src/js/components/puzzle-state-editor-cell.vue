@@ -1,10 +1,10 @@
 <template>
-  <div class="PuzzleStateEditorCell" v-on:click="edit">
+  <div class="PuzzleStateEditorCell" @click="edit">
     <input
       ref="input"
       v-if="editing"
-      v-on:blur="blur"
-      v-on:keydown="keydown"
+      @blur="blur"
+      @keydown="keydown"
     />
     <div v-else>
       {{value || '-'}}

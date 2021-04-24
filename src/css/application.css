@@ -17,8 +17,12 @@ html, body {
  height: 100%;
 }
 
-body {
+#main {
+ align-items: flex-start;
+ display: flex;
  overflow: hidden;
+ height: 100%;
+ width: 100%;
 }
 
 p {
@@ -69,37 +73,36 @@ h1 {
  display: none;
 }
 
-.help_button {
- border: 0;
- cursor: pointer;
- padding: 0;
- user-select: none;
-}
-
-.help_text {
- display: none;
-}
-
-/******************************************************************************
- *
- * Hacks to make buttons look right in Firefox
- *
- ******************************************************************************/
-
 input[type="button"]::-moz-focus-inner {
  padding: 1px 1px 0 1px;
  border: 0;
 }
 
-#control_panel .stepper input[type="button"]::-moz-focus-inner {
- padding-top: 0;
+#stats_view {
+ background: #fafafa;
+ border-radius: 3px;
+ border: 1px solid #aaa;
+ font-size: 0.9em;
+ margin: 10px;
+ padding: 0.5em;
+ position: absolute;
+ right: 15px;
+ top: 15px;
 }
 
+#stats_view span{
+ display: block;
+ padding: 0.3em;
+}
+
+#tree_view,
 #tutorial {
- position: absolute;
+ border-left: 1px solid #aaa;
+ box-shadow: -1px 0 4px rgba(0, 0, 0, 0.1);
+ flex-grow: 1;
+ height: 100%;
  left: 245px;
  max-height: 100%;
- height: 100%;
  overflow: auto;
 }
 
@@ -117,7 +120,7 @@ input[type="button"]::-moz-focus-inner {
 
 #tutorial h1 {
  width: auto;
- margin: 1.2em 0 1em 0em;
+ margin: 1.2em 0 1em 0;
  font-size: 22px;
 }
 

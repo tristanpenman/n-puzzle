@@ -1,5 +1,5 @@
 <template>
-  <div class="PuzzleStateView">
+  <div class="PuzzleStateView" @click="$emit('click')">
     <div class="row">
       <div class="cell">{{ tiles[0] || '-' }}</div>
       <div class="cell">{{ tiles[1] || '-' }}</div>

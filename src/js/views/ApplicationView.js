@@ -36,7 +36,7 @@ ApplicationView = Backbone.View.extend({
             // This improves general rendering performance for elements such
             // as the state editor overlay.
 
-            var newWidth = $body.innerWidth() - $controlPanel.outerWidth();
+            var newWidth = $main.innerWidth() - $controlPanel.outerWidth();
 
             if (this.model.getTree().getRootNode() == null) {
                 $statsView.toggleClass('invisible', true);
@@ -50,25 +50,6 @@ ApplicationView = Backbone.View.extend({
                 $statsView.toggleClass('invisible', false);
                 this.treeView.setSize(newWidth, newHeight);
             }
-
-            var xOffset = $controlPanel.outerWidth();
-
-            $statsView
-                .css('position', 'absolute')
-                .css('top', '0')
-                .css('left', xOffset);
-
-            $treeView
-                .css('position', 'absolute')
-                .css('top', '0')
-                .css('left', xOffset);
-
-            $tutorial
-                .css('position', 'absolute')
-                .css('top', '0')
-                .css('left', xOffset)
-                .css('width', newWidth + "px");
-
         }, this);
 
         this.model.on('change:state', resizeHandler);
@@ -76,7 +57,5 @@ ApplicationView = Backbone.View.extend({
         $window
             .load(resizeHandler)
             .resize(resizeHandler);
-
-        $tutorial.fadeIn();
     }
 });
