@@ -67,10 +67,13 @@
     <img src="images/astar-steps.png">
     <p>The colours can be interpreted as follows:</p>
     <table>
+      <thead>
       <tr>
         <th>Colour</th>
         <th>Meaning</th>
       </tr>
+      </thead>
+      <tbody>
       <tr>
         <td>Blue</td>
         <td>If a node is in the Open List then it will be highlighted in blue.</td>
@@ -105,6 +108,7 @@
           the open list. These nodes will be colored purple.
         </td>
       </tr>
+      </tbody>
     </table>
     <h3>Open and Closed Lists</h3>
     <p>While the search algorithms are running, two lists are maintained. The first is the Open List - this is used to
@@ -130,19 +134,19 @@
   padding-bottom: 2.5em;
 }
 
-.Tutorial p {
+.Tutorial > p {
   line-height: 22px;
   font-size: 14px;
   margin-top: 7px;
 }
 
-.Tutorial h1 {
+.Tutorial > h1 {
   width: auto;
   margin: 1.2em 0 1em 0;
   font-size: 22px;
 }
 
-.Tutorial h2 {
+.Tutorial > h2 {
   margin-top: 22px;
   margin-bottom: 17px;
   font-size: 19px;
@@ -151,23 +155,51 @@
   font-weight: normal;
 }
 
-.Tutorial h3 {
+.Tutorial > h3 {
   font-size: 16px;
   font-weight: bold;
   margin-top: 20px;
   margin-bottom: 10px;
 }
 
-.Tutorial ul {
+.Tutorial > ul {
   margin-top: 0.6em;
 }
 
-.Tutorial li {
+.Tutorial > ul > li {
   margin-top: 0.4em;
   font-size: 14px;
 }
 
-.Tutorial img {
+.Tutorial > img {
   margin-top: 5px;
+}
+
+.Tutorial > table {
+  border-collapse: collapse;
+  margin-top: 1em;
+  max-width: 780px;
+  margin-bottom: 2em;
+}
+
+.Tutorial > table,
+.Tutorial > table > tbody > tr > td,
+.Tutorial > table > thead > tr > th {
+  border: 1px solid #999;
+  line-height: 20px;
+}
+
+.Tutorial > table > tbody > tr > td,
+.Tutorial > table > thead > tr > th {
+  padding: 6px 10px;
+  text-align: left;
+  line-height: 22px;
+  font-size: 14px;
+}
+
+.Tutorial > table > thead > tr > th {
+  background: #f2f2f2;
+  padding-top: 0.7em;
+  padding-bottom: 0.7em;
 }
 </style>

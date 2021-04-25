@@ -87,34 +87,3 @@ h1 {
  max-height: 100%;
  overflow: auto;
 }
-
-table {
- border-collapse: collapse;
- margin-top: 1em;
- max-width: 780px;
- margin-bottom: 2em;
-}
-
-table, table td, table th {
- border: 1px solid #999;
- line-height: 20px;
-}
-
-table td, table th {
- padding: 6px 10px;
- text-align: left;
- line-height: 22px;
- font-size: 14px;
-}
-
-table th {
- background: #ededed; /* Old browsers (including IE6-9) */
- background: -moz-linear-gradient(top, #f9f9f9 26%, #ebecee 73%); /* FF3.6+ */
- background: -webkit-gradient(linear, left top, left bottom, color-stop(26%,#f9f9f9), color-stop(73%,#ebecee)); /* Chrome,Safari4+ */
- background: -webkit-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* Chrome10+,Safari5.1+ */
- background: -o-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* Opera 11.10+ */
- background: -ms-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* IE10+ */
- background: linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* W3C */
- padding-top: 0.7em;
- padding-bottom: 0.7em;
-}
