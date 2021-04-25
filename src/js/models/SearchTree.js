@@ -95,6 +95,9 @@ SearchTreeNode = function(parent, state, attributes) {
  * Model representation of a search tree
  */
 SearchTree = Backbone.Model.extend({
+    initialize: function() {
+        this.rootNode = null;
+    },
 
     getRootNode: function() {
         return this.rootNode;

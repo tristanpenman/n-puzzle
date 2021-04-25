@@ -42,9 +42,9 @@
   <script src="js/models/algorithms/AStarSearch.js"></script>
 
   <!-- views -->
+  <script src="js/views/AlgorithmStats.js"></script>
   <script src="js/views/ApplicationView.js"></script>
   <script src="js/views/ControlPanel.js"></script>
-  <script src="js/views/StatsView.js"></script>
   <script src="js/views/Stepper.js"></script>
   <script src="js/views/TreeView.js"></script>
   <script src="js/views/Tutorial.js"></script>
@@ -52,6 +52,7 @@
   <!-- vue components -->
   <script>
     [
+      'algorithm-stats',
       'control-panel',
       'help-modal',
       'puzzle-state-editor',
@@ -70,7 +71,7 @@
 
 <div id="main">
   <!-- Markup for the TreeView view -->
-  <div id="tree_view">
+  <div id="tree_view" class="invisible">
     <canvas class="main"></canvas>
     <div id="viewport">
       <div id="fakescrolldiv"></div>
@@ -78,11 +79,7 @@
   </div>
 
   <!-- Placeholder for the Tutorial view -->
-  <div id="tutorial"></div>
-</div>
-
-<!-- Markup for StatsView -->
-<div id="stats_view" class="invisible">
+  <div id="tutorial" class="invisible"></div>
 </div>
 
 <script>
@@ -94,7 +91,6 @@
   // Initialise the application view
   new ApplicationView({
     $controlPanel: $('#control_panel'),
-    $statsView: $('#stats_view'),
     $treeView: $('#tree_view'),
     debug: false,
     model: new ApplicationState({

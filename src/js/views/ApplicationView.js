@@ -3,7 +3,6 @@ ApplicationView = Backbone.View.extend({
     const $body = $('body');
     const $window = $(window);
     const $controlPanel = options.$controlPanel;
-    const $statsView = options.$statsView;
     const $treeView = options.$treeView;
     const $tutorial = $body.find('#tutorial');
 
@@ -26,8 +25,12 @@ ApplicationView = Backbone.View.extend({
       model: this.model
     });
 
-    new StatsView({
-      el: options.$statsView,
+    // Algorithm stats
+    const el = document.createElement('div');
+    el.classList.add('invisible');
+    document.body.appendChild(el);
+    new AlgorithmStats({
+      el,
       model: this.model
     });
 
@@ -40,16 +43,14 @@ ApplicationView = Backbone.View.extend({
       const newWidth = $('#main').innerWidth() - $controlPanel.outerWidth();
       const $Tutorial = $('.Tutorial');
 
-      if (this.model.getTree().getRootNode() == null) {
-        $statsView.toggleClass('invisible', true);
+      if (this.model.getTree().getRootNode() === null) {
         $treeView.toggleClass('invisible', true);
         $Tutorial.toggleClass('invisible', false);
         this.treeView.setSize(newWidth, 0);
       } else {
-        var newHeight = $body.innerHeight();
+        const newHeight = $body.innerHeight();
         $treeView.toggleClass('invisible', false);
         $Tutorial.toggleClass('invisible', true);
-        $statsView.toggleClass('invisible', false);
         this.treeView.setSize(newWidth, newHeight);
       }
     }, this);
