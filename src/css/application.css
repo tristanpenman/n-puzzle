@@ -17,7 +17,7 @@ html, body {
  height: 100%;
 }
 
-#main {
+body {
  align-items: flex-start;
  display: flex;
  overflow: hidden;
@@ -95,8 +95,7 @@ h1 {
  padding: 0.3em;
 }
 
-#tree_view,
-#tutorial {
+#main {
  border-left: 1px solid #aaa;
  box-shadow: -1px 0 4px rgba(0, 0, 0, 0.1);
  flex-grow: 1;
@@ -104,53 +103,6 @@ h1 {
  left: 245px;
  max-height: 100%;
  overflow: auto;
-}
-
-#tutorial #content {
- padding-left: 1.7em;
- padding-right: 2em;
- padding-bottom: 2.5em;
-}
-
-#tutorial p {
- line-height: 22px;
- font-size: 14px;
- margin-top: 7px;
-}
-
-#tutorial h1 {
- width: auto;
- margin: 1.2em 0 1em 0;
- font-size: 22px;
-}
-
-#tutorial h2 {
- margin-top: 22px;
- margin-bottom: 17px;
- font-size: 19px;
- padding-bottom: 5px;
- border-bottom: 1px solid #ddd;
- font-weight: normal;
-}
-
-#tutorial h3 {
- font-size: 16px;
- font-weight: bold;
- margin-top: 20px;
- margin-bottom: 10px;
-}
-
-#tutorial ul {
- margin-top: 0.6em;
-}
-
-#tutorial li {
- margin-top: 0.4em;
- font-size: 14px;
-}
-
-#tutorial img {
- margin-top: 5px;
 }
 
 table {

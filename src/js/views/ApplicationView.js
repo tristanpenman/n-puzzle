@@ -1,61 +1,63 @@
 ApplicationView = Backbone.View.extend({
+  initialize: function (options) {
+    const $body = $('body');
+    const $window = $(window);
+    const $controlPanel = options.$controlPanel;
+    const $statsView = options.$statsView;
+    const $treeView = options.$treeView;
+    const $tutorial = $body.find('#tutorial');
 
-    initialize: function(options) {
+    // Initialise control panel
+    new ControlPanel({
+      el: options.$controlPanel,
+      debug: options.debug,
+      model: this.model
+    });
 
-        // Initialise control panel
-        this.controlPanel = new ControlPanel({
-            el: options.$controlPanel,
-            debug: options.debug,
-            model: this.model
-        });
+    // Initialise tutorial
+    new Tutorial({
+      el: $tutorial
+    });
 
-        // Initialise tree view
-        this.treeView = new TreeView({
-            el: options.$treeView,
-            debug: options.debug,
-            model: this.model
-        });
+    // Initialise tree view
+    this.treeView = new TreeView({
+      el: options.$treeView,
+      debug: options.debug,
+      model: this.model
+    });
 
-        this.statsView = new StatsView({
-            el: options.$statsView,
-            model: this.model
-        });
+    new StatsView({
+      el: options.$statsView,
+      model: this.model
+    });
 
-        // Cache selectors
-        var $body = $('body');
-        var $window = $(window);
-        var $controlPanel = options.$controlPanel;
-        var $statsView = options.$statsView;
-        var $treeView = options.$treeView;
-        var $main = options.$treeView.find('.main');
-        var $tutorial = $body.find('#tutorial');
+    const resizeHandler = _.bind(function () {
 
-        resizeHandler = _.bind(function() {
+      // Only show and resize the tree view if the search is running.
+      // This improves general rendering performance for elements such
+      // as the state editor overlay.
 
-            // Only show and resize the tree view if the search is running.
-            // This improves general rendering performance for elements such
-            // as the state editor overlay.
+      const newWidth = $('#main').innerWidth() - $controlPanel.outerWidth();
+      const $Tutorial = $('.Tutorial');
 
-            var newWidth = $main.innerWidth() - $controlPanel.outerWidth();
+      if (this.model.getTree().getRootNode() == null) {
+        $statsView.toggleClass('invisible', true);
+        $treeView.toggleClass('invisible', true);
+        $Tutorial.toggleClass('invisible', false);
+        this.treeView.setSize(newWidth, 0);
+      } else {
+        var newHeight = $body.innerHeight();
+        $treeView.toggleClass('invisible', false);
+        $Tutorial.toggleClass('invisible', true);
+        $statsView.toggleClass('invisible', false);
+        this.treeView.setSize(newWidth, newHeight);
+      }
+    }, this);
 
-            if (this.model.getTree().getRootNode() == null) {
-                $statsView.toggleClass('invisible', true);
-                $treeView.toggleClass('invisible', true);
-                $tutorial.toggleClass('invisible', false);
-                this.treeView.setSize(newWidth, 0);
-            } else {
-                var newHeight = $body.innerHeight();
-                $treeView.toggleClass('invisible', false);
-                $tutorial.toggleClass('invisible', true);
-                $statsView.toggleClass('invisible', false);
-                this.treeView.setSize(newWidth, newHeight);
-            }
-        }, this);
+    this.model.on('change:state', resizeHandler);
 
-        this.model.on('change:state', resizeHandler);
-
-        $window
-            .load(resizeHandler)
-            .resize(resizeHandler);
-    }
+    $window
+      .load(resizeHandler)
+      .resize(resizeHandler);
+  }
 });
