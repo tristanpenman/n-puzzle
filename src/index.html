@@ -57,6 +57,7 @@
       'puzzle-state-editor',
       'puzzle-state-editor-cell',
       'puzzle-state-view',
+      'tree-view',
       'tutorial'
     ].forEach((component) => {
       Vue.component(component, httpVueLoader(`js/components/${component}.vue`));
@@ -70,12 +71,7 @@
 
 <div id="main">
   <!-- Markup for the TreeView view -->
-  <div id="tree_view" class="invisible">
-    <canvas class="main"></canvas>
-    <div id="viewport">
-      <div id="fakescrolldiv"></div>
-    </div>
-  </div>
+  <div id="tree_view" class="invisible"></div>
 
   <!-- Placeholder for the Tutorial view -->
   <div id="tutorial" class="invisible"></div>

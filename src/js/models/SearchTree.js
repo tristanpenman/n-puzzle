@@ -1,14 +1,12 @@
-
 SearchTreeNode = function(parent, state, attributes) {
-
-    var children = [];
-    var depth = 0;
+    const children = [];
+    let depth = 0;
 
     // Add this node as a child of its parent
     if (typeof parent !== 'undefined' && parent != null) {
         parent.getChildren().push(this);
         depth = parent.getDepth() + 1;
-    };
+    }
 
     this.getAttributes = function() {
         return attributes;
@@ -79,12 +77,12 @@ SearchTreeNode = function(parent, state, attributes) {
     };
 
     this.isLeaf = function() {
-        return (children.length == 0);
+        return (children.length === 0);
     };
 
     this.removeChild = function(child) {
-        var idx = this.getIndexOfChild(child);
-        if (idx == -1) {
+        const idx = this.getIndexOfChild(child);
+        if (idx === -1) {
             return false;
         }
         children.splice(idx, 1);
@@ -105,6 +103,6 @@ SearchTree = Backbone.Model.extend({
 
     setRootNode: function(rootNode) {
         this.rootNode = rootNode;
-        this.trigger('change');
+        this.trigger('change', this);
     }
 });

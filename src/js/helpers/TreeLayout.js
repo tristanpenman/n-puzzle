@@ -554,7 +554,7 @@ TreeLayout = function(userOptions) {
      * Retrieve the coordinates for a given node in the tree.
      */
     this.getCoordinatesForNode = function(node) {
-        if (data != null) {
+        if (data !== null) {
             return data.getCoordinatesForNode(node);
         }
         return null;
@@ -574,8 +574,7 @@ TreeLayout = function(userOptions) {
      * Layout the nodes in a tree, starting at rootNode.
      */
     this.positionTree = function(rootNode, userOptions) {
-
-        var fnOptions = $.extend({
+        const fnOptions = $.extend({
             stopAfterFirstWalk: false
         }, userOptions);
 
@@ -584,8 +583,7 @@ TreeLayout = function(userOptions) {
         // Reset bounding box coordinates
         xMin = xMax = yMin = yMax = 0;
 
-        if (rootNode != null) {
-
+        if (rootNode !== null) {
             firstWalk(rootNode, null);
 
             if (fnOptions.stopAfterFirstWalk) {

@@ -3,8 +3,8 @@ ApplicationView = Backbone.View.extend({
     const $body = $('body');
     const $window = $(window);
     const $controlPanel = options.$controlPanel;
-    const $treeView = options.$treeView;
-    const $tutorial = $body.find('#tutorial');
+    const treeView = document.getElementById('tree_view');
+    const tutorial = document.getElementById('tutorial');
 
     // Initialise control panel
     new ControlPanel({
@@ -15,13 +15,12 @@ ApplicationView = Backbone.View.extend({
 
     // Initialise tutorial
     new Tutorial({
-      el: $tutorial
+      el: tutorial
     });
 
     // Initialise tree view
     this.treeView = new TreeView({
-      el: options.$treeView,
-      debug: options.debug,
+      el: treeView,
       model: this.model
     });
 
@@ -35,25 +34,18 @@ ApplicationView = Backbone.View.extend({
     });
 
     const resizeHandler = _.bind(function () {
-
-      // Only show and resize the tree view if the search is running.
-      // This improves general rendering performance for elements such
-      // as the state editor overlay.
-
-      const newWidth = $('#main').innerWidth() - $controlPanel.outerWidth();
+      const $TreeView = $('.TreeView');
       const $Tutorial = $('.Tutorial');
-
       if (this.model.getTree().getRootNode() === null) {
-        $treeView.toggleClass('invisible', true);
+        $TreeView.toggleClass('invisible', true);
         $Tutorial.toggleClass('invisible', false);
-        this.treeView.setSize(newWidth, 0);
       } else {
-        const newHeight = $body.innerHeight();
-        $treeView.toggleClass('invisible', false);
+        $TreeView.toggleClass('invisible', false);
         $Tutorial.toggleClass('invisible', true);
-        this.treeView.setSize(newWidth, newHeight);
       }
     }, this);
+
+    resizeHandler();
 
     this.model.on('change:state', resizeHandler);
 
