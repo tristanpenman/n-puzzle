@@ -1,15 +1,12 @@
 ApplicationView = Backbone.View.extend({
   initialize: function (options) {
-    const $body = $('body');
-    const $window = $(window);
-    const $controlPanel = options.$controlPanel;
+    const controlPanel = document.getElementById('control_panel');
     const treeView = document.getElementById('tree_view');
     const tutorial = document.getElementById('tutorial');
 
     // Initialise control panel
     new ControlPanel({
-      el: options.$controlPanel,
-      debug: options.debug,
+      el: controlPanel,
       model: this.model
     });
 
@@ -19,7 +16,7 @@ ApplicationView = Backbone.View.extend({
     });
 
     // Initialise tree view
-    this.treeView = new TreeView({
+    new TreeView({
       el: treeView,
       model: this.model
     });
@@ -33,15 +30,25 @@ ApplicationView = Backbone.View.extend({
       model: this.model
     });
 
+    const toggleClass = (selector, cls, add) => {
+      Array.from(selector).forEach((element) => {
+        if (add) {
+          element.classList.add(cls);
+        } else {
+          element.classList.remove(cls);
+        }
+      })
+    };
+
     const resizeHandler = _.bind(function () {
-      const $TreeView = $('.TreeView');
-      const $Tutorial = $('.Tutorial');
+      const TreeView = document.getElementsByClassName('TreeView');
+      const Tutorial = document.getElementsByClassName('Tutorial');
       if (this.model.getTree().getRootNode() === null) {
-        $TreeView.toggleClass('invisible', true);
-        $Tutorial.toggleClass('invisible', false);
+        toggleClass(TreeView, 'invisible', true);
+        toggleClass(Tutorial, 'invisible', false);
       } else {
-        $TreeView.toggleClass('invisible', false);
-        $Tutorial.toggleClass('invisible', true);
+        toggleClass(TreeView, 'invisible', false);
+        toggleClass(Tutorial, 'invisible', true);
       }
     }, this);
 
@@ -49,8 +56,7 @@ ApplicationView = Backbone.View.extend({
 
     this.model.on('change:state', resizeHandler);
 
-    $window
-      .load(resizeHandler)
-      .resize(resizeHandler);
+    window.onload = resizeHandler;
+    window.onresize = resizeHandler;
   }
 });

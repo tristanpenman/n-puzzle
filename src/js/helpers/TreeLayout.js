@@ -302,7 +302,7 @@ TreeLayoutData = function (nodeWidth, nodeHeight) {
 TreeLayout = function (userOptions) {
 
   // Merge the user's options into the default options object
-  var options = $.extend({
+  var options = Util.extend({
 
     /** The fixed the distance between adjacent levels of the tree */
     levelSeparation: 40,
@@ -557,7 +557,7 @@ TreeLayout = function (userOptions) {
    * Layout the nodes in a tree, starting at rootNode.
    */
   this.positionTree = function (rootNode, userOptions) {
-    const fnOptions = $.extend({
+    const fnOptions = Util.extend({
       stopAfterFirstWalk: false
     }, userOptions);
 
