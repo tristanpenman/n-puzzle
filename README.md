@@ -46,7 +46,7 @@ http://tristanpenman.com/demos/n-puzzle
 License
 -------
 
-N-Puzzle is distributed under the Simplified BSD License. See the LICENSE file for more information.
+N-Puzzle is distributed under the 3-Clause BSD License. See the LICENSE file for more information.
 
 History
 -------
