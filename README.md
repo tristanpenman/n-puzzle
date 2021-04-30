@@ -40,15 +40,32 @@ heuristic functions are also provided:
 Demo
 ----
 
-A demo is available at:
+A live demo is available at:
 http://tristanpenman.com/demos/n-puzzle
+
+Development
+-----------
+
+The current version of N-Puzzle has been built using [Vue.js](https://vuejs.org/).
+
+Unlike many modern web apps, N-Puzzle does not require tools such as Webpack for development. You can simply host the code in `/src` using a local web server. MDN has a page that describes several ways to set up a local web server: [How do you set up a local testing server?](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server)
+
+Using Python as an example, getting the code and hosting N-Puzzle locally could be as simple as:
+
+    git clone https://github.com/tristanpenman/n-puzzle.git
+    cd n-puzzle/src
+    python3 -m http.server
+
+You would then be able to go to the URL http://localhost:8000 in your browser to use the app. If you change any of the code, simply refresh the page to see your changes.
 
 License
 -------
 
-N-Puzzle is distributed under the Simplified BSD License. See the LICENSE file for more information.
+N-Puzzle is distributed under the 3-Clause BSD License. See the LICENSE file for more information.
 
 History
 -------
 
 N-Puzzle is based on the AI-Search Java applet developed at RMIT University by Vic Ciesielski, James Harland and Peter McDonald. The original applet can found at: http://www.cs.rmit.edu.au/AI-Search/
+
+The first version of N-Puzzle was built using jQuery, and has been tagged as the official [v1.0 release](https://github.com/tristanpenman/n-puzzle/releases/tag/v1.0).
