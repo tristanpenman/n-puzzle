@@ -10,9 +10,7 @@
  * this functionality.
  */
 ApplicationState = Backbone.Model.extend({
-
     initialize: function() {
-
         if (!this.has('configuration')) {
             throw "A default configuration has not been provided to the ApplicationState model.";
         }
@@ -24,12 +22,10 @@ ApplicationState = Backbone.Model.extend({
         // currently being used
         this.set({
             'algorithm': null,
-            'state': 'stopped'
+            'searchTree': new SearchTree(),
+            'state': 'stopped',
+            'statistics': []
         });
-
-        this.set('searchTree', new SearchTree());
-
-        this.set('statistics', []);
 
         this.expansionOrder = 1;
     },
@@ -64,19 +60,19 @@ ApplicationState = Backbone.Model.extend({
     },
 
     isComplete: function() {
-        return this.get('state') == 'complete';
+        return this.get('state') === 'complete';
     },
 
     isPaused: function() {
-        return this.get('state') == 'paused';
+        return this.get('state') === 'paused';
     },
 
     isRunning: function() {
-        return this.get('state') == 'running';
+        return this.get('state') === 'running';
     },
 
     isStopped: function() {
-        return this.get('state') == 'stopped';
+        return this.get('state') === 'stopped';
     },
 
     undo: function() {
@@ -84,7 +80,7 @@ ApplicationState = Backbone.Model.extend({
             var action = this.treeUndoActions.pop();
             var redoAction = action.execute();
             this.treeRedoActions.push(redoAction);
-            this.trigger('change');
+            this.trigger('change', this);
             this.get('searchTree').trigger('change');
         }
     },
@@ -96,7 +92,6 @@ ApplicationState = Backbone.Model.extend({
      * to schedule the next iteration.
      */
     next: function() {
-
         var algorithm = this.get('algorithm');
         if (this.isRunning()) {
 
@@ -114,13 +109,13 @@ ApplicationState = Backbone.Model.extend({
             } else {
 
                 this.set('statistics', algorithm.getStatistics());
-                if (this.getConfiguration().getMode() == 'burst' &&
+                if (this.getConfiguration().getMode() === 'burst' &&
                     this.isRunning()) {
                     this.doBurst();
                 }
             }
 
-            this.trigger('change');
+            this.trigger('change', this);
             this.get('searchTree').trigger('change');
         }
 
@@ -133,7 +128,7 @@ ApplicationState = Backbone.Model.extend({
      * This only applies while in burst mode.
      */
     pause: function() {
-        if (this.isRunning() && this.getConfiguration().getMode() == 'burst') {
+        if (this.isRunning() && this.getConfiguration().getMode() === 'burst') {
             this.set({
                 'state': 'paused'
             });
@@ -169,7 +164,7 @@ ApplicationState = Backbone.Model.extend({
      * This only applies while in burst mode.
      */
     resume: function() {
-        if (this.isPaused() && this.getConfiguration().getMode() == 'burst') {
+        if (this.isPaused() && this.getConfiguration().getMode() === 'burst') {
             this.set('state', 'running');
             this.next();
         }
@@ -288,7 +283,7 @@ ApplicationState = Backbone.Model.extend({
                 // If the root node of the tree is not set, and only one node
                 // has been added to the tree, then it must be the root node.
                 if (tree.getRootNode() == null) {
-                    if (augmentedStates.length == 1) {
+                    if (augmentedStates.length === 1) {
                         tree.setRootNode(newNodes[0]);
                         // This change cannot be undone.
                         return null;
@@ -506,7 +501,7 @@ ApplicationState = Backbone.Model.extend({
 
             if (parentState != null) {
 
-                if (parentState.getExpansionOrder() == 0) {
+                if (parentState.getExpansionOrder() === 0) {
                     // Update the expansion order value for the parent state
                     var setExpansionOrderAction = new SetExpansionOrderAction(
                         parentState, this.expansionOrder);
@@ -565,9 +560,9 @@ ApplicationState = Backbone.Model.extend({
                 rootId = rootNode.getState().getLongIdentifier();
             }
 
-            if (augmentedStates.length == 1 && newAugmentedStates.length == 0 &&
+            if (augmentedStates.length === 1 && newAugmentedStates.length === 0 &&
                 parentState == null &&
-                rootId == augmentedStates[0].originalState.getLongIdentifier()) {
+                rootId === augmentedStates[0].originalState.getLongIdentifier()) {
 
                 // Aliases
                 var augmentedState = augmentedStates[0];
@@ -618,7 +613,7 @@ ApplicationState = Backbone.Model.extend({
             // goal being found.
             for (var i = 0; i < augmentedStates.length; i++) {
 
-                if (augmentedStates[i].kind == 'goal') {
+                if (augmentedStates[i].kind === 'goal') {
 
                     goalFound = true;
                     var ancestor = augmentedStates[i].originalState.getParent();
@@ -637,7 +632,7 @@ ApplicationState = Backbone.Model.extend({
                     this.expansionOrder++;
                     localActions.push(setExpansionOrderAction.execute());
 
-                } else if (augmentedStates[i].kind == 'repeat') {
+                } else if (augmentedStates[i].kind === 'repeat') {
                     // While checking for goal states, we can also check for
                     // repeat states, so that we can reset the heuristic value
                     // to null for those states.
@@ -661,7 +656,7 @@ ApplicationState = Backbone.Model.extend({
             if (nextState != null) {
                 var node = statesMappedToNodes[nextState.getLongIdentifier()];
                 var attributes = node.getAttributes();
-                if (attributes.kind != 'culled') {
+                if (attributes.kind !== 'culled') {
                     var action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
                     localActions.push(action.execute());
                 }
@@ -678,14 +673,14 @@ ApplicationState = Backbone.Model.extend({
                 // Create a composite action to perform all of the actions
                 // required for this iteration.
                 this.treeUndoActions.push(new CompositeAction(localActions));
-            } else if (localActions.length == 1) {
+            } else if (localActions.length === 1) {
                 this.treeUndoActions.push(localActions.pop());
             }
 
             if (alg == null) {
                 this.treeUndoActions = [];
             } else {
-                this.trigger('change');
+                this.trigger('change', this);
             }
 
         }, this);
@@ -733,7 +728,7 @@ ApplicationState = Backbone.Model.extend({
         });
 
         // Attempt to iterate the algorithm if in burst mode
-        if (config.getMode() == 'burst') {
+        if (config.getMode() === 'burst') {
             this.next();
         }
 

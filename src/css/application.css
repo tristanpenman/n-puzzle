@@ -5,8 +5,8 @@
  ******************************************************************************/
 
 * {
+ font-family: Arial, serif;
  margin: 0;
- font-family: Arial;
 }
 
 html {
@@ -18,16 +18,37 @@ html, body {
 }
 
 body {
+ /*align-items: flex-start;*/
+ /*display: flex;*/
  overflow: hidden;
+ height: 100%;
+ width: 100%;
+}
+
+p {
+ margin-bottom: 10px;
+}
+
+li {
+ margin-bottom: 4px;
+}
+
+ul {
+ margin-bottom: 8px;
 }
 
 input, select {
  vertical-align: bottom;
 }
 
-input[type="button"] {
+button {
  padding: 3px 0.75em;
  font-size: 13px;
+}
+
+button::-moz-focus-inner {
+ padding: 1px 1px 0 1px;
+ border: 0;
 }
 
 form {
@@ -51,124 +72,4 @@ h1 {
  padding-bottom: 0.2em;
  border-bottom: 1px solid #aaa;
  width: 8.9em;
-}
-
-.qtip-content p,
-.qtip-content ul {
- margin-top: 0.5em;
- margin-bottom: 0.5em;
-}
-
-.qtip-content li {
- margin-top: 0.5em;
- padding-left: 0;
-}
-
-.qtip-content ul {
- padding-left: 1.5em;
-}
-
-.invisible {
- display: none;
-}
-
-/******************************************************************************
- *
- * Hacks to make buttons look right in Firefox
- *
- ******************************************************************************/
-
-input[type="button"]::-moz-focus-inner {
- padding: 1px 1px 0px 1px;
- border: 0;
-}
-
-#control_panel .stepper input[type="button"]::-moz-focus-inner {
- padding-top: 0px;
-}
-
-#tutorial {
- position: absolute;
- left: 245px;
- max-height: 100%;
- height: 100%;
- overflow: auto;
-}
-
-#tutorial #content {
- padding-left: 1.7em;
- padding-right: 2em;
- padding-bottom: 2.5em;
-}
-
-#tutorial p {
- line-height: 22px;
- font-size: 14px;
- margin-top: 7px;
-}
-
-#tutorial h1 {
- width: auto;
- margin: 1.2em 0 1em 0em;
- font-size: 22px;
-}
-
-#tutorial h2 {
- margin-top: 22px;
- margin-bottom: 17px;
- font-size: 19px;
- padding-bottom: 5px;
- border-bottom: 1px solid #ddd;
- font-weight: normal;
-}
-
-#tutorial h3 {
- font-size: 16px;
- font-weight: bold;
- margin-top: 20px;
- margin-bottom: 10px;
-}
-
-#tutorial ul {
- margin-top: 0.6em;
-}
-
-#tutorial li {
- margin-top: 0.4em;
- font-size: 14px;
-}
-
-#tutorial img {
- margin-top: 5px;
-}
-
-table {
- border-collapse: collapse;
- margin-top: 1em;
- max-width: 780px;
- margin-bottom: 2em;
-}
-
-table, table td, table th {
- border: 1px solid #999;
- line-height: 20px;
-}
-
-table td, table th {
- padding: 6px 10px;
- text-align: left;
- line-height: 22px;
- font-size: 14px;
-}
-
-table th {
- background: #ededed; /* Old browsers (including IE6-9) */
- background: -moz-linear-gradient(top, #f9f9f9 26%, #ebecee 73%); /* FF3.6+ */
- background: -webkit-gradient(linear, left top, left bottom, color-stop(26%,#f9f9f9), color-stop(73%,#ebecee)); /* Chrome,Safari4+ */
- background: -webkit-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* Chrome10+,Safari5.1+ */
- background: -o-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* Opera 11.10+ */
- background: -ms-linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* IE10+ */
- background: linear-gradient(top, #f9f9f9 26%,#ebecee 73%); /* W3C */
- padding-top: 0.7em;
- padding-bottom: 0.7em;
 }

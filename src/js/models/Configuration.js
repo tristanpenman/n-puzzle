@@ -52,7 +52,7 @@ Configuration = Backbone.Model.extend({
     },
 
     onChange: function() {
-        this.trigger('change');
+        this.trigger('change', this);
     },
 
     setAlgorithm: function(algorithm) {

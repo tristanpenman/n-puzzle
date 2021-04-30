@@ -16,7 +16,7 @@ PuzzleState = Backbone.Model.extend({
 
     copyFrom: function(src) {
 
-        if (src.hasOwnProperty('tiles') && $.isArray(src.tiles) && src.tiles.length == 9) {
+        if (src.hasOwnProperty('tiles') && Array.isArray(src.tiles) && src.tiles.length == 9) {
             this.tiles = src.tiles.slice();
             this.trigger('change');
             return this;
@@ -177,6 +177,7 @@ PuzzleState = Backbone.Model.extend({
         }
 
         this.trigger('change');
+        return this;
     },
 
     swapTiles: function(a, b) {
