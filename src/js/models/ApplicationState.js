@@ -92,7 +92,6 @@ ApplicationState = Backbone.Model.extend({
      * to schedule the next iteration.
      */
     next: function() {
-
         var algorithm = this.get('algorithm');
         if (this.isRunning()) {
 

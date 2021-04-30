@@ -18,8 +18,8 @@ html, body {
 }
 
 body {
- align-items: flex-start;
- display: flex;
+ /*align-items: flex-start;*/
+ /*display: flex;*/
  overflow: hidden;
  height: 100%;
  width: 100%;
@@ -72,18 +72,4 @@ h1 {
  padding-bottom: 0.2em;
  border-bottom: 1px solid #aaa;
  width: 8.9em;
-}
-
-.invisible {
- display: none;
-}
-
-#main {
- border-left: 1px solid #aaa;
- box-shadow: -1px 0 4px rgba(0, 0, 0, 0.1);
- flex-grow: 1;
- height: 100%;
- left: 245px;
- max-height: 100%;
- overflow: auto;
 }

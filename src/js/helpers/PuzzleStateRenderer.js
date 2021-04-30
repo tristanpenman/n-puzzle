@@ -11,7 +11,13 @@ PuzzleStateRenderer = function (context) {
 
   // Load normal sized font
   const font = new Image();
-  font.src = 'images/font.png';
+  const fontPromise = new Promise((resolve) => {
+    font.src = 'images/font.png';
+    font.onload = () => {
+      resolve();
+    };
+  });
+
 
   // Character metrics for tiny font
   const tinyPaddingTop = 5;
@@ -82,8 +88,12 @@ PuzzleStateRenderer = function (context) {
     }
   };
 
-  this.renderState = function (state, stateColor, x, y) {
+  this.renderState = async function (state, stateColor, x, y) {
+
+    await fontPromise;
+
     context.strokeStyle = stateColor;
+
     context.strokeRect(x + 0.5, y + 0.5, width, height);
 
     for (let ty = 0; ty < 3; ty++) {

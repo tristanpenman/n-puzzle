@@ -8,6 +8,8 @@
       <!-- fake scrollable area, resized based on actual size of search tree -->
       <div class="fake" ref="fake"></div>
     </div>
+
+    <algorithm-stats :statistics="model.getStatistics()"></algorithm-stats>
   </div>
 </template>
 
@@ -70,10 +72,8 @@ module.exports = {
 
       // Recursively render child states
       node.getChildren().forEach((child) => {
-        // Get nodes for children coordinate
         const childCoords = this.layoutAlgorithm.getCoordinatesForNode(child);
         if (childCoords == null) {
-          console.log('Warning: stopped drawing tree due to missing node coordinates');
           return;
         }
 
@@ -123,8 +123,8 @@ module.exports = {
       const virtualDoc = {
         x: this.treeLayoutMarginLeft,
         y: this.treeLayoutMarginTop,
-        width: Math.max(width - (this.treeLayoutMarginLeft + this.treeLayoutMarginRight), boundingWidth),
-        height: Math.max(height - (this.treeLayoutMarginTop + this.treeLayoutMarginBottom), boundingHeight)
+        width: Math.max(width - this.treeLayoutMarginLeft - this.treeLayoutMarginRight, boundingWidth),
+        height: Math.max(height - this.treeLayoutMarginTop - this.treeLayoutMarginBottom, boundingHeight)
       };
 
       // Set size of 'fake' content area inside viewport; works with native scrollbars
@@ -138,6 +138,14 @@ module.exports = {
       const yOffset = this.treeLayoutMarginTop - boundingBox.top - viewport.scrollTop;
 
       this.drawSubtree(rootNode, coords, xOffset, yOffset, width, height);
+    },
+    justRedraw() {
+      this.drawTree(this.model.getTree().getRootNode());
+    },
+    layoutAndRedraw() {
+      const rootNode = this.model.getTree().getRootNode();
+      this.layoutAlgorithm.positionTree(rootNode);
+      this.drawTree(rootNode);
     }
   },
   mounted() {
@@ -156,31 +164,27 @@ module.exports = {
       nodeWidth: this.renderer.getExpectedWidth(),
     });
 
-    // re-draw the tree whenever the canvas is resized
-    document.body.onresize = () => {
-      this.drawTree(this.model.tree.getRootNode());
-    };
+    // re-draw the tree whenever the canvas is resized or scrolled
+    window.addEventListener('resize', this.justRedraw);
+    this.$refs.viewport.addEventListener('scroll', this.justRedraw);
 
-    // re-draw the tree whenever the viewport is scrolled
-    this.$refs.viewport.onscroll = () => {
-      this.drawTree(this.model.tree.getRootNode());
-    };
+    // re-calculate layout when the tree changes
+    this.model.getTree().on('change', this.layoutAndRedraw);
 
     // initial layout and draw of the tree
-    const rootNode = this.model.tree.getRootNode();
-    this.layoutAlgorithm.positionTree(rootNode);
-    this.drawTree(rootNode);
+    this.layoutAndRedraw();
+  },
+  beforeDestroy() {
+    // remove dom event listeners
+    window.removeEventListener('resize', this.justRedraw);
+    this.$refs.viewport.removeEventListener('scroll', this.justRedraw);
+
+    // remove model event listener
+    this.model.getTree().off('change', this.layoutAndRedraw);
   },
   props: [
     'model'
-  ],
-  watch: {
-    model(model) {
-      const rootNode = model.tree.getRootNode();
-      this.layoutAlgorithm.positionTree(rootNode);
-      this.drawTree(rootNode);
-    }
-  }
+  ]
 };
 </script>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="AlgorithmStats" v-if="state !== 'stopped'">
+  <div class="AlgorithmStats">
     <div v-for="stat in statistics">
       {{ stat.name }}: {{ stat.value }}
     </div>
@@ -9,7 +9,6 @@
 <script>
 module.exports = {
   props: [
-    'state',
     'statistics'
   ]
 };
@@ -20,11 +19,10 @@ module.exports = {
   background: #fafafa;
   border-radius: 3px;
   border: 1px solid #aaa;
-  font-size: 0.9em;
+  left: 15px;
   margin: 10px;
   padding: 0.5em;
   position: absolute;
-  right: 15px;
   top: 15px;
 }
 

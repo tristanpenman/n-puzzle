@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="css/application.css">
 
   <!-- legacy libraries -->
-  <script src="lib/jquery/jquery-1.7.2.min.js"></script>
   <script src="lib/underscore-1.10.2/underscore-min.js"></script>
   <script src="lib/backbone-1.4.0/backbone-min.js"></script>
   <script src="lib/buckets/buckets-20120801.min.js"></script>
@@ -41,17 +40,11 @@
   <script src="js/models/algorithms/GreedySearch.js"></script>
   <script src="js/models/algorithms/AStarSearch.js"></script>
 
-  <!-- views -->
-  <script src="js/views/AlgorithmStats.js"></script>
-  <script src="js/views/ApplicationView.js"></script>
-  <script src="js/views/ControlPanel.js"></script>
-  <script src="js/views/TreeView.js"></script>
-  <script src="js/views/Tutorial.js"></script>
-
   <!-- vue components -->
   <script>
     [
       'algorithm-stats',
+      'application-view',
       'control-panel',
       'help-modal',
       'puzzle-state-editor',
@@ -66,16 +59,7 @@
 </head>
 <body>
 
-<!-- Placeholder for the ControlPanel view -->
-<div id="control_panel"></div>
-
-<div id="main">
-  <!-- Markup for the TreeView view -->
-  <div id="tree_view" class="invisible"></div>
-
-  <!-- Placeholder for the Tutorial view -->
-  <div id="tutorial" class="invisible"></div>
-</div>
+<div id="app"></div>
 
 <script>
   // Set up the default configuration
@@ -84,10 +68,16 @@
   configuration.getGoalState().setTiles([1, 2, 3, 8, 0, 4, 7, 6, 5]);
 
   // Initialise the application view
-  new ApplicationView({
-    model: new ApplicationState({
-      'configuration': configuration
-    })
+  new Vue({
+    el: document.getElementById('app'),
+    data: {
+      model: new ApplicationState({
+        'configuration': configuration
+      })
+    },
+    template: `
+      <application-view :model="model"></application-view>
+    `
   });
 </script>
 </body>

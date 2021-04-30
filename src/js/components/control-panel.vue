@@ -6,7 +6,7 @@
       <label>Initial state:</label>
       <puzzle-state-view v-bind:tiles="getInitialState()"></puzzle-state-view>
       <div class="field">
-        <button @click="showModal('initial')" :disabled="state !== 'stopped'">Edit state</button>
+        <button @click="showModal('initial')" :disabled="getState() !== 'stopped'">Edit state</button>
       </div>
     </div>
 
@@ -14,19 +14,19 @@
       <label>Goal state:</label>
       <puzzle-state-view v-bind:tiles="getGoalState()"></puzzle-state-view>
       <div class="field">
-        <button @click="showModal('goal')" :disabled="state !== 'stopped'">Edit state</button>
+        <button @click="showModal('goal')" :disabled="getState() !== 'stopped'">Edit state</button>
       </div>
     </div>
 
     <div class="group algorithm">
       <label>Search algorithm:</label>
       <div class="field">
-        <select @change="changeAlgorithm" v-bind:value="configuration.getAlgorithm()" :disabled="state !== 'stopped'">
+        <select @change="changeAlgorithm" v-bind:value="getAlgorithm()" :disabled="getState() !== 'stopped'">
           <option v-for="algorithm in availableAlgorithms()" v-bind:value="algorithm.key">
             {{ algorithm.name }}
           </option>
         </select>
-        <button @click="showModal('algorithms')" class="help" :disabled="state !== 'stopped'">
+        <button @click="showModal('algorithms')" class="help" :disabled="getState() !== 'stopped'">
           <img src="images/help_icon.gif" alt="help">
         </button>
       </div>
@@ -37,8 +37,8 @@
       <div class="field">
         <select
           @change="changeHeuristic"
-          :disabled="state !== 'stopped'"
-          :value="configuration.getHeuristic()"
+          :disabled="getState() !== 'stopped'"
+          :value="getHeuristic()"
           v-if="usesHeuristic()"
         >
           <option v-for="heuristic in availableHeuristics()" v-bind:value="heuristic.key">
@@ -50,7 +50,7 @@
             Not available
           </option>
         </select>
-        <button @click="showModal('heuristics')" class="help" :disabled="state !== 'stopped'">
+        <button @click="showModal('heuristics')" class="help" :disabled="getState() !== 'stopped'">
           <img src="images/help_icon.gif" alt="help">
         </button>
       </div>
@@ -59,7 +59,7 @@
     <div class="group mode">
       <label>Control mode:</label>
       <div class="field">
-        <select @change="changeMode" :disabled="state !== 'stopped'">
+        <select @change="changeMode" :disabled="getState() !== 'stopped'">
           <option value="single">Single-step</option>
           <option value="burst">Burst mode</option>
         </select>
@@ -69,17 +69,17 @@
     <div class="group stepper">
       <label>Controls:</label>
       <div class="row" v-if="getMode() === 'burst'">
-        <button :disabled="state !== 'stopped'" @click="$emit('start')">Start</button>
-        <button :disabled="state === 'stopped' || state !== 'paused'" @click="$emit('resume')">Resume</button>
-        <button :disabled="state === 'stopped' || state !== 'running'" @click="$emit('pause')">Pause</button>
+        <button :disabled="getState() !== 'stopped'" @click="$emit('start')">Start</button>
+        <button :disabled="getState() === 'stopped' || getState() !== 'paused'" @click="$emit('resume')">Resume</button>
+        <button :disabled="getState() === 'stopped' || getState() !== 'running'" @click="$emit('pause')">Pause</button>
       </div>
       <div class="row" v-else>
-        <button :disabled="state !== 'stopped'" @click="$emit('start')">Start</button>
-        <button :disabled="state !== 'running'" @click="$emit('next')">Next</button>
-        <button :disabled="state !== 'running'" @click="$emit('back')">Back</button>
+        <button :disabled="getState() !== 'stopped'" @click="$emit('start')">Start</button>
+        <button :disabled="getState() !== 'running'" @click="$emit('next')">Next</button>
+        <button :disabled="getState() !== 'running'" @click="$emit('back')">Back</button>
       </div>
       <div class="row">
-        <button :disabled="state === 'stopped'" @click="$emit('reset')">Reset</button>
+        <button :disabled="getState() === 'stopped'" @click="$emit('reset')">Reset</button>
       </div>
     </div>
 
@@ -124,7 +124,8 @@
 module.exports = {
   data() {
     return {
-      modal: null
+      modal: null,
+      state: null
     }
   },
   methods: {
@@ -145,44 +146,52 @@ module.exports = {
         }));
     },
     changeAlgorithm(event) {
-      this.configuration.setAlgorithm(event.target.value);
+      this.model.getConfiguration().setAlgorithm(event.target.value);
     },
     changeHeuristic(event) {
-      this.configuration.setHeuristic(event.target.value);
+      this.model.getConfiguration().setHeuristic(event.target.value);
     },
     changeMode(event) {
-      this.configuration.setMode(event.target.value);
+      this.model.getConfiguration().setMode(event.target.value);
+    },
+    getAlgorithm() {
+      return this.model.getConfiguration().getAlgorithm();
     },
     getGoalState() {
-      return this.configuration.getGoalState().valueOf();
+      return this.model.getConfiguration().getGoalState().valueOf();
+    },
+    getHeuristic() {
+      return this.model.getConfiguration().getHeuristic();
     },
     getInitialState() {
-      return this.configuration.getInitialState().valueOf();
+      return this.model.getConfiguration().getInitialState().valueOf();
     },
     getMode() {
-      return this.configuration.getMode();
+      return this.model.getConfiguration().getMode();
+    },
+    getState() {
+      return this.model.getState();
     },
     hideModal() {
       this.modal = null;
     },
     saveGoalState(tiles) {
-      this.configuration.getGoalState().copyFrom({tiles});
+      this.model.getConfiguration().getGoalState().copyFrom({tiles});
       this.modal = null;
     },
     saveInitialState(tiles) {
-      this.configuration.getInitialState().copyFrom({tiles});
+      this.model.getConfiguration().getInitialState().copyFrom({tiles});
       this.modal = null;
     },
     showModal(modal) {
       this.modal = modal;
     },
     usesHeuristic() {
-      return Configuration.getAvailableAlgorithms()[this.configuration.getAlgorithm()].usesHeuristic;
+      return Configuration.getAvailableAlgorithms()[this.model.getConfiguration().getAlgorithm()].usesHeuristic;
     }
   },
   props: [
-    'configuration',
-    'state'
+    'model'
   ]
 };
 </script>
@@ -190,7 +199,6 @@ module.exports = {
 <style>
 .ControlPanel {
   background-color: #f2f2f2;
-  height: 100%;
   min-width: 230px;
   overflow-x: hidden;
   overflow-y: auto;
