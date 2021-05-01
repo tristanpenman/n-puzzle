@@ -141,9 +141,10 @@
 }
 
 .Tutorial > h1 {
-  width: auto;
-  margin: 1.2em 0 1em 0;
+  border-bottom: 1px solid #aaa;
   font-size: 22px;
+  margin: 1.2em 0 1em 0;
+  padding-bottom: 0.2em;
 }
 
 .Tutorial > h2 {

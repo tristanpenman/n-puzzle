@@ -42,4 +42,16 @@ module.exports = {
   padding-top: 10px;
   text-align: center;
 }
+
+.HelpModal > .popup > p {
+  margin-bottom: 10px;
+}
+
+.HelpModal > .popup > ul {
+  margin-bottom: 8px;
+}
+
+.HelpModal > .popup > ul > li {
+  margin-bottom: 4px;
+}
 </style>

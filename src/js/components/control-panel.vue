@@ -208,16 +208,24 @@ module.exports = {
 .ControlPanel > h1 {
   border-bottom: 1px solid #aaa;
   font-size: 22px;
+  margin: 1.2em 0 1em 0.2em;
   padding-bottom: 0.2em;
+  width: 8.9em;
 }
 
-.ControlPanel > .group.disabled label {
+.ControlPanel > .group > label {
+  display: block;
+  font-size: 0.9em;
+  margin-bottom: 0.4em;
+}
+
+.ControlPanel > .group.disabled > label {
   color: #666;
 }
 
 .ControlPanel > .group {
-  padding: 0.3em;
   margin-bottom: 0.7em;
+  padding: 0.3em;
 }
 
 .ControlPanel > .stepper > .row {
@@ -234,5 +242,10 @@ module.exports = {
 .ControlPanel > .group > .field > button.help:disabled {
   cursor: default;
   opacity: 50%;
+}
+
+.ControlPanel > .group > .field > select {
+  padding: 1px;
+  vertical-align: bottom;
 }
 </style>
