@@ -1,107 +1,103 @@
 DepthFirstSearch = Backbone.Model.extend({
+  initialize: function (attributes, options) {
+    // Callback functions
+    this.isGoalState = options.isGoalState;
+    this.onDiscover = options.onDiscover;
 
-    initialize: function(attributes, options) {
+    // Nodes that have been explored
+    this.closedSet = {};
+    this.closedSetSize = 0;
 
-        // Callback functions
-        this.isGoalState = options.isGoalState;
-        this.onDiscover = options.onDiscover;
+    // Add initial state to frontier
+    this.openList = [options.initialState];
 
-        // Nodes that have been explored
-        this.closedSet = {};
-        this.closedSetSize = 0;
+    // Discover initial state
+    options.onDiscover([{
+      originalState: options.initialState,
+      depth: 0,
+      kind: 'normal'
+    }], null);
+  },
 
-        // Add initial state to frontier
-        this.openList = [options.initialState];
+  addToClosedSet: function (state) {
+    this.closedSet[state.toString()] = true;
+    this.closedSetSize++;
+  },
 
-        // Discover initial state
-        options.onDiscover([{
-            originalState: options.initialState,
-            depth: 0,
-            kind: 'normal'
-        }], null);
-    },
+  addToOpenList: function (state) {
+    this.openList.push(state);
+  },
 
-    addToClosedSet: function(state) {
-        this.closedSet[state.toString()] = true;
-        this.closedSetSize++;
-    },
+  getStatistics: function () {
+    return [{
+      name: 'Open list',
+      value: this.openList.length
+    }, {
+      name: 'Closed list',
+      value: this.closedSetSize
+    }];
+  },
 
-    addToOpenList: function(state) {
-        this.openList.push(state);
-    },
+  inClosedSet: function (state) {
+    return this.closedSet.hasOwnProperty(state.toString());
+  },
 
-    getStatistics: function() {
-        return [{
-            name: 'Open list',
-            value: this.openList.length
-        },{
-            name: 'Closed list',
-            value: this.closedSetSize
-        }];
-    },
-
-    inClosedSet: function(state) {
-        return this.closedSet.hasOwnProperty(state.toString());
-    },
-
-    iterate: function() {
-
-        if (this.goalFound) {
-            return true;
-        }
-
-        var state = this.openList.pop();
-
-        if (this.isGoalState(state)) {
-            // Let the application know that the goal has been discovered
-            this.goalFound = true;
-            this.onDiscover([{
-                originalState: state,
-                kind: 'goal'
-            }], state.getParent());
-            return true;
-        }
-
-        this.addToClosedSet(state);
-
-        var successors = state.generateSuccessors();
-        var numSuccessors = successors.length;
-        var augmentedSuccessors = [];
-
-        // Add states to the frontier
-        for (var i = 0; i < numSuccessors; i++) {
-
-            var successor = successors[i];
-            var augmentedState = {
-                originalState: successor,
-                kind: 'normal'
-            };
-
-            if (this.inClosedSet(successor)) {
-                augmentedState.kind = 'repeat';
-            } else {
-                this.addToOpenList(successor);
-            }
-
-            augmentedSuccessors.push(augmentedState);
-        }
-
-        // Let application know that states have been discovered
-        this.onDiscover(augmentedSuccessors, state);
-
-        return this.goalFound;
-    },
-
-    peek: function() {
-        if (this.openList.length > 0) {
-            return this.openList[this.openList.length - 1];
-        } else {
-            return null;
-        }
-    },
-
-    wasGoalFound: function() {
-        return this.goalFound;
+  iterate: function () {
+    if (this.goalFound) {
+      return true;
     }
 
+    var state = this.openList.pop();
+
+    if (this.isGoalState(state)) {
+      // Let the application know that the goal has been discovered
+      this.goalFound = true;
+      this.onDiscover([{
+        originalState: state,
+        kind: 'goal'
+      }], state.getParent());
+      return true;
+    }
+
+    this.addToClosedSet(state);
+
+    var successors = state.generateSuccessors();
+    var numSuccessors = successors.length;
+    var augmentedSuccessors = [];
+
+    // Add states to the frontier
+    for (var i = 0; i < numSuccessors; i++) {
+
+      var successor = successors[i];
+      var augmentedState = {
+        originalState: successor,
+        kind: 'normal'
+      };
+
+      if (this.inClosedSet(successor)) {
+        augmentedState.kind = 'repeat';
+      } else {
+        this.addToOpenList(successor);
+      }
+
+      augmentedSuccessors.push(augmentedState);
+    }
+
+    // Let application know that states have been discovered
+    this.onDiscover(augmentedSuccessors, state);
+
+    return this.goalFound;
+  },
+
+  peek: function () {
+    if (this.openList.length > 0) {
+      return this.openList[this.openList.length - 1];
+    } else {
+      return null;
+    }
+  },
+
+  wasGoalFound: function () {
+    return this.goalFound;
+  }
 });
