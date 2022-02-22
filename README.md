@@ -1,8 +1,4 @@
-N-Puzzle
-========
-
-Overview
---------
+# N-Puzzle
 
 N-Puzzle is a web app for learning about graph-based search algorithms.
 
@@ -37,14 +33,12 @@ heuristic functions are also provided:
  - Manhattan distance heuristic
  - Tiles-out heuristic
 
-Demo
-----
+## Demo
 
 A live demo is available at:
 http://tristanpenman.com/demos/n-puzzle
 
-Development
------------
+## Development
 
 The current version of N-Puzzle has been built using [Vue.js](https://vuejs.org/).
 
@@ -58,13 +52,11 @@ Using Python as an example, getting the code and hosting N-Puzzle locally could 
 
 You would then be able to go to the URL http://localhost:8000 in your browser to use the app. If you change any of the code, simply refresh the page to see your changes.
 
-License
--------
+## License
 
 N-Puzzle is distributed under the 3-Clause BSD License. See the LICENSE file for more information.
 
-History
--------
+## Acknowledgements
 
 N-Puzzle is based on the AI-Search Java applet developed at RMIT University by Vic Ciesielski, James Harland and Peter McDonald. The original applet can found at: http://www.cs.rmit.edu.au/AI-Search/
 
