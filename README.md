@@ -41,22 +41,22 @@ A live demo is available [here](http://tristanpenman.com/demos/n-puzzle).
 
 N-Puzzle has been built using [Vue.js](https://vuejs.org/), using Vue [Single File Components](https://vuejs.org/guide/scaling-up/sfc.html).
 
-No additional tools are required for development - this means there is no need to install Webpack, or any other bundler. You can simply host the code in `/src` using a local web server. MDN has a page that describes several ways to set up a local web server: [How do you set up a local testing server?](https://developer.mozilla.org/en-US/docs/Learn/Common_questions/set_up_a_local_testing_server)
+The project now uses [Vite](https://vitejs.dev/) for local development and builds.
 
-Using Python as an example, getting the code and hosting N-Puzzle locally could be as simple as:
+To run the dev server:
 
-    git clone https://github.com/tristanpenman/n-puzzle.git
-    cd n-puzzle/src
-    python3 -m http.server
+    npm install
+    npm run dev
 
-You would then be able to go to the URL http://localhost:8000 in your browser to use the app. If you change any of the code, simply refresh the page to see your changes.
+Vite will print the local URL (typically http://localhost:5173) in the terminal. If you change any of the code, simply refresh the page to see your changes.
 
-Alternatively, you could use NPM:
+To build a production version:
 
-    npm -g install http-server
-    git clone https://github.com/tristanpenman/n-puzzle.git
-    cd n-puzzle/src
-    http-server -c-1
+    npm run build
+
+You can also preview the production build locally:
+
+    npm run preview
 
 ## Acknowledgements
 
