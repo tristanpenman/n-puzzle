@@ -22,21 +22,15 @@ import PuzzleStateView from './js/components/puzzle-state-view.vue';
 import TreeView from './js/components/tree-view.vue';
 import Tutorial from './js/components/tutorial.vue';
 
-const components = {
-  'algorithm-stats': AlgorithmStats,
-  'application-view': ApplicationView,
-  'control-panel': ControlPanel,
-  'help-modal': HelpModal,
-  'puzzle-state-editor': PuzzleStateEditor,
-  'puzzle-state-editor-cell': PuzzleStateEditorCell,
-  'puzzle-state-view': PuzzleStateView,
-  'tree-view': TreeView,
-  'tutorial': Tutorial
-};
-
-Object.entries(components).forEach(([name, component]) => {
-  Vue.component(name, component);
-});
+Vue.component('algorithm-stats', AlgorithmStats);
+Vue.component('application-view', ApplicationView);
+Vue.component('control-panel', ControlPanel);
+Vue.component('help-modal', HelpModal);
+Vue.component('puzzle-state-editor', PuzzleStateEditor);
+Vue.component('puzzle-state-editor-cell', PuzzleStateEditorCell);
+Vue.component('puzzle-state-view', PuzzleStateView);
+Vue.component('tree-view', TreeView);
+Vue.component('tutorial', Tutorial);
 
 window.addEventListener('load', () => {
   // Set up the default configuration
