@@ -1,4 +1,6 @@
-IterativeDeepeningSearch = Backbone.Model.extend({
+import Backbone from 'backbone';
+
+const IterativeDeepeningSearch = Backbone.Model.extend({
   initialize: function (attributes, options) {
     // Callback functions
     this.isGoalState = options.isGoalState;
@@ -172,3 +174,5 @@ IterativeDeepeningSearch = Backbone.Model.extend({
     return this.goalFound;
   }
 });
+
+export default IterativeDeepeningSearch;

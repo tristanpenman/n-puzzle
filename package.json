@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@vitejs/plugin-vue2": "^2.3.4",
+    "backbone": "1.4.1",
+    "buckets-js": "^1.98.2",
+    "underscore": "1.10.2",
     "vue": "^2.7.16",
     "vue-template-compiler": "^2.7.16"
   },

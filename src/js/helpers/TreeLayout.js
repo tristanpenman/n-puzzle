@@ -1,3 +1,5 @@
+import Util from './Util';
+
 /**
  * This function constructs a helper object for the TreeLayout algorithm. The
  * helper object stores the intermediate layout data, and final coordinates,
@@ -6,8 +8,7 @@
  * @param nodeWidth   expected node width, used to maintain bounding box
  * @param nodeHeight  expected node height, used to maintain bounding box
  */
-TreeLayoutData = function (nodeWidth, nodeHeight) {
-
+const TreeLayoutData = function (nodeWidth, nodeHeight) {
   /**
    * Intermediate layout data associated with nodes in the tree. The attribute
    * objects are accessed via an index based on their position in the
@@ -299,8 +300,7 @@ TreeLayoutData = function (nodeWidth, nodeHeight) {
   };
 };
 
-TreeLayout = function (userOptions) {
-
+const TreeLayout = function (userOptions) {
   // Merge the user's options into the default options object
   var options = Util.extend({
 
@@ -564,10 +564,10 @@ TreeLayout = function (userOptions) {
     data = new TreeLayoutData(options.nodeWidth, options.nodeHeight);
 
     // Reset bounding box coordinates
-    xMin = 0;
-    xMax = 0;
-    yMin = 0;
-    yMax = 0;
+    data.xMin = 0;
+    data.xMax = 0;
+    data.yMin = 0;
+    data.yMax = 0;
 
     if (rootNode !== null) {
       firstWalk(rootNode, null);
@@ -584,3 +584,5 @@ TreeLayout = function (userOptions) {
     data.discardIntermediateData();
   };
 }
+
+export default TreeLayout;

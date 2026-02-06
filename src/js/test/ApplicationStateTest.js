@@ -1,4 +1,11 @@
-function createApplicationStateWithMockObjects() {
+import Backbone from 'backbone';
+
+import ApplicationState from '../models/ApplicationState';
+import Configuration from '../models/Configuration';
+import PuzzleState from '../models/PuzzleState';
+import SearchTree from '../models/SearchTree';
+
+export function createApplicationStateWithMockObjects() {
   const mockInitialState = new PuzzleState();
   mockInitialState.setTiles([0, 2, 3, 1, 4, 5, 8, 7, 6]);
 

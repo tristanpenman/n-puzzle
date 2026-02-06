@@ -10,7 +10,7 @@
 </template>
 
 <script>
-module.exports = {
+export default {
   methods: {
     close() {
       this.$emit('dismiss');

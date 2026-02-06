@@ -1,3 +1,5 @@
+import { SearchTreeNode } from '../models/SearchTree';
+
 test("test SearchTreeNode construction of a root node", function () {
   // Create root node
   const rootNode = new SearchTreeNode();

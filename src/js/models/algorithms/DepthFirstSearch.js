@@ -1,4 +1,6 @@
-DepthFirstSearch = Backbone.Model.extend({
+import Backbone from 'backbone';
+
+const DepthFirstSearch = Backbone.Model.extend({
   initialize: function (attributes, options) {
     // Callback functions
     this.isGoalState = options.isGoalState;
@@ -101,3 +103,5 @@ DepthFirstSearch = Backbone.Model.extend({
     return this.goalFound;
   }
 });
+
+export default DepthFirstSearch;

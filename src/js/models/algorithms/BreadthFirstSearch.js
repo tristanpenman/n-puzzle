@@ -1,4 +1,6 @@
-BreadthFirstSearch = Backbone.Model.extend({
+import Backbone from "backbone";
+
+const BreadthFirstSearch = Backbone.Model.extend({
   initialize: function (attributes, options) {
     // Callback functions
     this.isGoalState = options.isGoalState;
@@ -118,3 +120,5 @@ BreadthFirstSearch = Backbone.Model.extend({
     return this.goalFound;
   }
 });
+
+export default BreadthFirstSearch;

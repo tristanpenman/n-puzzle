@@ -8,59 +8,9 @@
 
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 
-  <!-- legacy libraries -->
-  <script src="lib/underscore-1.10.2/underscore-min.js"></script>
-  <script src="lib/backbone-1.4.0/backbone-min.js"></script>
-  <script src="lib/buckets/buckets-20120801.min.js"></script>
-
-  <!-- vue -->
-  <!-- https://cdn.jsdelivr.net/npm/vue@2/dist/vue.{js,min.js} -->
-  <script src="lib/vue-2.16.2/vue.min.js"></script>
-
-  <!-- http-vue-loader -->
-  <!-- https://cdn.jsdelivr.net/npm/http-vue-loader@1.4.2/src/httpVueLoader.{js,min.js} -->
-  <script src="lib/http-vue-loader-1.4.2/httpVueLoader.js"></script>
-
-  <!-- helpers -->
-  <script src="js/helpers/PuzzleStateRenderer.js"></script>
-  <script src="js/helpers/TreeLayout.js"></script>
-  <script src="js/helpers/Util.js"></script>
-
-  <!-- models -->
-  <script src="js/models/ApplicationState.js"></script>
-  <script src="js/models/Configuration.js"></script>
-  <script src="js/models/PuzzleState.js"></script>
-  <script src="js/models/SearchTree.js"></script>
-
-  <!-- uninformed search algorithms -->
-  <script src="js/models/algorithms/BreadthFirstSearch.js"></script>
-  <script src="js/models/algorithms/DepthFirstSearch.js"></script>
-  <script src="js/models/algorithms/IterativeDeepeningSearch.js"></script>
-
-  <!-- informed search algorithms -->
-  <script src="js/models/algorithms/InformedSearch.js"></script>
-  <script src="js/models/algorithms/GreedySearch.js"></script>
-  <script src="js/models/algorithms/AStarSearch.js"></script>
-
-  <!-- vue components -->
-  <script>
-    [
-      'algorithm-stats',
-      'application-view',
-      'control-panel',
-      'help-modal',
-      'puzzle-state-editor',
-      'puzzle-state-editor-cell',
-      'puzzle-state-view',
-      'tree-view',
-      'tutorial'
-    ].forEach((component) => {
-      Vue.component(component, httpVueLoader(`js/components/${component}.vue`));
-    });
-  </script>
 </head>
 <body>
 <div id="app"></div>
-<script src="js/app.js" type="text/javascript"></script>
+<script type="module" src="/main.js"></script>
 </body>
 </html>

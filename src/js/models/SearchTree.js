@@ -1,4 +1,6 @@
-SearchTreeNode = function (parent, state, attributes) {
+import Backbone from 'backbone';
+
+const SearchTreeNode = function (parent, state, attributes) {
   const children = [];
   let depth = 0;
 
@@ -92,7 +94,7 @@ SearchTreeNode = function (parent, state, attributes) {
 /**
  * Model representation of a search tree
  */
-SearchTree = Backbone.Model.extend({
+const SearchTree = Backbone.Model.extend({
   initialize: function () {
     this.rootNode = null;
   },
@@ -106,3 +108,6 @@ SearchTree = Backbone.Model.extend({
     this.trigger('change', this);
   }
 });
+
+export { SearchTreeNode };
+export default SearchTree;

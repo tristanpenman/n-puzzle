@@ -1,3 +1,10 @@
+import Backbone from 'backbone';
+import _ from 'underscore';
+
+import Configuration from './Configuration';
+import PuzzleState from './PuzzleState';
+import SearchTree, { SearchTreeNode } from './SearchTree';
+
 /**
  * This model represents the overall application state, and implements the
  * most of the runtime logic for the application. The current configuration
@@ -9,7 +16,7 @@
  * reverse a change. The next() and undo() methods also provide some of
  * this functionality.
  */
-ApplicationState = Backbone.Model.extend({
+const ApplicationState = Backbone.Model.extend({
   initialize: function () {
     if (!this.has('configuration')) {
       throw "A default configuration has not been provided to the ApplicationState model.";
@@ -193,7 +200,7 @@ ApplicationState = Backbone.Model.extend({
     var config = this.getConfiguration();
     var algorithms = Configuration.getAvailableAlgorithms();
     var selectedAlgorithm = config.getAlgorithm();
-    var AlgorithmConstructor = window[algorithms[selectedAlgorithm].className];
+    var AlgorithmConstructor = algorithms[selectedAlgorithm].constructorFn;
 
     // Find the name of the heuristic function
     var heuristicName = null;
@@ -735,3 +742,5 @@ ApplicationState = Backbone.Model.extend({
     return this;
   }
 });
+
+export default ApplicationState;

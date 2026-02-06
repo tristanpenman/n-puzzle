@@ -13,7 +13,7 @@
 </template>
 
 <script>
-module.exports = {
+export default {
   methods: {
     blur() {
       this.$emit('set', this.position, this.value);

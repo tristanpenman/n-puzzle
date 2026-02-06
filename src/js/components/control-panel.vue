@@ -121,7 +121,9 @@
 </template>
 
 <script>
-module.exports = {
+import Configuration from '../models/Configuration';
+
+export default {
   data() {
     return {
       modal: null,

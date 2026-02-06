@@ -14,7 +14,10 @@
 </template>
 
 <script>
-module.exports = {
+import PuzzleStateRenderer from '../helpers/PuzzleStateRenderer';
+import TreeLayout from '../helpers/TreeLayout';
+
+export default {
   data() {
     return {
       context: null,

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-module.exports = {
+export default {
   methods: {
     handleBack() {
       this.model.undo();

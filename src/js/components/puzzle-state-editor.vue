@@ -23,7 +23,9 @@
 </template>
 
 <script>
-module.exports = {
+import PuzzleState from '../models/PuzzleState';
+
+export default {
   data() {
     return {
       editing: null,

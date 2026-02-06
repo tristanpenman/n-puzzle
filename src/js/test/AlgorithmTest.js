@@ -1,3 +1,6 @@
+import PuzzleState from '../models/PuzzleState';
+import { createApplicationStateWithMockObjects } from './ApplicationStateTest';
+
 function testSearchAlgorithm(initialState, goalState, algorithm, heuristic,
                              expectedOpenListSize, expectedClosedSetSize) {
   const r = createApplicationStateWithMockObjects();

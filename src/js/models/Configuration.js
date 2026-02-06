@@ -1,4 +1,13 @@
-Configuration = Backbone.Model.extend({
+import Backbone from 'backbone';
+
+import PuzzleState from './PuzzleState';
+import BreadthFirstSearch from './algorithms/BreadthFirstSearch';
+import DepthFirstSearch from './algorithms/DepthFirstSearch';
+import IterativeDeepeningSearch from './algorithms/IterativeDeepeningSearch';
+import GreedySearch from './algorithms/GreedySearch';
+import AStarSearch from './algorithms/AStarSearch';
+
+const Configuration = Backbone.Model.extend({
   initialize: function () {
     // Set default configuration
     this.set({
@@ -86,27 +95,27 @@ Configuration.getAvailableAlgorithms = function () {
     'bfs': {
       name: 'Breadth-first search',
       usesHeuristic: false,
-      className: 'BreadthFirstSearch'
+      constructorFn: BreadthFirstSearch
     },
     'dfs': {
       name: 'Depth-first search',
       usesHeuristic: false,
-      className: 'DepthFirstSearch'
+      constructorFn: DepthFirstSearch
     },
     'ids': {
       name: 'Iterative deepening search',
       usesHeuristic: false,
-      className: 'IterativeDeepeningSearch'
+      constructorFn: IterativeDeepeningSearch
     },
     'greedy': {
       name: 'Greedy search',
       usesHeuristic: true,
-      className: 'GreedySearch'
+      constructorFn: GreedySearch
     },
     'astar': {
       name: 'A* search',
       usesHeuristic: true,
-      className: 'AStarSearch'
+      constructorFn: AStarSearch
     }
   };
 };
@@ -150,3 +159,5 @@ Configuration.getDefaultHeuristic = function () {
 Configuration.getDefaultControlMode = function () {
   return 'single';
 };
+
+export default Configuration;

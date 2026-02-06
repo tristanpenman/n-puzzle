@@ -1,4 +1,6 @@
-PuzzleStateRenderer = function (context) {
+import Util from './Util';
+
+const PuzzleStateRenderer = function (context) {
   // Character metrics for normal-sized font
   const xPaddingLeft = 6;
   const xPaddingRight = 5;
@@ -154,3 +156,5 @@ PuzzleStateRenderer = function (context) {
     this.renderNumberUsingTinyFont(x + 1, middleY, this.getExpectedWidth(), characters);
   };
 };
+
+export default PuzzleStateRenderer;

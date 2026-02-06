@@ -1,3 +1,5 @@
+import PuzzleState from '../models/PuzzleState';
+
 test("test PuzzleState construction", function () {
   const puzzleState = new PuzzleState();
   for (let x = 0; x < 3; x++) {

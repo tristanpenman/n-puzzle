@@ -19,7 +19,7 @@
 </template>
 
 <script>
-module.exports = {
+export default {
   props: [
     'tiles',
   ]

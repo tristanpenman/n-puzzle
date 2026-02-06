@@ -1,4 +1,8 @@
-PuzzleState = Backbone.Model.extend({
+import Backbone from 'backbone';
+
+import Util from '../helpers/Util';
+
+const PuzzleState = Backbone.Model.extend({
 
   initialize: function (attributes, options) {
     this.tiles = [1, 2, 3, 4, 5, 6, 7, 8, 0];
@@ -230,6 +234,7 @@ PuzzleState.calculateEuclideanDistance = function (a, b) {
   return distance;
 };
 
+
 PuzzleState.calculateManhattanDistance = function (a, b) {
   var distance = 0;
   // For each tile in puzzle state 'a'
@@ -272,3 +277,5 @@ PuzzleState.calculateTilesOutOfPlace = function (a, b) {
   }
   return tilesOutOfPlace;
 };
+
+export default PuzzleState;
