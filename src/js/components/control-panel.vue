@@ -17,6 +17,9 @@
         <button @click="showModal('goal')" :disabled="getState() !== 'stopped'">Edit state</button>
       </div>
     </div>
+    <p class="warning" v-if="!isSolvable()">
+      Warning: This initial/goal pair is unsolvable.
+    </p>
 
     <div class="group algorithm">
       <label>Search algorithm:</label>
@@ -141,6 +144,7 @@
 
 <script>
 import Configuration from '../models/Configuration';
+import PuzzleState from '../models/PuzzleState';
 
 // assets
 const faviconImage = new URL('../../images/favicon.png', import.meta.url).href;
@@ -226,6 +230,11 @@ export default {
     },
     hideModal() {
       this.modal = null;
+    },
+    isSolvable() {
+      var initialState = this.model.getConfiguration().getInitialState();
+      var goalState = this.model.getConfiguration().getGoalState();
+      return PuzzleState.isSolvable(initialState, goalState);
     },
     saveGoalState(tiles) {
       this.model.getConfiguration().getGoalState().copyFrom({tiles});
@@ -322,5 +331,16 @@ export default {
 .ControlPanel > .group > .field > select {
   padding: 1px;
   vertical-align: bottom;
+}
+
+.ControlPanel > .warning {
+  background: #ffc2002b;
+  border-radius: 3px;
+  border: 1px solid #b00020;
+  color: #b00020;
+  font-size: 0.90em;
+  line-height: 1.5em;
+  margin: 0.1em 0.9em 0.8em 0.3em;
+  padding: 5px 7px;
 }
 </style>
