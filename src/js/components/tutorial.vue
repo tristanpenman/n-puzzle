@@ -17,7 +17,7 @@
     <p>To set the Initial or Goal states, you can click either the 'Edit state' button or the graphical representation
       of the state.</p>
     <p>You should see a popup like the following:</p>
-    <img src="images/choose-state.png" width="130" height="161">
+    <img :src="chooseStateImage" width="130" height="161">
     <p>To change a tile, simply click on the tile that you would like to replace, then enter the new value on your
       keyboard. This will swap the tile with the one that previously held that value.</p>
     <h3>Search Algorithm</h3>
@@ -52,7 +52,7 @@
       search tree represents an arrangement of tiles (or <em>state</em>), and is drawn as a box that is split into 4
       sections.</p>
     <p>The following diagram shows a node taken from a Greedy search:</p>
-    <img src="images/state-representation.png">
+    <img :src="stateRepresentationImage">
     <p>The largest section is the puzzle state. Below that you will see two smaller sections.</p>
     <p>Below the puzzle state are two sections. The section on the left is the <em>depth</em> of the node. The section
       on the right is the heuristic score. The heuristic score is only used with Informed Search Algorithms, so if you
@@ -64,7 +64,7 @@
       state.</p>
     <p>The following diagram shows the A* algorithm (with the Euclidean distance heuristic) applied to a problem that
       can be solved in just two moves:</p>
-    <img src="images/astar-steps.png">
+    <img :src="astarStepsImage">
     <p>The colours can be interpreted as follows:</p>
     <table>
       <thead>
@@ -117,7 +117,7 @@
       not be explored because they represent states that have already been explored via other nodes.</p>
     <p>When a search is active, the number of nodes in the Open and Closed Lists will be visible in the top-left
       corner:</p>
-    <img src="images/stats.png">
+    <img :src="statsImage">
     <h2>Credits</h2>
     <p>N-Puzzle was developed by Tristan Penman. The source code can be on <a
       href="https://github.com/tristanpenman/n-puzzle">Github</a>, and is distributed under the Simplified BSD License.
@@ -126,6 +126,24 @@
       RMIT University by Vic Ciesielski, James Harland and Peter McDonald.</p>
   </div>
 </template>
+
+<script>
+const chooseStateImage = new URL('../../images/choose-state.png', import.meta.url).href;
+const stateRepresentationImage = new URL('../../images/state-representation.png', import.meta.url).href;
+const astarStepsImage = new URL('../../images/astar-steps.png', import.meta.url).href;
+const statsImage = new URL('../../images/stats.png', import.meta.url).href;
+
+export default {
+  data() {
+    return {
+      chooseStateImage,
+      stateRepresentationImage,
+      astarStepsImage,
+      statsImage
+    };
+  }
+};
+</script>
 
 <style>
 .Tutorial {

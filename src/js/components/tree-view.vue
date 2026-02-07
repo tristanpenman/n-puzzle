@@ -177,7 +177,7 @@ export default {
     // initial layout and draw of the tree
     this.layoutAndRedraw();
   },
-  beforeDestroy() {
+  beforeUnmount() {
     // remove dom event listeners
     window.removeEventListener('resize', this.justRedraw);
     this.$refs.viewport.removeEventListener('scroll', this.justRedraw);

@@ -7,11 +7,12 @@ html {
  font-size: 13px;
 }
 
-html, body {
+html,
+body {
  height: 100%;
 }
 
-body {
+body > #app {
  overflow: hidden;
  height: 100%;
  width: 100%;

@@ -1,4 +1,5 @@
-import Vue from 'vue/dist/vue.esm.js';
+import { createApp } from 'vue/dist/vue.esm-bundler.js';
+
 import Util from './js/helpers/Util';
 import PuzzleStateRenderer from './js/helpers/PuzzleStateRenderer';
 import TreeLayout from './js/helpers/TreeLayout';
@@ -22,16 +23,6 @@ import PuzzleStateView from './js/components/puzzle-state-view.vue';
 import TreeView from './js/components/tree-view.vue';
 import Tutorial from './js/components/tutorial.vue';
 
-Vue.component('algorithm-stats', AlgorithmStats);
-Vue.component('application-view', ApplicationView);
-Vue.component('control-panel', ControlPanel);
-Vue.component('help-modal', HelpModal);
-Vue.component('puzzle-state-editor', PuzzleStateEditor);
-Vue.component('puzzle-state-editor-cell', PuzzleStateEditorCell);
-Vue.component('puzzle-state-view', PuzzleStateView);
-Vue.component('tree-view', TreeView);
-Vue.component('tutorial', Tutorial);
-
 window.addEventListener('load', () => {
   // Set up the default configuration
   const configuration = new Configuration();
@@ -39,17 +30,30 @@ window.addEventListener('load', () => {
   configuration.getGoalState().setTiles([1, 2, 3, 8, 0, 4, 7, 6, 5]);
 
   // Initialise the application view
-  new Vue({
-    el: document.getElementById('app'),
-    data: {
-      model: new ApplicationState({
-        'configuration': configuration
-      })
+  const app = createApp({
+    data() {
+      return {
+        model: new ApplicationState({
+          'configuration': configuration
+        })
+      };
     },
     template: `
-        <application-view :model="model"></application-view>
-      `
+      <application-view :model="model"></application-view>
+    `
   });
+
+  app.component('algorithm-stats', AlgorithmStats);
+  app.component('application-view', ApplicationView);
+  app.component('control-panel', ControlPanel);
+  app.component('help-modal', HelpModal);
+  app.component('puzzle-state-editor', PuzzleStateEditor);
+  app.component('puzzle-state-editor-cell', PuzzleStateEditorCell);
+  app.component('puzzle-state-view', PuzzleStateView);
+  app.component('tree-view', TreeView);
+  app.component('tutorial', Tutorial);
+
+  app.mount('#app');
 });
 
 void [

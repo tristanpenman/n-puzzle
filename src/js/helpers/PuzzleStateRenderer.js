@@ -11,15 +11,33 @@ const PuzzleStateRenderer = function (context) {
   const characterWidth = 7;
   const characterHeight = 10;
 
+  // Assets
+  const fontUrl = new URL('../../images/font.png', import.meta.url).href;
+  const tinyFontUrl = new URL('../../images/tiny-font.png', import.meta.url).href;
+
   // Load normal sized font
   const font = new Image();
-  const fontPromise = new Promise((resolve) => {
-    font.src = 'images/font.png';
+  const fontPromise = new Promise((resolve, reject) => {
+    font.src = fontUrl;
     font.onload = () => {
       resolve();
     };
+    font.onerror = () => {
+      reject();
+    };
   });
 
+  // Load tiny font (for depth and path cost)
+  const tinyFont = new Image();
+  const tinyFontPromise = new Promise((resolve, reject) => {
+    tinyFont.src = tinyFontUrl;
+    tinyFont.onload = () => {
+      resolve();
+    };
+    tinyFont.onerror = () => {
+      reject();
+    };
+  });
 
   // Character metrics for tiny font
   const tinyPaddingTop = 5;
@@ -32,10 +50,6 @@ const PuzzleStateRenderer = function (context) {
   const tinyFontK = 11;
   const tinyFontHash = 12;
   const tinyFontDash = 13;
-
-  // Load tiny font (for depth and path cost)
-  const tinyFont = new Image();
-  tinyFont.src = "images/tiny-font.png";
 
   // Pre-calculate expected width and height of a node
   const width = xPaddingLeft + characterWidth * 3 + xSpacing * 2 + xPaddingRight;
@@ -91,8 +105,7 @@ const PuzzleStateRenderer = function (context) {
   };
 
   this.renderState = async function (state, stateColor, x, y) {
-
-    await fontPromise;
+    await Promise.all([fontPromise, tinyFontPromise]);
 
     context.strokeStyle = stateColor;
 

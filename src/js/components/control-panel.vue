@@ -31,7 +31,7 @@
           </option>
         </select>
         <button @click="showModal('algorithms')" class="help" :disabled="getState() !== 'stopped'">
-          <img src="images/help_icon.gif" alt="help">
+          <img :src="helpIconImage" alt="help">
         </button>
       </div>
     </div>
@@ -59,7 +59,7 @@
           </option>
         </select>
         <button @click="showModal('heuristics')" class="help" :disabled="getState() !== 'stopped'">
-          <img src="images/help_icon.gif" alt="help">
+          <img :src="helpIconImage" alt="help">
         </button>
       </div>
     </div>
@@ -131,9 +131,13 @@
 <script>
 import Configuration from '../models/Configuration';
 
+// assets
+const helpIconImage = new URL('../../images/help-icon.png', import.meta.url).href;
+
 export default {
   data() {
     return {
+      helpIconImage,
       modal: null,
       state: null
     }
@@ -244,11 +248,22 @@ export default {
   margin-bottom: 0.4em;
 }
 
+.ControlPanel > .group > .field {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+}
+
 .ControlPanel > .group > .field > button.help {
   border: 0;
   cursor: pointer;
+  display: flex;
   padding: 0;
   user-select: none;
+}
+
+.ControlPanel > .group > .field > button.help > img {
+  margin: auto;
 }
 
 .ControlPanel > .group > .field > button.help:disabled {
