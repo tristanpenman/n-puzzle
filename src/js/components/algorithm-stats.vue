@@ -1,6 +1,6 @@
 <template>
   <div class="AlgorithmStats">
-    <div v-for="stat in statistics">
+    <div v-for="stat in statistics" :key="stat.name">
       {{ stat.name }}: {{ stat.value }}
     </div>
   </div>

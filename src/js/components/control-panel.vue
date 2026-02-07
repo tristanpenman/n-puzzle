@@ -22,7 +22,11 @@
       <label>Search algorithm:</label>
       <div class="field">
         <select @change="changeAlgorithm" v-bind:value="getAlgorithm()" :disabled="getState() !== 'stopped'">
-          <option v-for="algorithm in availableAlgorithms()" v-bind:value="algorithm.key">
+          <option
+            v-for="algorithm in availableAlgorithms()"
+            :key="algorithm.key"
+            v-bind:value="algorithm.key"
+          >
             {{ algorithm.name }}
           </option>
         </select>
@@ -41,7 +45,11 @@
           :value="getHeuristic()"
           v-if="usesHeuristic()"
         >
-          <option v-for="heuristic in availableHeuristics()" v-bind:value="heuristic.key">
+          <option
+            v-for="heuristic in availableHeuristics()"
+            :key="heuristic.key"
+            v-bind:value="heuristic.key"
+          >
             {{ heuristic.name }}
           </option>
         </select>

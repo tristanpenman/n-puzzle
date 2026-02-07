@@ -2,8 +2,8 @@
   <div class="PuzzleStateEditor">
     <div class="popup">
       <div class="grid">
-        <div class="row" v-for="y in [0, 1, 2]">
-          <div class="cell" v-for="x in [0, 1, 2]">
+        <div class="row" v-for="y in [0, 1, 2]" :key="`row-${y}`">
+          <div class="cell" v-for="x in [0, 1, 2]" :key="`cell-${x}-${y}`">
             <puzzle-state-editor-cell
               v-bind:editing="editing && editing[0] === x && editing[1] === y"
               v-bind:position="[x, y]"
