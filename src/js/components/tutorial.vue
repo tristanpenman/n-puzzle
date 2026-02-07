@@ -119,11 +119,14 @@
       corner:</p>
     <img :src="statsImage">
     <h2>Credits</h2>
-    <p>N-Puzzle was developed by Tristan Penman. The source code can be on <a
-      href="https://github.com/tristanpenman/n-puzzle">Github</a>, and is distributed under the Simplified BSD License.
-      See the LICENSE file included in the source code for more information.</p>
+    <p>N-Puzzle was developed by <a href="https://github.com/tristanpenman">Tristan Penman</a>.</p>
     <p>This project is based on the <a href="http://www.cs.rmit.edu.au/AI-Search">AI-Search Java applet</a> developed at
       RMIT University by Vic Ciesielski, James Harland and Peter McDonald.</p>
+    <h2>License</h2>
+    <p>The source code can be on <a
+      href="https://github.com/tristanpenman/n-puzzle">GitHub</a>, and is distributed under the Simplified BSD License.
+      See the LICENSE file for more information.
+    </p>
   </div>
 </template>
 
