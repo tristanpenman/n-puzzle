@@ -21,7 +21,7 @@ export default {
 
 <style>
 .HelpModal {
-  background: rgba(70, 70, 70, 0.5);
+  background: var(--color-overlay);
   display: flex;
   height: 100%;
   left: 0;
@@ -31,9 +31,9 @@ export default {
 }
 
 .HelpModal > .popup {
-  background: #333;
+  background: var(--color-surface);
   border-radius: 4px;
-  color: white;
+  color: var(--color-text);
   margin: auto;
   padding: 25px 25px 15px 25px;
 }

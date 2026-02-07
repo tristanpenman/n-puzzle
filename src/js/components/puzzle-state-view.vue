@@ -28,8 +28,8 @@ export default {
 
 <style>
 .PuzzleStateView {
-  background: #999;
-  border: 1px solid #999;
+  background: var(--color-tile-border);
+  border: 1px solid var(--color-tile-border);
   border-radius: 0.3em;
   display: inline-block;
   font-size: 12px;
@@ -47,7 +47,7 @@ export default {
 
 .PuzzleStateView > .row > .cell {
   align-items: center;
-  background: #fff;
+  background: var(--color-tile);
   display: inline-flex;
   height: 29px;
   justify-content: center;
