@@ -1,3 +1,5 @@
+import { assert, test } from 'qunit';
+
 import PuzzleState from '../models/PuzzleState';
 import { createApplicationStateWithMockObjects } from './ApplicationStateTest';
 
@@ -33,11 +35,11 @@ function testSearchAlgorithm(initialState, goalState, algorithm, heuristic,
     return null;
   };
 
-  equal(findStat('Open list', stats).value, expectedOpenListSize);
-  equal(findStat('Closed list', stats).value, expectedClosedSetSize);
+  assert.equal(findStat('Open list', stats).value, expectedOpenListSize);
+  assert.equal(findStat('Closed list', stats).value, expectedClosedSetSize);
 }
 
-test("test search algorithms for problem 1 (2012)", function () {
+test("test search algorithms for problem 1 (2012)", () => {
   const initialState = [3, 2, 4, 5, 0, 8, 7, 6, 1];
   const goalState = [3, 6, 2, 5, 0, 4, 7, 1, 8];
 
@@ -51,7 +53,7 @@ test("test search algorithms for problem 1 (2012)", function () {
   testSearchAlgorithm(initialState, goalState, 'astar', 'manhattan', 6, 7);
 });
 
-test("test search algorithms for problem 2 (2012)", function () {
+test("test search algorithms for problem 2 (2012)", () => {
   const initialState = [1, 2, 3, 4, 5, 0, 6, 7, 8];
   const goalState = [1, 0, 3, 4, 2, 8, 6, 5, 7];
 
@@ -65,7 +67,7 @@ test("test search algorithms for problem 2 (2012)", function () {
   testSearchAlgorithm(initialState, goalState, 'astar', 'manhattan', 5, 5);
 });
 
-test("test search algorithms for problem 3 (2012)", function () {
+test("test search algorithms for problem 3 (2012)", () => {
   const initialState = [0, 2, 3, 1, 5, 4, 8, 6, 7];
   const goalState = [1, 2, 3, 5, 0, 4, 8, 6, 7];
 
@@ -78,7 +80,7 @@ test("test search algorithms for problem 3 (2012)", function () {
   testSearchAlgorithm(initialState, goalState, 'astar', 'manhattan', 2, 3);
 });
 
-test("test search algorithms for problem 4 (2012)", function () {
+test("test search algorithms for problem 4 (2012)", () => {
   const initialState = [1, 2, 3, 4, 5, 6, 7, 8, 0];
   const goalState = [5, 1, 2, 6, 3, 8, 4, 0, 7];
 
@@ -90,7 +92,7 @@ test("test search algorithms for problem 4 (2012)", function () {
   testSearchAlgorithm(initialState, goalState, 'astar', 'manhattan', 12, 16);
 });
 
-test("test search algorithms for problem 5 (2012)", function () {
+test("test search algorithms for problem 5 (2012)", () => {
   const initialState = [1, 0, 2, 5, 3, 8, 6, 4, 7];
   const goalState = [1, 2, 3, 4, 5, 6, 7, 8, 0];
 
@@ -102,7 +104,7 @@ test("test search algorithms for problem 5 (2012)", function () {
   testSearchAlgorithm(initialState, goalState, 'astar', 'manhattan', 99, 171);
 });
 
-test("test search algorithms for problem 6 (2012)", function () {
+test("test search algorithms for problem 6 (2012)", () => {
   const initialState = [1, 2, 3, 6, 0, 8, 4, 7, 5];
   const goalState = [1, 2, 3, 4, 5, 6, 7, 8, 0];
 
