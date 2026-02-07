@@ -2,9 +2,9 @@
 
 N-Puzzle is a web app for learning about graph-based search algorithms.
 
-We use the 8-puzzle, which is an instance of the [Sliding Puzzle](https://en.wikipedia.org/wiki/Sliding_puzzle) problem, where eight tiles are placed on a 3x3 grid. The remaining position is an empty space. Tiles adjacent to the empty space may be moved into that space. The puzzle is solved by finding a sequence of moves (state transitions) that will allow us to move from the initial state to the goal state.
+We use the 8-puzzle, an instance of the [Sliding Puzzle](https://en.wikipedia.org/wiki/Sliding_puzzle) problem where eight tiles are placed on a 3x3 grid. The remaining position is an empty space. Tiles adjacent to the empty space may be moved into that space. The puzzle is solved by finding a sequence of moves (state transitions) that will allow us to move from the initial state to the goal state.
 
-An example initial state and goal state are given below:
+An example initial state and goal state are given below.
 
 **Initial state**:
 
@@ -18,6 +18,8 @@ An example initial state and goal state are given below:
     4 7 -
     6 8 1
 
+## Algorithms
+
 N-Puzzle provides five algorithms that can be used to solve the problem:
 
 - Breadth-first Search (BFS)
@@ -26,8 +28,7 @@ N-Puzzle provides five algorithms that can be used to solve the problem:
 - Greedy Search
 - A* Search
 
-Since Greedy Search and A* Search are informed search algorithms, three
-heuristic functions are also provided:
+Since Greedy Search and A* Search are informed search algorithms, three heuristic functions are also provided:
 
 - Euclidean distance heuristic
 - Manhattan distance heuristic
@@ -45,22 +46,24 @@ The project now uses [Vite](https://vitejs.dev/) for local development and build
 
 To run the dev server:
 
-    npm install
-    npm run dev
+    pnpm install
+    pnpm run dev
 
 Vite will print the local URL (typically http://localhost:5173) in the terminal. If you change any of the code, simply refresh the page to see your changes.
 
 To build a production version:
 
-    npm run build
+    pnpm build
 
 You can also preview the production build locally:
 
-    npm run preview
+    pnpm preview
 
 ## Acknowledgements
 
-N-Puzzle is based on the AI-Search Java applet developed at RMIT University by Vic Ciesielski, James Harland and Peter McDonald. The original applet can found at: http://www.cs.rmit.edu.au/AI-Search/
+N-Puzzle is based on the AI-Search Java applet developed at RMIT University by Vic Ciesielski, James Harland and Peter McDonald.
+
+The original applet can found on RMIT's [AI-Search website](https://learninglab.rmit.edu.au/Toolbox/AI-Search/index.html).
 
 ## License
 
