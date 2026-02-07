@@ -278,4 +278,38 @@ PuzzleState.calculateTilesOutOfPlace = function (a, b) {
   return tilesOutOfPlace;
 };
 
+PuzzleState.countInversions = function (tiles) {
+  var inversions = 0;
+  for (var i = 0; i < tiles.length; i++) {
+    if (tiles[i] === 0) {
+      continue;
+    }
+    for (var j = i + 1; j < tiles.length; j++) {
+      if (tiles[j] !== 0 && tiles[i] > tiles[j]) {
+        inversions++;
+      }
+    }
+  }
+  return inversions;
+};
+
+PuzzleState.getSolvabilitySignature = function (state) {
+  var tiles = state.valueOf();
+  var size = Math.sqrt(tiles.length);
+  if (!Number.isInteger(size)) {
+    throw "Puzzle size must be a square.";
+  }
+  var inversions = PuzzleState.countInversions(tiles);
+  if (size % 2 === 1) {
+    return inversions % 2;
+  }
+  var blankIndex = tiles.indexOf(0);
+  var blankRowFromBottom = size - Math.floor(blankIndex / size);
+  return (inversions + blankRowFromBottom) % 2;
+};
+
+PuzzleState.isSolvable = function (initial, goal) {
+  return PuzzleState.getSolvabilitySignature(initial) === PuzzleState.getSolvabilitySignature(goal);
+};
+
 export default PuzzleState;
