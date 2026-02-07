@@ -239,6 +239,8 @@ export default {
 }
 
 .ControlPanel > .stepper > .row {
+  display: flex;
+  gap: 5px;
   margin-bottom: 0.4em;
 }
 

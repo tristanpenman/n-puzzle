@@ -100,6 +100,7 @@ export default {
 .PuzzleStateEditor > .popup > .actions {
   align-items: center;
   display: flex;
+  gap: 5px;
 }
 
 .PuzzleStateEditor > .popup > .actions > input {

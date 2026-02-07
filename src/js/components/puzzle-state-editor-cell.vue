@@ -3,8 +3,10 @@
     <input
       ref="input"
       v-if="editing"
-      @blur="blur"
-      @keydown="keydown"
+      v-model="draft"
+      @blur="commit"
+      @keydown.enter.prevent="commit"
+      @keydown.esc.prevent="cancel"
     />
     <div v-else>
       {{value || '-'}}
@@ -14,21 +16,27 @@
 
 <script>
 export default {
+  data() {
+    return {
+      draft: ''
+    };
+  },
   methods: {
-    blur() {
-      this.$emit('set', this.position, this.value);
-    },
     edit() {
       if (!this.editing) {
         this.$emit('edit', this.position);
       }
     },
-    keydown(event) {
-      if (event.key >= '0' && event.key <= '9') {
-        this.$emit('set', this.position, parseInt(event.key, 10));
-      } else {
-        this.$emit('set', this.position, this.value);
+    commit() {
+      const parsed = Number(this.draft);
+      if (Number.isInteger(parsed) && parsed >= 0 && parsed <= 8) {
+        this.$emit('set', this.position, parsed);
+        return;
       }
+      this.$emit('set', this.position, this.value);
+    },
+    cancel() {
+      this.$emit('set', this.position, this.value);
     }
   },
   props: [
@@ -39,8 +47,10 @@ export default {
   watch: {
     'editing': function(editing) {
       if (editing) {
+        this.draft = this.value === null || this.value === undefined ? '' : String(this.value);
         this.$nextTick(() => {
           this.$refs.input.focus();
+          this.$refs.input.select();
         });
       }
     }

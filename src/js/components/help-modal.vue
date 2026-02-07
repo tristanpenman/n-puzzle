@@ -1,6 +1,6 @@
 <template>
   <div class="HelpModal" @click="close">
-    <div class="popup">
+    <div class="popup" @click.stop>
       <slot></slot>
       <div class="actions">
         <button @click="close">Close</button>
