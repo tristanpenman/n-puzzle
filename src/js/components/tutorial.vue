@@ -163,7 +163,7 @@ export default {
 }
 
 .Tutorial > h1 {
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid var(--color-border);
   font-size: 22px;
   margin: 1.2em 0 1em 0;
   padding-bottom: 0.2em;
@@ -180,7 +180,7 @@ export default {
   margin-bottom: 17px;
   font-size: 19px;
   padding-bottom: 5px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--color-border-muted);
   font-weight: normal;
 }
 
@@ -214,7 +214,7 @@ export default {
 .Tutorial > table,
 .Tutorial > table > tbody > tr > td,
 .Tutorial > table > thead > tr > th {
-  border: 1px solid #999;
+  border: 1px solid var(--color-border);
   line-height: 20px;
 }
 
@@ -227,7 +227,7 @@ export default {
 }
 
 .Tutorial > table > thead > tr > th {
-  background: #f2f2f2;
+  background: var(--color-surface);
   padding-top: 0.7em;
   padding-bottom: 0.7em;
 }

@@ -54,8 +54,9 @@ export default {
 }
 
 .ApplicationView > .main {
-  border-left: 1px solid #aaa;
-  box-shadow: -1px 0 4px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg);
+  border-left: 1px solid var(--color-border);
+  box-shadow: -1px 0 6px rgba(0, 0, 0, 0.35);
   flex-grow: 1;
   height: 100%;
   left: 245px;

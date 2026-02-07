@@ -74,6 +74,17 @@
       </div>
     </div>
 
+    <div class="group theme">
+      <label>Theme:</label>
+      <div class="field">
+        <select @change="changeTheme" :value="getTheme()">
+          <option value="light">Light</option>
+          <option value="dark">Dark</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+    </div>
+
     <div class="group stepper">
       <label>Controls:</label>
       <div class="row" v-if="getMode() === 'burst'">
@@ -134,6 +145,7 @@ import Configuration from '../models/Configuration';
 // assets
 const faviconImage = new URL('../../images/favicon.png', import.meta.url).href;
 const helpIconImage = new URL('../../images/help-icon.png', import.meta.url).href;
+const themeStorageKey = 'n-puzzle-theme';
 
 export default {
   data() {
@@ -141,8 +153,16 @@ export default {
       faviconImage,
       helpIconImage,
       modal: null,
-      state: null
+      state: null,
+      theme: 'system'
     }
+  },
+  mounted() {
+    const storedTheme = localStorage.getItem(themeStorageKey);
+    if (storedTheme === 'light' || storedTheme === 'dark' || storedTheme === 'system') {
+      this.theme = storedTheme;
+    }
+    this.applyTheme(this.theme);
   },
   methods: {
     availableAlgorithms() {
@@ -170,6 +190,19 @@ export default {
     changeMode(event) {
       this.model.getConfiguration().setMode(event.target.value);
     },
+    changeTheme(event) {
+      const theme = event.target.value;
+      this.theme = theme;
+      localStorage.setItem(themeStorageKey, theme);
+      this.applyTheme(theme);
+    },
+    applyTheme(theme) {
+      if (theme === 'light' || theme === 'dark') {
+        document.documentElement.setAttribute('data-theme', theme);
+        return;
+      }
+      document.documentElement.removeAttribute('data-theme');
+    },
     getAlgorithm() {
       return this.model.getConfiguration().getAlgorithm();
     },
@@ -187,6 +220,9 @@ export default {
     },
     getState() {
       return this.model.getState();
+    },
+    getTheme() {
+      return this.theme;
     },
     hideModal() {
       this.modal = null;
@@ -214,7 +250,8 @@ export default {
 
 <style>
 .ControlPanel {
-  background-color: #f2f2f2;
+  background-color: var(--color-panel);
+  color: var(--color-text);
   min-width: 230px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -223,7 +260,7 @@ export default {
 
 .ControlPanel > h1 {
   align-items: center;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 1px solid var(--color-border);
   display: flex;
   font-size: 22px;
   gap: 6px;
@@ -244,7 +281,7 @@ export default {
 }
 
 .ControlPanel > .group.disabled > label {
-  color: #666;
+  color: var(--color-text-muted);
 }
 
 .ControlPanel > .group {
@@ -265,6 +302,7 @@ export default {
 }
 
 .ControlPanel > .group > .field > button.help {
+  background: transparent;
   border: 0;
   cursor: pointer;
   display: flex;

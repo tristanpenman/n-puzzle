@@ -56,7 +56,7 @@ export default {
 
 <style>
 .PuzzleStateEditor {
-  background: rgba(70, 70, 70, 0.5);
+  background: var(--color-overlay);
   display: flex;
   height: 100%;
   left: 0;
@@ -66,14 +66,14 @@ export default {
 }
 
 .PuzzleStateEditor > .popup {
-  background: #333;
+  background: var(--color-surface);
   border-radius: 4px;
   margin: auto;
   padding: 16px;
 }
 
 .PuzzleStateEditor > .popup > .grid {
-  background: #666;
+  background: var(--color-tile-border);
   border-radius: 2px;
   display: flex;
   flex-direction: column;
@@ -93,7 +93,7 @@ export default {
 }
 
 .PuzzleStateEditor > .popup > .grid > .row > .cell:hover {
-  background: #fcf3d0;
+  background: var(--color-highlight);
   cursor: pointer;
 }
 
@@ -108,7 +108,7 @@ export default {
 }
 
 .PuzzleStateEditor > .popup > .actions > a {
-  color: #fff;
+  color: var(--color-text);
   text-decoration: none;
 }
 

@@ -16,9 +16,9 @@ export default {
 
 <style>
 .AlgorithmStats {
-  background: #fafafa;
+  background: var(--color-surface);
   border-radius: 3px;
-  border: 1px solid #aaa;
+  border: 1px solid var(--color-border);
   left: 15px;
   margin: 10px;
   padding: 0.5em;

@@ -193,7 +193,7 @@ export default {
 
 <style>
 .TreeView {
-  background: white;
+  background: var(--color-bg);
   height: 100%;
   position: relative;
 }

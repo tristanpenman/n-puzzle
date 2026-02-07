@@ -61,7 +61,7 @@ export default {
 <style>
 .PuzzleStateEditorCell {
   align-items: center;
-  background: #fff;
+  background: var(--color-tile);
   display: flex;
   flex-grow: 1;
   font-size: 20px;
@@ -71,7 +71,7 @@ export default {
 }
 
 .PuzzleStateEditorCell:hover {
-  background: #fcf3d0;
+  background: var(--color-highlight);
   cursor: pointer;
 }
 
@@ -79,6 +79,7 @@ export default {
   background-color: transparent;
   border-color: transparent;
   border-style: none;
+  color: var(--color-text);
   font-size: 20px;
   width: 0.8em;
 }
