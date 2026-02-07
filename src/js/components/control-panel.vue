@@ -1,6 +1,6 @@
 <template>
   <div class="ControlPanel">
-    <h1>N-Puzzle</h1>
+    <h1><img :src="faviconImage" width="18" height="18"/>N-Puzzle</h1>
 
     <div class="group initial">
       <label>Initial state:</label>
@@ -132,11 +132,13 @@
 import Configuration from '../models/Configuration';
 
 // assets
+const faviconImage = new URL('../../images/favicon.png', import.meta.url).href;
 const helpIconImage = new URL('../../images/help-icon.png', import.meta.url).href;
 
 export default {
   data() {
     return {
+      faviconImage,
       helpIconImage,
       modal: null,
       state: null
@@ -220,11 +222,19 @@ export default {
 }
 
 .ControlPanel > h1 {
+  align-items: center;
   border-bottom: 1px solid #aaa;
+  display: flex;
   font-size: 22px;
+  gap: 6px;
   margin: 1.2em 0 1em 0.2em;
   padding-bottom: 0.2em;
   width: 8.9em;
+}
+
+.ControlPanel > h1 > img {
+  position: relative;
+  top: -1px;
 }
 
 .ControlPanel > .group > label {

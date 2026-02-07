@@ -1,6 +1,6 @@
 <template>
   <div class="Tutorial">
-    <h1>Welcome to N-Puzzle</h1>
+    <h1>Welcome!</h1>
     <p>This web application allows you to view a graphical representation of a range of different graph search
       algorithms, whilst solving your choice of 8-puzzle problems.</p>
     <h2>Getting Started</h2>
