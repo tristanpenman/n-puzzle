@@ -19,7 +19,7 @@ const PuzzleState = Backbone.Model.extend({
   },
 
   copyFrom: function (src) {
-    if (src.hasOwnProperty('tiles') && Array.isArray(src.tiles) && src.tiles.length == 9) {
+    if (Object.prototype.hasOwnProperty.call(src, 'tiles') && Array.isArray(src.tiles) && src.tiles.length == 9) {
       this.tiles = src.tiles.slice();
       this.trigger('change');
       return this;
@@ -35,22 +35,22 @@ const PuzzleState = Backbone.Model.extend({
         if (this.tiles[x + y * 3] == 0) {
           var zero = [x, y];
           if (x > 0) {
-            var newState = new PuzzleState({}, {parent: this});
+            const newState = new PuzzleState({}, {parent: this});
             newState.swapTiles(zero, [x - 1, y]);
             successors.push(newState);
           }
           if (x < 2) {
-            var newState = new PuzzleState({}, {parent: this});
+            const newState = new PuzzleState({}, {parent: this});
             newState.swapTiles(zero, [x + 1, y]);
             successors.push(newState);
           }
           if (y > 0) {
-            var newState = new PuzzleState({}, {parent: this});
+            const newState = new PuzzleState({}, {parent: this});
             newState.swapTiles(zero, [x, y - 1]);
             successors.push(newState);
           }
           if (y < 2) {
-            var newState = new PuzzleState({}, {parent: this});
+            const newState = new PuzzleState({}, {parent: this});
             newState.swapTiles(zero, [x, y + 1]);
             successors.push(newState);
           }
@@ -161,8 +161,8 @@ const PuzzleState = Backbone.Model.extend({
 
     // Validate input
     var valuesUsed = [];
-    for (var i = 0; i < 9; i++) {
-      var newTile = tiles[i];
+    for (let i = 0; i < 9; i++) {
+      const newTile = tiles[i];
       if (Util.isInteger(newTile) && newTile >= 0 && newTile <= 8) {
         if (valuesUsed.indexOf(tiles[i]) == -1) {
           valuesUsed.push(tiles[i]);
@@ -173,7 +173,7 @@ const PuzzleState = Backbone.Model.extend({
       throw "Tile array must use all the values 0 through 8 exactly once each.";
     }
 
-    for (var i = 0; i < 9; i++) {
+    for (let i = 0; i < 9; i++) {
       this.tiles[i] = tiles[i];
     }
 

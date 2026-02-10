@@ -103,7 +103,7 @@ const InformedSearch = Backbone.Model.extend({
     var explored = [];
 
     this.closedSetSize++;
-    if (!this.closedSet.hasOwnProperty(stateStr)) {
+    if (!Object.prototype.hasOwnProperty.call(this.closedSet, stateStr)) {
       this.closedSet[stateStr] = true;
 
       // Find all nodes in the frontier with the same state string, and
@@ -147,7 +147,7 @@ const InformedSearch = Backbone.Model.extend({
         this.closedSetSize++;
         this.closedSet[successorStr] = true;
         augmentedState.kind = 'repeat';
-      } else if (this.closedSet.hasOwnProperty(successorStr)) {
+      } else if (Object.prototype.hasOwnProperty.call(this.closedSet, successorStr)) {
         augmentedState.kind = 'repeat';
       } else {
         augmentedState.kind = 'normal';

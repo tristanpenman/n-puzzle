@@ -1,7 +1,7 @@
 import InformedSearch from './InformedSearch';
 
 const AStarSearch = InformedSearch.extend({
-  initialize: function (_attributes, _options) {
+  initialize: function () {
     this.fScoreFunction = function (state) {
       return state.getDepth() + state.getHeuristicValue();
     };

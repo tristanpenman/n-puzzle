@@ -2,7 +2,7 @@ const Util = {
   extend: function () {
     for (let i = 1; i < arguments.length; i++) {
       for (const key in arguments[i]) {
-        if (arguments[i].hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(arguments[i], key)) {
           arguments[0][key] = arguments[i][key];
         }
       }

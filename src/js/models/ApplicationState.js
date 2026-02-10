@@ -342,7 +342,6 @@ const ApplicationState = Backbone.Model.extend({
           var node = statesMappedToNodes[stateId];
 
           // Clone the node's attributes to build an augmented state
-          var attributes = node.getAttributes();
           var augmentedState = _.clone(node.getAttributes());
           augmentedState.originalState = state;
 
@@ -439,7 +438,7 @@ const ApplicationState = Backbone.Model.extend({
     var UpdateStateAttributeAction = function (state, attribute, value) {
       this.execute = function () {
         var stateId = state.getLongIdentifier();
-        if (!statesMappedToNodes.hasOwnProperty(stateId)) {
+        if (!Object.prototype.hasOwnProperty.call(statesMappedToNodes, stateId)) {
           throw("Could not update kind of unknown state: " + stateId);
         }
         var node = statesMappedToNodes[stateId];
@@ -516,7 +515,7 @@ const ApplicationState = Backbone.Model.extend({
           localActions.push(setExpansionOrderAction.execute());
         }
 
-        var action = new UpdateStateAttributeAction(parentState, 'kind', 'explored');
+        const action = new UpdateStateAttributeAction(parentState, 'kind', 'explored');
         localActions.push(action.execute());
       }
 
@@ -524,25 +523,25 @@ const ApplicationState = Backbone.Model.extend({
       // previously, then execute an UpdateStateAttributeAction.
       // Otherwise, add the state to the list of states that should
       // be added to the tree
-      for (var i = 0; i < augmentedStates.length; i++) {
+      for (let i = 0; i < augmentedStates.length; i++) {
 
         // Aliases
-        var augmentedState = augmentedStates[i];
-        var state = augmentedState.originalState;
+        const augmentedState = augmentedStates[i];
+        const state = augmentedState.originalState;
 
         // Check for existing node
         var stateId = state.getLongIdentifier();
-        if (statesMappedToNodes.hasOwnProperty(stateId)) {
+        if (Object.prototype.hasOwnProperty.call(statesMappedToNodes, stateId)) {
 
           // If the state already has a node in the tree, then
           // update the relevant attributes
-          var updateNodeKindAction = new UpdateStateAttributeAction(
+          const updateNodeKindAction = new UpdateStateAttributeAction(
             state, 'kind', augmentedState.kind);
 
           // Add the action to the list of actions performed so far
           localActions.push(updateNodeKindAction.execute());
 
-          var updateExpansionOrderAction = new SetExpansionOrderAction(
+          const updateExpansionOrderAction = new SetExpansionOrderAction(
             state, augmentedState.expansionOrder);
 
           localActions.push(updateExpansionOrderAction.execute());
@@ -561,8 +560,8 @@ const ApplicationState = Backbone.Model.extend({
       // the undo list, then the IDS algorithm must be restarting the
       // search at the root of the tree (after incrementing the maximum
       // depth).
-      var rootId = null;
-      var rootNode = searchTree.getRootNode();
+      let rootId = null;
+      const rootNode = searchTree.getRootNode();
       if (rootNode != null) {
         rootId = rootNode.getState().getLongIdentifier();
       }
@@ -572,11 +571,11 @@ const ApplicationState = Backbone.Model.extend({
         rootId === augmentedStates[0].originalState.getLongIdentifier()) {
 
         // Aliases
-        var augmentedState = augmentedStates[0];
-        var state = augmentedState.originalState;
+        const augmentedState = augmentedStates[0];
+        const state = augmentedState.originalState;
 
         // To handle this special case, we need to create a new root
-        var newNode = new SearchTreeNode(null, state, {
+        const newNode = new SearchTreeNode(null, state, {
           kind: augmentedState.kind
         });
 
@@ -584,11 +583,11 @@ const ApplicationState = Backbone.Model.extend({
         // states are re-discovered, they can be added to the tree.
         // Undoing the action will restore the previous root node, as
         // well as the previous state->node map.
-        var newStatesMappedToNodes = {};
+        const newStatesMappedToNodes = {};
         newStatesMappedToNodes[state.getLongIdentifier()] = newNode;
 
         // Finally, we can perform the action
-        var action = new ReplaceRootNodeAction(newNode,
+        const action = new ReplaceRootNodeAction(newNode,
           newStatesMappedToNodes,
           searchTree);
         localActions.push(action.execute());
@@ -596,7 +595,7 @@ const ApplicationState = Backbone.Model.extend({
       } else {
 
         // Create an action that will add the new states to the tree
-        var addStateToTreeAction = new AddStatesToTreeAction(
+        const addStateToTreeAction = new AddStatesToTreeAction(
           newAugmentedStates,
           parentState,
           searchTree
@@ -605,36 +604,33 @@ const ApplicationState = Backbone.Model.extend({
         // Execute the AddStatesToTreeAction, and if the action is
         // reversible, add the undo action to the list of actions performed
         // so far.
-        var undoAction = addStateToTreeAction.execute();
+        const undoAction = addStateToTreeAction.execute();
         if (undoAction != null) {
           localActions.push(undoAction);
         }
       }
-
-      var goalFound = false;
 
       // Check for goal states. If there is a goal state that has been
       // discovered, then the Application state should be updated to
       // 'complete'. Reversing this action (i.e. clicking 'Back') will
       // revert the application state to whatever it was prior to the
       // goal being found.
-      for (var i = 0; i < augmentedStates.length; i++) {
+      for (let i = 0; i < augmentedStates.length; i++) {
 
         if (augmentedStates[i].kind === 'goal') {
 
-          goalFound = true;
-          var ancestor = augmentedStates[i].originalState.getParent();
+          let ancestor = augmentedStates[i].originalState.getParent();
           while (ancestor) {
-            var action = new UpdateStateAttributeAction(ancestor, 'kind', 'goal_path');
+            const action = new UpdateStateAttributeAction(ancestor, 'kind', 'goal_path');
             localActions.push(action.execute());
             ancestor = ancestor.getParent();
           }
 
-          var action = new UpdateApplicationStateAction(this, 'complete');
+          const action = new UpdateApplicationStateAction(this, 'complete');
           localActions.push(action.execute());
 
           // Update the expansion order value for the goal state
-          var setExpansionOrderAction = new SetExpansionOrderAction(
+          const setExpansionOrderAction = new SetExpansionOrderAction(
             augmentedStates[i].originalState, this.expansionOrder);
           this.expansionOrder++;
           localActions.push(setExpansionOrderAction.execute());
@@ -650,28 +646,28 @@ const ApplicationState = Backbone.Model.extend({
       // Make a copy of the algorithm stats, create an action to update
       // ApplicationState copy of those stats, and execute the action.
       if (alg != null) {
-        var updateStatsAction = new UpdateAlgorithmStatsAction(this,
+        const updateStatsAction = new UpdateAlgorithmStatsAction(this,
           _.clone(alg.getStatistics()));
         localActions.push(updateStatsAction.execute());
       }
 
-      var nextState = initialState;
+      let nextState = initialState;
       if (alg != null) {
         nextState = alg.peek();
       }
 
       if (nextState != null) {
-        var node = statesMappedToNodes[nextState.getLongIdentifier()];
-        var attributes = node.getAttributes();
+        const node = statesMappedToNodes[nextState.getLongIdentifier()];
+        const attributes = node.getAttributes();
         if (attributes.kind !== 'culled') {
-          var action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
+          const action = new UpdateStateAttributeAction(nextState, 'kind', 'next');
           localActions.push(action.execute());
         }
       }
 
       if (typeof exploredNodes != 'undefined') {
-        for (var i = 0; i < exploredNodes.length; i++) {
-          var action = new UpdateStateAttributeAction(exploredNodes[i], 'kind', 'explored');
+        for (let i = 0; i < exploredNodes.length; i++) {
+          const action = new UpdateStateAttributeAction(exploredNodes[i], 'kind', 'explored');
           localActions.push(action.execute());
         }
       }

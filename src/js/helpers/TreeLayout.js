@@ -91,7 +91,7 @@ class TreeLayoutData {
     this.getAttributesForNode = function (node) {
       var index = nodesVisited.indexOf(node);
       var key = 'node-' + index;
-      if (index > 0 && nodeAttributes.hasOwnProperty(key)) {
+      if (index > 0 && Object.prototype.hasOwnProperty.call(nodeAttributes, key)) {
         return nodeAttributes[key];
       }
       return null;
@@ -136,7 +136,7 @@ class TreeLayoutData {
       }
 
       var key = 'node-' + index;
-      if (!nodeCoordinates.hasOwnProperty(key)) {
+      if (!Object.prototype.hasOwnProperty.call(nodeCoordinates, key)) {
         return null;
       }
 
@@ -167,9 +167,7 @@ class TreeLayoutData {
      */
     this.getNumber = function (node) {
       var parent = node.getParent();
-      var attr = getOrCreateAttributesForNode(node);
       if (node.number == null) {
-        var i = 1;
         for (var n = 0; n < parent.getChildCount(); n++) {
           var child = parent.getChild(n);
           getOrCreateAttributesForNode(child).number = n;

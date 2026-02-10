@@ -61,7 +61,7 @@ const IterativeDeepeningSearch = Backbone.Model.extend({
   },
 
   inClosedSet: function (state) {
-    return this.closedSet.hasOwnProperty(state.toString());
+    return Object.prototype.hasOwnProperty.call(this.closedSet, state.toString());
   },
 
   inOpenList: function (state) {
@@ -131,7 +131,6 @@ const IterativeDeepeningSearch = Backbone.Model.extend({
         // Add states to the frontier
         for (var i = 0; i < successors.length; i++) {
           var successor = successors[i];
-          var successorStr = successor.toString();
 
           var childAugmentedState = {
             originalState: successor,

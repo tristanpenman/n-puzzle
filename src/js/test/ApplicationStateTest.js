@@ -98,7 +98,7 @@ test("test ApplicationState start()", (assert) => {
   const rootNode = r.applicationState.getTree().getRootNode();
   assert.equal(rootNode != null, true, "Search tree should have a root node after calling start()");
   assert.equal(rootNode.getState(), r.configuration.getInitialState(), "Search tree root node should point back to the initial state");
-  assert.equal(rootNode.getAttributes().hasOwnProperty('kind'), true, "Search tree root node should have an attribute named 'kind'");
+  assert.equal(Object.prototype.hasOwnProperty.call(rootNode.getAttributes(), 'kind'), true, "Search tree root node should have an attribute named 'kind'");
 });
 
 test("test ApplicationState next()", (assert) => {
@@ -118,7 +118,7 @@ test("test ApplicationState next()", (assert) => {
   // Test search tree nodes
   const rootNode = r.applicationState.getTree().getRootNode();
   assert.equal(rootNode.getState(), r.configuration.getInitialState(), "Search tree root node should point back to the initial state");
-  assert.equal(rootNode.getAttributes().hasOwnProperty('kind'), true, "Search tree root node should have an attribute named 'kind'");
+  assert.equal(Object.prototype.hasOwnProperty.call(rootNode.getAttributes(), 'kind'), true, "Search tree root node should have an attribute named 'kind'");
   assert.equal(rootNode.getChildCount(), 2, "Root node should have two children after first calling next()");
 
   // TODO: need to test identification of repeat states

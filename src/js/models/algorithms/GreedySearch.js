@@ -1,7 +1,7 @@
 import InformedSearch from './InformedSearch';
 
 const GreedySearch = InformedSearch.extend({
-  initialize: function (attributes, options) {
+  initialize: function () {
     this.fScoreFunction = function (state) {
       return state.getHeuristicValue(state);
     };

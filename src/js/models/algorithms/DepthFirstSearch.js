@@ -41,7 +41,7 @@ const DepthFirstSearch = Backbone.Model.extend({
   },
 
   inClosedSet: function (state) {
-    return this.closedSet.hasOwnProperty(state.toString());
+    return Object.prototype.hasOwnProperty.call(this.closedSet, state.toString());
   },
 
   iterate: function () {
