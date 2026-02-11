@@ -84,8 +84,8 @@ const ApplicationState = Backbone.Model.extend({
 
   undo: function () {
     if (this.treeUndoActions.length > 0) {
-      var action = this.treeUndoActions.pop();
-      var redoAction = action.execute();
+      const action = this.treeUndoActions.pop();
+      const redoAction = action.execute();
       this.treeRedoActions.push(redoAction);
       this.trigger('change', this);
       this.get('searchTree').trigger('change');
@@ -99,18 +99,18 @@ const ApplicationState = Backbone.Model.extend({
    * to schedule the next iteration.
    */
   next: function () {
-    var algorithm = this.get('algorithm');
+    const algorithm = this.get('algorithm');
     if (this.isRunning()) {
 
       if (this.treeRedoActions.length > 0) {
 
-        var action = this.treeRedoActions.pop();
-        var undoAction = action.execute();
+        const action = this.treeRedoActions.pop();
+        const undoAction = action.execute();
         this.treeUndoActions.push(undoAction);
 
       } else if (algorithm.iterate()) {
 
-        var stats = algorithm.getStatistics();
+        const stats = algorithm.getStatistics();
         this.set('statistics', stats);
 
       } else {
@@ -197,15 +197,15 @@ const ApplicationState = Backbone.Model.extend({
   start: function () {
 
     // Locate the algorithm constructor function
-    var config = this.getConfiguration();
-    var algorithms = Configuration.getAvailableAlgorithms();
-    var selectedAlgorithm = config.getAlgorithm();
-    var AlgorithmConstructor = algorithms[selectedAlgorithm].constructorFn;
+    const config = this.getConfiguration();
+    const algorithms = Configuration.getAvailableAlgorithms();
+    const selectedAlgorithm = config.getAlgorithm();
+    const AlgorithmConstructor = algorithms[selectedAlgorithm].constructorFn;
 
     // Find the name of the heuristic function
-    var heuristicName = null;
+    let heuristicName = null;
     if (algorithms[selectedAlgorithm].usesHeuristic) {
-      var heuristics = Configuration.getAvailableHeuristics();
+      const heuristics = Configuration.getAvailableHeuristics();
       heuristicName = heuristics[config.getHeuristic()].fnName;
     }
 
@@ -215,19 +215,19 @@ const ApplicationState = Backbone.Model.extend({
     // uniquely identifies a state within the entire state space by
     // concatenating the short identifiers of all states from the initial
     // state to the spcified state.
-    var statesMappedToNodes = {};
+    let statesMappedToNodes = {};
 
     // Alias initial and goal states
-    var initialState = config.getInitialState();
-    var goalState = config.getGoalState();
+    const initialState = config.getInitialState();
+    const goalState = config.getGoalState();
 
     /**
      * Constructor function that will initialise an Action that will set
      * the 'expansion order' value for a state.
      */
-    var SetExpansionOrderAction = function (state, value) {
+    const SetExpansionOrderAction = function (state, value) {
       this.execute = function () {
-        var oldValue = state.getExpansionOrder();
+        const oldValue = state.getExpansionOrder();
         state.setExpansionOrder(value);
         return new SetExpansionOrderAction(state, oldValue);
       }
@@ -253,34 +253,32 @@ const ApplicationState = Backbone.Model.extend({
      * @param  parentState  shared parent state of augmentedStates
      * @param  tree  the tree that the nodes should be added to
      */
-    var AddStatesToTreeAction = function (augmentedStates, parentState, tree) {
-
+    const AddStatesToTreeAction = function (augmentedStates, parentState, tree) {
       this.execute = function () {
-
         // Find parent node
-        var parentNode = null;
+        let parentNode = null;
         if (parentState != null) {
-          var parentId = parentState.getLongIdentifier();
+          const parentId = parentState.getLongIdentifier();
           parentNode = statesMappedToNodes[parentId];
         }
 
-        var newNodes = [];
-        var newStates = [];
-        for (var i = 0; i < augmentedStates.length; i++) {
+        const newNodes = [];
+        const newStates = [];
+        for (let i = 0; i < augmentedStates.length; i++) {
 
           // Aliases
-          var augmentedState = augmentedStates[i];
-          var state = augmentedState.originalState;
+          const augmentedState = augmentedStates[i];
+          const state = augmentedState.originalState;
 
           // Make a new node
-          var newNode = new SearchTreeNode(parentNode, state, {
+          const newNode = new SearchTreeNode(parentNode, state, {
             kind: augmentedState.kind
           });
 
           newNode.augmentedState = augmentedState;
 
           // Add node to the state->node map
-          var stateId = state.getLongIdentifier();
+          const stateId = state.getLongIdentifier();
           statesMappedToNodes[stateId] = newNode;
 
           newNodes.push(newNode);
@@ -321,28 +319,27 @@ const ApplicationState = Backbone.Model.extend({
      * @param  parentState  shared parent state of the states array
      * @param  tree  tree that is being altered
      */
-    var RemoveStatesFromTreeAction = function (states, parentState, tree) {
+    const RemoveStatesFromTreeAction = function (states, parentState, tree) {
       this.execute = function () {
-
         if (parentState == null) {
           throw "Cannot remove nodes from tree without parent state";
         }
 
         // Find parent node
-        var parentId = parentState.getLongIdentifier();
-        var parentNode = statesMappedToNodes[parentId];
+        const parentId = parentState.getLongIdentifier();
+        const parentNode = statesMappedToNodes[parentId];
 
         // For each state that should be removed
-        var augmentedStates = [];
-        for (var i = 0; i < states.length; i++) {
+        const augmentedStates = [];
+        for (let i = 0; i < states.length; i++) {
 
           // Get the associated node
-          var state = states[i];
-          var stateId = state.getLongIdentifier();
-          var node = statesMappedToNodes[stateId];
+          const state = states[i];
+          const stateId = state.getLongIdentifier();
+          const node = statesMappedToNodes[stateId];
 
           // Clone the node's attributes to build an augmented state
-          var augmentedState = _.clone(node.getAttributes());
+          const augmentedState = _.clone(node.getAttributes());
           augmentedState.originalState = state;
 
           // Add that to the list of states that would need to be
@@ -376,11 +373,11 @@ const ApplicationState = Backbone.Model.extend({
      *                  node and its descendants
      * @param  tree     the tree that is being altered
      */
-    var ReplaceRootNodeAction = function (newRoot, newMap, tree) {
+    const ReplaceRootNodeAction = function (newRoot, newMap, tree) {
       this.execute = function () {
-        var oldMap = _.clone(statesMappedToNodes);
+        const oldMap = _.clone(statesMappedToNodes);
         statesMappedToNodes = newMap;
-        var oldRoot = tree.getRootNode();
+        const oldRoot = tree.getRootNode();
         tree.setRootNode(newRoot);
         return new ReplaceRootNodeAction(oldRoot, oldMap, tree);
       }
@@ -396,9 +393,9 @@ const ApplicationState = Backbone.Model.extend({
      * @param  model  the ApplicationState instance to be updated
      * @param  state  the new state value
      */
-    var UpdateApplicationStateAction = function (model, state) {
+    const UpdateApplicationStateAction = function (model, state) {
       this.execute = function () {
-        var oldState = model.get('state');
+        const oldState = model.get('state');
         model.set('state', state);
         return new UpdateApplicationStateAction(model, oldState);
       }
@@ -415,9 +412,9 @@ const ApplicationState = Backbone.Model.extend({
      * @param  model  the ApplicationState instance to be updated
      * @param  stats  the new stats object
      */
-    var UpdateAlgorithmStatsAction = function (model, stats) {
+    const UpdateAlgorithmStatsAction = function (model, stats) {
       this.execute = function () {
-        var oldStats = model.get('statistics');
+        const oldStats = model.get('statistics');
         model.set('statistics', stats);
         return new UpdateAlgorithmStatsAction(model, oldStats);
       }
@@ -435,15 +432,15 @@ const ApplicationState = Backbone.Model.extend({
      * @param  attribute  name of the attribute to be updated
      * @param  value  new value of the attribute
      */
-    var UpdateStateAttributeAction = function (state, attribute, value) {
+    const UpdateStateAttributeAction = function (state, attribute, value) {
       this.execute = function () {
-        var stateId = state.getLongIdentifier();
+        const stateId = state.getLongIdentifier();
         if (!Object.prototype.hasOwnProperty.call(statesMappedToNodes, stateId)) {
           throw("Could not update kind of unknown state: " + stateId);
         }
-        var node = statesMappedToNodes[stateId];
-        var attributes = node.getAttributes();
-        var oldValue = attributes[attribute];
+        const node = statesMappedToNodes[stateId];
+        const attributes = node.getAttributes();
+        const oldValue = attributes[attribute];
         attributes[attribute] = value;
 
         return new UpdateStateAttributeAction(
@@ -460,12 +457,12 @@ const ApplicationState = Backbone.Model.extend({
      *
      * @param  actions  an array of Action objects
      */
-    var CompositeAction = function (actions) {
+    const CompositeAction = function (actions) {
       this.execute = function () {
-        var undoActions = [];
+        const undoActions = [];
         while (actions.length) {
-          var action = actions.pop();
-          var undoAction = action.execute();
+          const action = actions.pop();
+          const undoAction = action.execute();
           if (undoAction != null) {
             undoActions.push(undoAction);
           }
@@ -480,7 +477,7 @@ const ApplicationState = Backbone.Model.extend({
      * This is used by Iterative Deepening DFS when the maximum depth is
      * incremented.
      */
-    var onResetExpansionOrder = _.bind(function () {
+    const onResetExpansionOrder = _.bind(function () {
       this.expansionOrder = 1;
     }, this);
 
@@ -492,24 +489,23 @@ const ApplicationState = Backbone.Model.extend({
      * @param  parentState      the parentState of all states in the
      *                          augmentedStates array.
      */
-    var onDiscover = _.bind(function (augmentedStates, parentState, exploredNodes) {
-
+    const onDiscover = _.bind(function (augmentedStates, parentState, exploredNodes) {
       // Get the current root node
-      var searchTree = this.get('searchTree');
-      var alg = this.get('algorithm');
+      const searchTree = this.get('searchTree');
+      const alg = this.get('algorithm');
 
       // List of actions that have been performed so far
-      var localActions = [];
+      const localActions = [];
 
       // List of states that should be added to the tree, populated
       // below...
-      var newAugmentedStates = [];
+      const newAugmentedStates = [];
 
       if (parentState != null) {
 
         if (parentState.getExpansionOrder() === 0) {
           // Update the expansion order value for the parent state
-          var setExpansionOrderAction = new SetExpansionOrderAction(
+          const setExpansionOrderAction = new SetExpansionOrderAction(
             parentState, this.expansionOrder);
           this.expansionOrder++;
           localActions.push(setExpansionOrderAction.execute());
@@ -524,13 +520,12 @@ const ApplicationState = Backbone.Model.extend({
       // Otherwise, add the state to the list of states that should
       // be added to the tree
       for (let i = 0; i < augmentedStates.length; i++) {
-
         // Aliases
         const augmentedState = augmentedStates[i];
         const state = augmentedState.originalState;
 
         // Check for existing node
-        var stateId = state.getLongIdentifier();
+        const stateId = state.getLongIdentifier();
         if (Object.prototype.hasOwnProperty.call(statesMappedToNodes, stateId)) {
 
           // If the state already has a node in the tree, then
@@ -694,7 +689,7 @@ const ApplicationState = Backbone.Model.extend({
      * @param  state  the state to be checked
      * @return returns true if the state is a goal state, false otherwise
      */
-    var isGoalState = _.bind(function (state) {
+    const isGoalState = _.bind(function (state) {
       return state.isEqualTo(goalState);
     }, this)
 
@@ -702,7 +697,7 @@ const ApplicationState = Backbone.Model.extend({
      * Algorithm callback method that calculates the selected heuristic
      * measure for the goal state and the specified state.
      */
-    var heuristicFunction = _.bind(function (state) {
+    const heuristicFunction = _.bind(function (state) {
       if (heuristicName != null) {
         return PuzzleState[heuristicName](state, goalState);
       }
@@ -714,7 +709,7 @@ const ApplicationState = Backbone.Model.extend({
     initialState.setExpansionOrder(0);
 
     // Instantiate algorithm
-    var algorithm = new AlgorithmConstructor({}, {
+    const algorithm = new AlgorithmConstructor({}, {
       'initialState': initialState,
       'isGoalState': isGoalState,              // Callback
       'onDiscover': onDiscover,                // Callback

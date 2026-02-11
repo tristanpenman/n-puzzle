@@ -49,7 +49,7 @@ const DepthFirstSearch = Backbone.Model.extend({
       return true;
     }
 
-    var state = this.openList.pop();
+    const state = this.openList.pop();
 
     if (this.isGoalState(state)) {
       // Let the application know that the goal has been discovered
@@ -63,15 +63,14 @@ const DepthFirstSearch = Backbone.Model.extend({
 
     this.addToClosedSet(state);
 
-    var successors = state.generateSuccessors();
-    var numSuccessors = successors.length;
-    var augmentedSuccessors = [];
+    const successors = state.generateSuccessors();
+    const numSuccessors = successors.length;
+    const augmentedSuccessors = [];
 
     // Add states to the frontier
-    for (var i = 0; i < numSuccessors; i++) {
-
-      var successor = successors[i];
-      var augmentedState = {
+    for (let i = 0; i < numSuccessors; i++) {
+      const successor = successors[i];
+      const augmentedState = {
         originalState: successor,
         kind: 'normal'
       };

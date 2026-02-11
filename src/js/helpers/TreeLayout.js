@@ -18,32 +18,32 @@ class TreeLayoutData {
      * nodesVisited array. This data can be discarded after the algorithm
      * has finished laying out the tree.
      */
-    var nodeAttributes = {};
+    let nodeAttributes = {};
 
     /**
      * Coordinates associated with nodes in the tree. This data is retained
      * after completion of the algorithm.
      */
-    var nodeCoordinates = {};
+    const nodeCoordinates = {};
 
     /**
      * Array of nodes, ordered by when they first had their attributes set.
      * This is used to produce a unique index for each node, that can be used
      * to find node attributes in the nodeAttributes object.
      */
-    var nodesVisited = [];
+    const nodesVisited = [];
 
     /** Bounding coordinate on left hand side */
-    var xMin = 0;
+    let xMin = 0;
 
     /** Bounding coordinate on right hand side */
-    var xMax = 0;
+    let xMax = 0;
 
     /** Bounding coordinate on top edge */
-    var yMin = 0;
+    let yMin = 0;
 
     /** Bounding coordinate on bottom edge */
-    var yMax = 0;
+    let yMax = 0;
 
     /**
      * Get the layout attributes associated with a node, initialising the
@@ -54,7 +54,7 @@ class TreeLayoutData {
      * @return      an attributes object
      */
     function getOrCreateAttributesForNode(node) {
-      var index = nodesVisited.indexOf(node);
+      let index = nodesVisited.indexOf(node);
       if (index == -1) {
         index = nodesVisited.push(node) - 1;
         return nodeAttributes['node-' + index] = {
@@ -89,8 +89,8 @@ class TreeLayoutData {
      * Retrieve the entire attributes object for a node.
      */
     this.getAttributesForNode = function (node) {
-      var index = nodesVisited.indexOf(node);
-      var key = 'node-' + index;
+      const index = nodesVisited.indexOf(node);
+      const key = 'node-' + index;
       if (index > 0 && Object.prototype.hasOwnProperty.call(nodeAttributes, key)) {
         return nodeAttributes[key];
       }
@@ -130,17 +130,17 @@ class TreeLayoutData {
      */
     this.getCoordinatesForNode = function (node) {
 
-      var index = nodesVisited.indexOf(node);
+      const index = nodesVisited.indexOf(node);
       if (index == -1) {
         return null;
       }
 
-      var key = 'node-' + index;
+      const key = 'node-' + index;
       if (!Object.prototype.hasOwnProperty.call(nodeCoordinates, key)) {
         return null;
       }
 
-      var coordinates = nodeCoordinates[key];
+      const coordinates = nodeCoordinates[key];
 
       // Make a copy of the coordinates object
       return {
@@ -166,10 +166,10 @@ class TreeLayoutData {
      * examined.
      */
     this.getNumber = function (node) {
-      var parent = node.getParent();
+      const parent = node.getParent();
       if (node.number == null) {
-        for (var n = 0; n < parent.getChildCount(); n++) {
-          var child = parent.getChild(n);
+        for (let n = 0; n < parent.getChildCount(); n++) {
+          const child = parent.getChild(n);
           getOrCreateAttributesForNode(child).number = n;
         }
       }
@@ -248,12 +248,12 @@ class TreeLayoutData {
         yMax = y + nodeHeight;
       }
 
-      var index = nodesVisited.indexOf(node);
+      let index = nodesVisited.indexOf(node);
       if (index == -1) {
         index = nodesVisited.push(node) - 1;
       }
 
-      var key = 'node-' + index;
+      const key = 'node-' + index;
       nodeCoordinates[key] = {
         'x': x,
         'y': y
@@ -305,7 +305,7 @@ class TreeLayoutData {
 class TreeLayout {
   constructor(userOptions) {
     // Merge the user's options into the default options object
-    var options = Util.extend({
+    const options = Util.extend({
       /** The fixed the distance between adjacent levels of the tree */
       levelSeparation: 40,
 
@@ -326,35 +326,35 @@ class TreeLayout {
      * Container for the intermediate attributes and final coordinates produced
      * by the tree layout algorithm.
      */
-    var data = null;
+    let data = null;
 
     /**
      * Finds the greatest distinct ancestor of a node [node] and its right
      * neighbour [rightNeighbour].
      */
-    var ancestor = function (node, rightNeighbour, defaultAncestor) {
-      var ancestor = data.getAncestorForNode(node);
-      var parent = rightNeighbour.getParent();
+    const ancestor = function (node, rightNeighbour, defaultAncestor) {
+      const ancestor = data.getAncestorForNode(node);
+      const parent = rightNeighbour.getParent();
       return parent.getIndexOfChild(ancestor) > -1 ? ancestor : defaultAncestor;
     };
 
     /**
      * TODO: Method description
      */
-    var executeShifts = function (node) {
-      var shift = 0;
-      var change = 0;
-      var childCount = node.getChildCount();
+    const executeShifts = function (node) {
+      let shift = 0;
+      let change = 0;
+      const childCount = node.getChildCount();
 
-      for (var i = 0; i < childCount; i++) {
+      for (let i = 0; i < childCount; i++) {
         // Work from right to left
-        var child = node.getChild(childCount - i - 1);
+        const child = node.getChild(childCount - i - 1);
 
         change += data.getChangeForNode(child);
 
         // Update prelim and modifier for child node
-        var prelim = data.getPrelimForNode(child) + shift;
-        var modifier = data.getModifierForNode(child) + shift;
+        const prelim = data.getPrelimForNode(child) + shift;
+        const modifier = data.getModifierForNode(child) + shift;
         data.setPrelimForNode(child, prelim);
         data.setModifierForNode(child, modifier);
 
@@ -373,7 +373,7 @@ class TreeLayout {
      * @param a  first node
      * @param b  second node
      */
-    var calculateDistance = function (a, b) {
+    const calculateDistance = function (a, b) {
       if (a.getParent() == b.getParent()) {
         return options.nodeWidth + options.siblingSeparation;
       } else {
@@ -385,9 +385,9 @@ class TreeLayout {
     /**
      * TODO: Method description
      */
-    var moveSubtree = function (wMinus, wPlus, parent, shift) {
+    const moveSubtree = function (wMinus, wPlus, parent, shift) {
 
-      var subtrees = data.getNumber(wPlus, parent) - data.getNumber(wMinus, parent);
+      const subtrees = data.getNumber(wPlus, parent) - data.getNumber(wMinus, parent);
 
       data.setChangeForNode(wPlus, data.getChangeForNode(wPlus) - shift / subtrees);
       data.setShiftForNode(wPlus, data.getShiftForNode(wPlus) + shift);
@@ -399,38 +399,38 @@ class TreeLayout {
     /**
      * TODO: Method description
      */
-    var nextLeft = function (v) {
+    const nextLeft = function (v) {
       return v.isLeaf() ? data.getThreadForNode(v) : v.getChild(0);
     };
 
     /**
      * TODO: Method description
      */
-    var nextRight = function (v) {
+    const nextRight = function (v) {
       return v.isLeaf() ? data.getThreadForNode(v) : v.getChild(v.getChildCount() - 1);
     };
 
     /**
      * TODO: Method description
      */
-    var apportion = function (node, defaultAncestor, leftSibling, parentOfNode) {
+    const apportion = function (node, defaultAncestor, leftSibling, parentOfNode) {
 
       if (leftSibling == null) {
         return defaultAncestor;
       }
 
-      var vOPlus = node;
-      var vIPlus = node;
-      var vIMinus = leftSibling;
-      var vOMinus = parentOfNode.getChild(0);
+      let vOPlus = node;
+      let vIPlus = node;
+      let vIMinus = leftSibling;
+      let vOMinus = parentOfNode.getChild(0);
 
-      var sIPlus = data.getModifierForNode(vIPlus);
-      var sOPlus = data.getModifierForNode(vOPlus);
-      var sIMinus = data.getModifierForNode(vIMinus);
-      var sOMinus = data.getModifierForNode(vOMinus);
+      let sIPlus = data.getModifierForNode(vIPlus);
+      let sOPlus = data.getModifierForNode(vOPlus);
+      let sIMinus = data.getModifierForNode(vIMinus);
+      let sOMinus = data.getModifierForNode(vOMinus);
 
-      var nextRightVIMinus = nextRight(vIMinus);
-      var nextLeftVIPlus = nextLeft(vIPlus);
+      let nextRightVIMinus = nextRight(vIMinus);
+      let nextLeftVIPlus = nextLeft(vIPlus);
 
       while (nextRightVIMinus != null && nextLeftVIPlus != null) {
         vIMinus = nextRightVIMinus;
@@ -438,7 +438,7 @@ class TreeLayout {
         vOMinus = nextLeft(vOMinus);
         vOPlus = nextRight(vOPlus);
         data.setAncestorForNode(vOPlus, node);
-        var shift = (data.getPrelimForNode(vIMinus) + sIMinus)
+        const shift = (data.getPrelimForNode(vIMinus) + sIMinus)
           - (data.getPrelimForNode(vIPlus) + sIPlus)
           + (calculateDistance(vIMinus, vIPlus));
         if (shift > 0) {
@@ -475,7 +475,7 @@ class TreeLayout {
     /**
      *
      */
-    var firstWalk = function (node, leftSibling) {
+    const firstWalk = function (node, leftSibling) {
       if (node.isLeaf()) {
         if (leftSibling != null) {
           data.setPrelimForNode(node,
@@ -484,12 +484,12 @@ class TreeLayout {
           data.setPrelimForNode(node, 0);
         }
       } else {
-        var firstChild = node.getChild(0);
-        var lastChild = node.getChild(node.getChildCount() - 1);
-        var defaultAncestor = firstChild;
-        var previousChild = null;
-        for (var i = 0; i < node.getChildCount(); i++) {
-          var child = node.getChild(i);
+        const firstChild = node.getChild(0);
+        const lastChild = node.getChild(node.getChildCount() - 1);
+        let defaultAncestor = firstChild;
+        let previousChild = null;
+        for (let i = 0; i < node.getChildCount(); i++) {
+          const child = node.getChild(i);
           firstWalk(child, previousChild);
           defaultAncestor = apportion(child, defaultAncestor, previousChild, node);
           previousChild = child;
@@ -497,10 +497,10 @@ class TreeLayout {
 
         executeShifts(node);
 
-        var midPoint = (data.getPrelimForNode(firstChild) + data.getPrelimForNode(lastChild)) / 2;
+        const midPoint = (data.getPrelimForNode(firstChild) + data.getPrelimForNode(lastChild)) / 2;
 
         if (leftSibling != null) {
-          var prelim = data.getPrelimForNode(leftSibling) + calculateDistance(node, leftSibling);
+          const prelim = data.getPrelimForNode(leftSibling) + calculateDistance(node, leftSibling);
           data.setPrelimForNode(node, prelim);
           data.setModifierForNode(node, prelim - midPoint);
         } else {
@@ -513,15 +513,15 @@ class TreeLayout {
     /**
      * TODO: Method description
      */
-    var secondWalk = function (v, m, level, levelStart) {
-      var x = data.getPrelimForNode(v) + m;
-      var y = levelStart + level * (options.nodeHeight + options.levelSeparation);
+    const secondWalk = function (v, m, level, levelStart) {
+      const x = data.getPrelimForNode(v) + m;
+      const y = levelStart + level * (options.nodeHeight + options.levelSeparation);
 
       data.setCoordinatesForNode(v, x, y);
 
       if (!v.isLeaf()) {
-        for (var i = 0; i < v.getChildCount(); i++) {
-          var child = v.getChild(i);
+        for (let i = 0; i < v.getChildCount(); i++) {
+          const child = v.getChild(i);
           secondWalk(child, m + data.getModifierForNode(v), level + 1, levelStart);
         }
       }

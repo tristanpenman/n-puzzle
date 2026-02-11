@@ -36,7 +36,7 @@ const SearchTreeNode = function (parent, state, attributes) {
 
   this.getLeftSibling = function () {
     if (parent != null) {
-      var index = parent.getIndexOfChild(this);
+      const index = parent.getIndexOfChild(this);
       if (index > 0) {
         return parent.getChild(index - 1);
       }
@@ -50,7 +50,7 @@ const SearchTreeNode = function (parent, state, attributes) {
 
   this.getRightSibling = function () {
     if (parent != null) {
-      var index = parent.getIndexOfChild(this);
+      const index = parent.getIndexOfChild(this);
       if (index > -1 && index < parent.getChildCount() - 1) {
         return parent.getChild(index + 1);
       }
@@ -66,7 +66,7 @@ const SearchTreeNode = function (parent, state, attributes) {
     if (parent == null) {
       return false;
     }
-    var index = parent.getIndexOfChild(this);
+    const index = parent.getIndexOfChild(this);
     return (index > 0);
   };
 
@@ -74,7 +74,7 @@ const SearchTreeNode = function (parent, state, attributes) {
     if (parent == null) {
       return false;
     }
-    var index = parent.getIndexOfChild(this);
+    const index = parent.getIndexOfChild(this);
     return (index > -1 && index < parent.getChildCount() - 1);
   };
 

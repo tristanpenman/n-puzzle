@@ -125,7 +125,7 @@ class PuzzleStateRenderer {
         }
       }
 
-      let middleX = Math.round(x + this.getExpectedWidth() / 2) + 0.5;
+      const middleX = Math.round(x + this.getExpectedWidth() / 2) + 0.5;
       let middleY = y + yPaddingTop + 3 * characterHeight + 2 * ySpacing + yPaddingBottom + 0.5;
 
       // Draw horizontal line

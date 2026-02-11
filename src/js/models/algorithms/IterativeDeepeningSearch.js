@@ -65,9 +65,9 @@ const IterativeDeepeningSearch = Backbone.Model.extend({
   },
 
   inOpenList: function (state) {
-    var stateStr = state.toString();
-    for (var i = 0; i < this.openList.length; i++) {
-      if (this.openList[i].originalState.toString() == stateStr) {
+    const stateStr = state.toString();
+    for (let i = 0; i < this.openList.length; i++) {
+      if (this.openList[i].originalState.toString() === stateStr) {
         return true;
       }
     }
@@ -79,13 +79,12 @@ const IterativeDeepeningSearch = Backbone.Model.extend({
       return true;
     }
 
-    var maxDepth = this.getMaxDepth();
-    var numStates = 0;
+    let maxDepth = this.getMaxDepth();
+    let numStates = 0;
 
     // If the frontier has been exhausted then the maximum depth should
     // be increased, and the search should restart at depth 0.
-    if (this.openList.length == 0) {
-
+    if (this.openList.length === 0) {
       // Increase the max depth
       this.set('maxDepth', ++maxDepth);
 
@@ -102,8 +101,8 @@ const IterativeDeepeningSearch = Backbone.Model.extend({
 
     // As long as there are states in the frontier, and no states have
     // been added to the tree, the search should continue.
-    while (this.openList.length > 0 && numStates == 0) {
-      var augmentedState = this.getNextStateFromOpenList();
+    while (this.openList.length > 0 && numStates === 0) {
+      const augmentedState = this.getNextStateFromOpenList();
 
       if (this.isGoalState(augmentedState.originalState)) {
         // Let the application know that the goal has been discovered
@@ -117,22 +116,21 @@ const IterativeDeepeningSearch = Backbone.Model.extend({
       }
 
       if (augmentedState.depth < maxDepth) {
-
-        var parentState = augmentedState.originalState;
+        const parentState = augmentedState.originalState;
 
         // An array of successor objects with additional attributes
-        var augmentedSuccessors = [];
+        const augmentedSuccessors = [];
 
-        var successors = parentState.generateSuccessors();
-        var childDepth = augmentedState.depth + 1;
+        const successors = parentState.generateSuccessors();
+        const childDepth = augmentedState.depth + 1;
 
         this.addToClosedSet(augmentedState.originalState);
 
         // Add states to the frontier
-        for (var i = 0; i < successors.length; i++) {
-          var successor = successors[i];
+        for (let i = 0; i < successors.length; i++) {
+          const successor = successors[i];
 
-          var childAugmentedState = {
+          const childAugmentedState = {
             originalState: successor,
             depth: childDepth,
             kind: 'normal'
@@ -160,7 +158,7 @@ const IterativeDeepeningSearch = Backbone.Model.extend({
   },
 
   peek: function () {
-    for (var x = this.openList.length - 1; x >= 0; x--) {
+    for (let x = this.openList.length - 1; x >= 0; x--) {
       if (this.openList[x].originalState.getDepth() < this.getMaxDepth()) {
         return this.openList[x].originalState;
       }

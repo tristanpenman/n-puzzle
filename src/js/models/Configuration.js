@@ -75,7 +75,7 @@ const Configuration = Backbone.Model.extend({
   },
 
   setHeuristic: function (heuristic) {
-    var algorithm = this.get('algorithm');
+    const algorithm = this.get('algorithm');
     if (Configuration.getAvailableAlgorithms()[algorithm].usesHeuristic) {
       this.set('heuristic', heuristic);
     } else {

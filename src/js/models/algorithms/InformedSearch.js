@@ -17,7 +17,7 @@ const InformedSearch = Backbone.Model.extend({
     this.nonce = 0;
 
     // Function that compares the estimated cost 'f' of a path
-    var compareEntries = _.bind(function (a, b) {
+    const compareEntries = _.bind(function (a, b) {
       if (a.f > b.f) {
         return -1;
       } else if (a.f < b.f) {
@@ -42,7 +42,7 @@ const InformedSearch = Backbone.Model.extend({
     });
 
     // Prepare initial state for discovery
-    var augmentedInitialState = {
+    const augmentedInitialState = {
       originalState: options.initialState,
       depth: 0,
       kind: 'normal'
@@ -66,8 +66,8 @@ const InformedSearch = Backbone.Model.extend({
   },
 
   inOpenList: function (state) {
-    var stateStr = state.toString();
-    var result = false;
+    const stateStr = state.toString();
+    let result = false;
     this.openList.forEach(_.bind(function (object) {
       if (object.state.toString() == stateStr) {
         result = true;
@@ -82,10 +82,10 @@ const InformedSearch = Backbone.Model.extend({
       return true;
     }
 
-    var expectedNode = this.peek();
+    const expectedNode = this.peek();
 
     // Get the highest priority node that has not been explored
-    var node;
+    let node;
     do {
       node = this.openList.dequeue();
     } while (node.explored == true);
@@ -95,12 +95,12 @@ const InformedSearch = Backbone.Model.extend({
     }
 
     // Extract state associated with the node
-    var state = node.state;
-    var stateStr = state.toString();
+    const state = node.state;
+    const stateStr = state.toString();
 
     // Keep track of any nodes whose states have been explored via
     // other nodes in the tree
-    var explored = [];
+    const explored = [];
 
     this.closedSetSize++;
     if (!Object.prototype.hasOwnProperty.call(this.closedSet, stateStr)) {
@@ -129,17 +129,17 @@ const InformedSearch = Backbone.Model.extend({
       return true;
     }
 
-    var successors = state.generateSuccessors();
-    var numSuccessors = successors.length;
-    var augmentedSuccessors = [];
+    const successors = state.generateSuccessors();
+    const numSuccessors = successors.length;
+    const augmentedSuccessors = [];
 
     // Add states to the frontier
-    for (var i = 0; i < numSuccessors; i++) {
-      var successor = successors[i];
+    for (let i = 0; i < numSuccessors; i++) {
+      const successor = successors[i];
       successor.setHeuristicValue(this.heuristicFunction(successor));
-      var successorStr = successor.toString();
+      const successorStr = successor.toString();
 
-      var augmentedState = {
+      const augmentedState = {
         originalState: successor
       }
 
@@ -169,7 +169,7 @@ const InformedSearch = Backbone.Model.extend({
   },
 
   peek: function () {
-    var node = null;
+    let node = null;
     do {
       if (this.openList.isEmpty()) {
         node = null;

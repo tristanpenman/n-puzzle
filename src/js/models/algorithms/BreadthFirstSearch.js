@@ -1,4 +1,4 @@
-import Backbone from "backbone";
+import Backbone from 'backbone';
 
 const BreadthFirstSearch = Backbone.Model.extend({
   initialize: function (attributes, options) {
@@ -49,9 +49,9 @@ const BreadthFirstSearch = Backbone.Model.extend({
   },
 
   inOpenList: function (state) {
-    var stateStr = state.toString();
-    for (var i = 0; i < this.openList.length; i++) {
-      if (this.openList[i].toString() == stateStr) {
+    const stateStr = state.toString();
+    for (let i = 0; i < this.openList.length; i++) {
+      if (this.openList[i].toString() === stateStr) {
         return true;
       }
     }
@@ -64,7 +64,7 @@ const BreadthFirstSearch = Backbone.Model.extend({
       return true;
     }
 
-    var state = this.getNextStateFromOpenList();
+    const state = this.getNextStateFromOpenList();
 
     if (this.isGoalState(state)) {
       // Let the application know that the goal has been discovered
@@ -78,16 +78,16 @@ const BreadthFirstSearch = Backbone.Model.extend({
 
     this.addToClosedSet(state);
 
-    var successors = state.generateSuccessors();
-    var numSuccessors = successors.length;
-    var augmentedSuccessors = [];
+    const successors = state.generateSuccessors();
+    const numSuccessors = successors.length;
+    const augmentedSuccessors = [];
 
     // Add states to the frontier
-    for (var i = 0; i < numSuccessors; i++) {
-      var successor = successors[i];
-      var augmentedState = {
+    for (let i = 0; i < numSuccessors; i++) {
+      const successor = successors[i];
+      const augmentedState = {
         originalState: successor
-      }
+      };
 
       if (this.inOpenList(successor)) {
         this.addToClosedSet(successor);
