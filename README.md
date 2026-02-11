@@ -2,6 +2,8 @@
 
 N-Puzzle is a web app for learning about graph-based search algorithms.
 
+![Screenshot](./screenshot.png)
+
 We use the 8-puzzle, an instance of the [Sliding Puzzle](https://en.wikipedia.org/wiki/Sliding_puzzle) problem where eight tiles are placed on a 3x3 grid. The remaining position is an empty space. Tiles adjacent to the empty space may be moved into that space. The puzzle is solved by finding a sequence of moves (state transitions) that will allow us to move from the initial state to the goal state.
 
 An example initial state and goal state are given below.
