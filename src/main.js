@@ -23,11 +23,52 @@ import PuzzleStateView from './js/components/puzzle-state-view.vue';
 import TreeView from './js/components/tree-view.vue';
 import Tutorial from './js/components/tutorial.vue';
 
+const INITIAL_STATE_STORAGE_KEY = 'n-puzzle.initial-state';
+const GOAL_STATE_STORAGE_KEY = 'n-puzzle.goal-state';
+
+const readStateFromStorage = function (key, fallbackTiles) {
+  const stored = window.localStorage.getItem(key);
+  if (stored == null) {
+    return fallbackTiles;
+  }
+
+  try {
+    const parsed = JSON.parse(stored);
+    return new PuzzleState().setTiles(parsed).valueOf();
+  } catch (error) {
+    window.localStorage.removeItem(key);
+    return fallbackTiles;
+  }
+};
+
+const writeStatesToStorage = function (configuration) {
+  window.localStorage.setItem(
+    INITIAL_STATE_STORAGE_KEY,
+    JSON.stringify(configuration.getInitialState().valueOf())
+  );
+  window.localStorage.setItem(
+    GOAL_STATE_STORAGE_KEY,
+    JSON.stringify(configuration.getGoalState().valueOf())
+  );
+};
+
 window.addEventListener('load', () => {
   // Set up the default configuration
   const configuration = new Configuration();
-  configuration.getInitialState().setTiles([0, 2, 3, 1, 4, 5, 8, 7, 6]);
-  configuration.getGoalState().setTiles([1, 2, 3, 8, 0, 4, 7, 6, 5]);
+  const defaultInitialState = [0, 2, 3, 1, 4, 5, 8, 7, 6];
+  const defaultGoalState = [1, 2, 3, 8, 0, 4, 7, 6, 5];
+  configuration.getInitialState().setTiles(
+    readStateFromStorage(INITIAL_STATE_STORAGE_KEY, defaultInitialState)
+  );
+  configuration.getGoalState().setTiles(
+    readStateFromStorage(GOAL_STATE_STORAGE_KEY, defaultGoalState)
+  );
+
+  configuration.on('change', () => {
+    writeStatesToStorage(configuration);
+  });
+
+  writeStatesToStorage(configuration);
 
   // Initialise the application view
   const app = createApp({
