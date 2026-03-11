@@ -69,4 +69,4 @@ The original applet can found on RMIT's [AI-Search website](https://learninglab.
 
 ## License
 
-N-Puzzle is distributed under the 3-Clause BSD License. See the LICENSE file for more information.
+This project is distributed under the 3-Clause BSD License. See the LICENSE file for more information.
