@@ -1,6 +1,6 @@
 <template>
   <div class="Tutorial">
-    <h1>Welcome!</h1>
+    <h1>Welcome! <small class="version">v{{ version }}</small></h1>
     <p>This web application allows you to view a graphical representation of a range of different graph search
       algorithms, whilst solving your choice of 8-puzzle problems.</p>
     <h2>Getting Started</h2>
@@ -142,7 +142,8 @@ export default {
       chooseStateImage,
       stateRepresentationImage,
       astarStepsImage,
-      statsImage
+      statsImage,
+      version: __APP_VERSION__
     };
   }
 };
@@ -166,6 +167,12 @@ export default {
   font-size: 22px;
   margin: 1.2em 0 1em 0;
   padding-bottom: 0.2em;
+}
+
+.Tutorial > h1 > .version {
+  font-size: 13px;
+  font-weight: normal;
+  color: #888;
 }
 
 .Tutorial > h2 {
