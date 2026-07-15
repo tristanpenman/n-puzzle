@@ -42,9 +42,9 @@ A live demo is available [here](http://tristanpenman.com/demos/n-puzzle).
 
 ## Development
 
-N-Puzzle has been built using [Vue.js](https://vuejs.org/), using Vue [Single File Components](https://vuejs.org/guide/scaling-up/sfc.html).
+N-Puzzle has been built using JavaScript [Vue.js](https://vuejs.org/) framework, using Vue [Single File Components](https://vuejs.org/guide/scaling-up/sfc.html).
 
-The project now uses [Vite](https://vitejs.dev/) for local development and builds.
+The project now uses [Vite](https://vitejs.dev/) for local development and builds. The instructions below assume you are using [pnpm](https://pnpm.io/) package manager.
 
 To run the dev server:
 
