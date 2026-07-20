@@ -1,10 +1,9 @@
 name: Deploy GitHub Pages
 
 on:
-  push:
-    branches:
-      - master
-  workflow_dispatch:
+  release:
+    types:
+      - published
 
 permissions:
   contents: write
@@ -16,27 +15,51 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ !github.event.release.prerelease }}
 
     steps:
-      - name: Checkout repository
+      - name: Verify latest public release
+        id: latest-release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          latest_tag="$(gh api "repos/${GITHUB_REPOSITORY}/releases/latest" --jq .tag_name)"
+
+          if [ "${latest_tag}" = "${RELEASE_TAG}" ]; then
+            echo "deploy=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "deploy=false" >> "${GITHUB_OUTPUT}"
+            echo "::notice::Skipping deploy for ${RELEASE_TAG}; latest public release is ${latest_tag}."
+          fi
+
+      - name: Checkout release tag
+        if: steps.latest-release.outputs.deploy == 'true'
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
 
       - name: Setup pnpm
+        if: steps.latest-release.outputs.deploy == 'true'
         uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
+        if: steps.latest-release.outputs.deploy == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
 
       - name: Install dependencies
+        if: steps.latest-release.outputs.deploy == 'true'
         run: pnpm install --frozen-lockfile
 
       - name: Build project
+        if: steps.latest-release.outputs.deploy == 'true'
         run: pnpm build
 
       - name: Deploy to gh-pages
+        if: steps.latest-release.outputs.deploy == 'true'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
