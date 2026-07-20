@@ -6,6 +6,7 @@ const pkg = JSON.parse(readFileSync(new URL('./package.json', import.meta.url)))
 
 export default defineConfig({
   root: "src",
+  base: "./",
   plugins: [vue()],
   define: {
     __APP_VERSION__: JSON.stringify(pkg.version)
